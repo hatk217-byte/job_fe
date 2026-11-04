@@ -5162,6 +5162,12 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
   line-height: 1.2;
 }
 
+.employer-admin-user-type.is-admin {
+  background: rgba(254, 226, 226, 0.95);
+  color: #dc2626;
+  border: 1px solid rgba(252, 165, 165, 0.6);
+}
+
 .employer-admin-user-type.is-candidate {
   background: rgba(219, 234, 254, 0.95);
   color: #1d4ed8;

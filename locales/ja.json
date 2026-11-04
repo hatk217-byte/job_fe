@@ -1012,6 +1012,7 @@
           "action": "ACTION"
         },
         "userTypes": {
+          "admin": "ADMIN",
           "candidate": "CANDIDATE",
           "employer": "EMPLOYER",
           "hostCompany": "HOST_COMPANY"

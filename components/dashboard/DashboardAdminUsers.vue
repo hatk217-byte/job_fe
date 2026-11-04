@@ -520,6 +520,7 @@ const itemsPerPage = ref(10)
 const filterUserType = ref<string[]>([])
 
 const userTypeFilterOptions = computed(() => [
+  { value: 'admin', label: t('dashboard.admin.users.userTypes.admin') },
   { value: 'candidate', label: t('dashboard.admin.users.userTypes.candidate') },
   { value: 'employer', label: t('dashboard.admin.users.userTypes.employer') },
   { value: 'hostCompany', label: t('dashboard.admin.users.userTypes.hostCompany') },
@@ -661,6 +662,12 @@ watch(itemsPerPage, () => {
 const getUserTypes = (user: any): string[] => {
   const types: string[] = []
 
+  // ADMIN: role = ADMIN (2)
+  if (user.role === USER_ROLES.ADMIN) {
+    types.push('admin')
+    return types
+  }
+
   // CANDIDATE: role = USER và không có companyId
   if (user.role === USER_ROLES.USER && !user.companyId) {
     types.push('candidate')
@@ -689,6 +696,7 @@ function toggleUserTypeFilter(value: string) {
 }
 
 const getUserTypeClass = (type: string): string => {
+  if (type === 'admin') return 'is-admin'
   if (type === 'candidate') return 'is-candidate'
   if (type === 'employer') return 'is-employer'
   if (type === 'hostCompany') return 'is-host'
