@@ -12,7 +12,7 @@
           placeholder="Mã số thuế"
           :disabled="mstChecking || isEditMode"
           @input="onMstInput"
-          @keyup.enter="validateMst"
+          @keydown.enter.prevent="validateMst"
         />
         <UButton
           v-if="!isEditMode"
@@ -495,7 +495,7 @@ import { nextTick } from 'vue'
 import type { CompanyAddUpdateEntity } from '~/entities/company'
 import RichTextEditor from '~/components/RichTextEditor.vue'
 import { adminJobDrawerCompanySelectControlUi } from '~/utils/admin-drawer-ui'
-import { handleMstInput } from '~/utils/mst'
+import { handleMstInput, isValidMstFormat, normalizeMstDigits, getMstLookupVariants } from '~/utils/mst'
 import { normalizeCompanyLogo } from '~/utils/companyLogo'
 import { IMAGE_UPLOAD_ACCEPT, validateImageUploadFile } from '~/utils/imageUploadValidation'
 import {
@@ -533,9 +533,7 @@ const isMstVerified = ref(false)
 const isNameAutoFilled = ref(false)
 const mstChecking = ref(false)
 const mstError = ref('')
-const mstDebounceTimer = ref<ReturnType<typeof setTimeout> | null>(null)
-
-/** Handle MST Change with debounce */
+/** Handle MST Change (chỉ reset trạng thái, không tự động tra cứu khi gõ) */
 function onMstInput(event: Event) {
   handleMstInput(event, (value) => {
     form.value.mst = value
@@ -544,65 +542,74 @@ function onMstInput(event: Event) {
   mstError.value = ''
   errors.value.mst = ''
 
-  // Clear previous timer
-  if (mstDebounceTimer.value) {
-    clearTimeout(mstDebounceTimer.value)
-  }
+  // Khi người dùng thay đổi MST, cần xác thực lại
+  isMstVerified.value = false
+  isNameAutoFilled.value = false
+}
 
-  // Reset state if MST is cleared
-  if (!form.value.mst?.trim()) {
-    isMstVerified.value = false
-    isNameAutoFilled.value = false
+/** Validate MST: Chỉ chạy khi bấm nút "Kiểm tra" hoặc nhấn Enter */
+async function validateMst() {
+  const rawMst = form.value.mst?.trim() || ''
+  if (!rawMst) {
+    mstError.value = 'Vui lòng nhập mã số thuế.'
     return
   }
 
-  // Debounce MST validation
-  mstDebounceTimer.value = setTimeout(async () => {
-    await validateMst()
-  }, 800)
-}
-
-/** Validate MST: check exist in DB, then check with external API */
-async function validateMst() {
-  const mst = form.value.mst?.trim()
-  if (!mst) return
+  const digits = normalizeMstDigits(rawMst)
+  if (!isValidMstFormat(digits)) {
+    mstError.value = 'Mã số thuế không đúng định dạng (phải gồm 10 hoặc 13 chữ số).'
+    return
+  }
 
   mstChecking.value = true
   mstError.value = ''
 
   try {
     // Step 1: Check if MST already exists in our database
-    try {
-      const existingCompany = await $api.company.checkExistMst(mst)
-      if (existingCompany) {
-        mstError.value = 'MST đã tồn tại trong hệ thống.'
-        useNotify({ message: 'MST đã tồn tại trong hệ thống.', type: 'error' })
-        mstChecking.value = false
-        return
+    const variants = getMstLookupVariants(rawMst)
+    for (const variant of variants) {
+      try {
+        const existingCompany = await $api.company.checkExistMst(variant)
+        if (existingCompany?.id) {
+          mstError.value = 'MST đã tồn tại trong hệ thống.'
+          useNotify({ message: 'MST đã tồn tại trong hệ thống.', type: 'error' })
+          isMstVerified.value = false
+          return
+        }
+      } catch {
+        // Chưa có trong DB -> tiếp tục
       }
-    } catch {
-      // checkExistMst returns error if not found, which is expected
     }
 
     // Step 2: Check with external MST API (VietQR)
     try {
-      const externalData = await $api.company.getCompanyByMst(mst)
-      if (externalData && externalData.data) {
-        // Found in external system - auto fill data
+      const externalData = await $api.company.getCompanyByMst(rawMst)
+      if (externalData?.data?.name) {
+        // Tìm thấy trong hệ thống VietQR - tự động điền
         form.value.name = externalData.data.name || form.value.name
         form.value.taxAddress = externalData.data.address || form.value.taxAddress
         isNameAutoFilled.value = true
         isMstVerified.value = true
+        mstError.value = ''
 
         useNotify({
           message: 'Đã tìm thấy thông tin từ hệ thống. Vui lòng kiểm tra và điền các thông tin còn lại.',
           type: 'success',
         })
+      } else {
+        mstError.value = 'Không tìm thấy MST trong hệ thống.'
+        useNotify({ message: 'Không tìm thấy MST trong hệ thống.', type: 'error' })
+        isMstVerified.value = false
       }
-    } catch {
-      // MST not found in external system
-      mstError.value = 'Không tìm thấy MST trong hệ thống.'
-      useNotify({ message: 'Không tìm thấy MST trong hệ thống.', type: 'error' })
+    } catch (err: any) {
+      const status = err?.statusCode || err?.status || err?.response?.status
+      if (status === 429) {
+        mstError.value = 'Hệ thống tra cứu đang bận, vui lòng thử lại sau vài giây.'
+        useNotify({ message: 'Hệ thống tra cứu đang bận, vui lòng thử lại sau vài giây.', type: 'error' })
+      } else {
+        mstError.value = 'Không tìm thấy MST trong hệ thống.'
+        useNotify({ message: 'Không tìm thấy MST trong hệ thống.', type: 'error' })
+      }
       isMstVerified.value = false
     }
   } finally {
