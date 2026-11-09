@@ -911,9 +911,8 @@
   min-width: 0;
   border-radius: 18px;
   border: 1px solid rgba(220, 227, 239, 0.96);
-  background: rgba(255, 255, 255, 0.92);
+  background: #ffffff;
   box-shadow: 0 14px 34px rgba(15, 23, 42, 0.05);
-  backdrop-filter: blur(12px);
   overflow: hidden;
 }
 
@@ -933,6 +932,26 @@
   max-width: 980px;
   width: 100%;
   margin: 0 auto;
+}
+
+.employer-newjob-body .page-dashboard-newjob.page-job-upload,
+.employer-newjob-page .page-dashboard-newjob.page-job-upload,
+.page-dashboard-newjob {
+  min-height: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.employer-newjob-body .employer-step-panel,
+.employer-newjob-body .employer-step-detail-wrap,
+.employer-newjob-body .employer-terms,
+.employer-newjob-body .employer-actions {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.employer-newjob-body .employer-accordion {
+  background: #ffffff;
 }
 
 .employer-company-content {
