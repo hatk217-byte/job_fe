@@ -5,12 +5,13 @@ import type {
 } from '~/entities/company'
 import type { CompanyBannerModel } from '~/models/company'
 import { normalizeCompanyLogo } from '~/utils/companyLogo'
+import { formatCompanyName } from '~/utils/formatCompanyName'
 
 export class CompanyMapper {
   static fromDto(dto: any): CompanyEntity {
     return {
       id: dto.id,
-      name: dto.name,
+      name: formatCompanyName(dto.name),
       mst: dto.mst ?? undefined,
       logo: normalizeCompanyLogo(dto.logo),
       organizationType: dto.organizationType ?? null,

@@ -1,46 +1,52 @@
 <template>
   <div class="blog-directory-page min-h-screen">
-    <section v-if="!loading && featuredBlog" class="blog-directory-hero">
-      <div class="container">
-        <div class="blog-directory-hero-shell">
-          <article class="blog-featured-card">
-            <div class="blog-featured-copy">
-              <div class="blog-featured-meta">
-                <span class="blog-badge">{{ featuredBlog.category || 'Blog' }}</span>
-                <span class="blog-featured-date">{{ formatDate(featuredBlog.createdAt) }}</span>
-              </div>
-              <h2>{{ featuredBlog.title }}</h2>
-              <p>{{ featuredBlog.description }}</p>
-              <div class="blog-featured-actions">
-                <NuxtLink
-                  :to="`/blog/${featuredBlog.id}`"
-                  class="primary-btn blog-featured-btn"
-                >
-                  Đọc bài viết
-                </NuxtLink>
-                <NuxtLink to="/jobs/search" class="blog-featured-secondary text-black">
-                  Xem việc làm mới
-                </NuxtLink>
-              </div>
-            </div>
-            <div class="blog-featured-visual">
-              <div
-                class="blog-featured-media blog-featured-media-one"
-                :style="featuredBlogMediaStyle"
-                role="img"
-                :aria-label="featuredBlog.title"
-              />
-            </div>
-          </article>
+    <!-- Top Hero Section (White background - VLDL Unified Style) -->
+    <section class="blog-directory-hero">
+      <div class="container blog-directory-shell">
+        <div class="blog-directory-heading">
+          <h1 class="blog-directory-title">Blog & Cẩm nang nghề giáo</h1>
+          <p class="blog-directory-subtitle">Khám phá những bài viết hữu ích về phương pháp giảng dạy, kỹ năng sư phạm và cơ hội nghề nghiệp.</p>
         </div>
+
+        <form class="blog-directory-search-card" @submit.prevent="applySearch">
+          <div class="blog-search-input-wrap">
+            <span class="blog-search-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </span>
+            <input
+              v-model="searchKeyword"
+              type="text"
+              placeholder="Nhập tiêu đề bài viết, chủ đề hoặc từ khóa..."
+            />
+          </div>
+          <button type="submit" class="blog-search-btn">
+            Tìm kiếm
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </button>
+        </form>
       </div>
     </section>
 
-    <div class="blog-directory-content">
+    <!-- Main Content Section -->
+    <section class="blog-directory-content">
       <div class="container">
-        <!-- Filter category -->
-        <div v-if="!loading && blogBadges.length" class="blog-directory-topbar">
+        <!-- Category Filter Pills (if categories exist) -->
+        <div v-if="!loading && blogBadges.length" class="blog-directory-filter-row">
           <div class="blog-directory-pills">
+            <button
+              type="button"
+              class="blog-directory-pill"
+              :class="{ 'is-active': selectedBadges.size === 0 }"
+              @click="selectedBadges.clear(); currentPage = 1"
+            >
+              Tất cả
+            </button>
             <button
               v-for="b in blogBadges"
               :key="b"
@@ -54,100 +60,102 @@
           </div>
         </div>
 
-        <!-- Content: left list + right sidebar -->
-        <div v-if="loading" class="blog-directory-main grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-4">
+        <!-- 1. Skeleton Loading -->
+        <div v-if="loading" class="blog-directory-main">
           <div class="blog-directory-main__list">
             <div
               v-for="i in 3"
               :key="i"
-              class="blog-directory-skeleton-row"
+              class="blog-directory-skeleton-card"
             >
-              <div class="blog-directory-row__grid grid gap-0">
-                <USkeleton class="h-[156px] w-full" style="border-radius: 12px" />
-                <div class="blog-directory-row__body">
-                  <div class="flex items-center gap-3">
-                    <USkeleton class="h-6 w-20 rounded-full" />
-                    <USkeleton class="h-4 w-24" />
-                  </div>
-                  <USkeleton class="mt-4 h-8 w-4/5" />
-                  <USkeleton class="mt-3 h-4 w-full" />
-                  <USkeleton class="mt-2 h-4 w-5/6" />
-                  <USkeleton class="mt-6 h-4 w-16" />
+              <USkeleton class="h-40 w-full rounded-xl" />
+              <div class="flex flex-col justify-center gap-3">
+                <div class="flex items-center gap-2">
+                  <USkeleton class="h-6 w-20 rounded-full" />
+                  <USkeleton class="h-4 w-24" />
                 </div>
+                <USkeleton class="h-6 w-4/5 rounded" />
+                <USkeleton class="h-4 w-full rounded" />
+                <USkeleton class="h-4 w-2/3 rounded" />
               </div>
             </div>
           </div>
 
-          <div class="blog-directory-main__sidebar">
-            <div class="blog-directory-sidebar-card">
-              <USkeleton class="h-6 w-28" />
-              <USkeleton class="mt-4 h-11 w-full" style="border-radius: 12px" />
+          <aside class="blog-directory-main__sidebar">
+            <div class="blog-sidebar-card">
+              <USkeleton class="h-5 w-28 rounded-full mb-3" />
+              <USkeleton class="h-6 w-40 rounded mb-2" />
+              <USkeleton class="h-4 w-full rounded mb-4" />
+              <USkeleton class="h-10 w-full rounded-xl" />
             </div>
-            <div class="blog-directory-sidebar-card blog-directory-sidebar-accent blog-directory-sidebar-employer">
-              <USkeleton class="h-5 w-32" />
-              <USkeleton class="mt-3 h-7 w-40" />
-              <USkeleton class="mt-3 h-4 w-56" />
-              <USkeleton class="mt-6 h-11 w-36" style="border-radius: 12px" />
-            </div>
-          </div>
+          </aside>
         </div>
 
-        <div v-else-if="blogs.length > 0" class="blog-directory-main grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-4">
-          <!-- Left: blog list (include the first blog too) -->
+        <!-- 2. When Blogs Found -->
+        <div v-else-if="filteredBlogs.length > 0" class="blog-directory-main">
+          <!-- Left: Blog List -->
           <div class="blog-directory-main__list">
             <NuxtLink
               v-for="blog in paginatedBlogs"
               :key="blog.id"
               :to="`/blog/${blog.id}`"
-              class="block"
+              class="blog-directory-card-link"
             >
-              <article
-                class="blog-directory-row group overflow-hidden bg-white transition-all duration-200 ease-out hover:-translate-y-1"
-              >
-                <div class="blog-directory-row__grid grid gap-0">
-                  <div class="blog-directory-row__thumb-wrap">
-                    <div class="blog-directory-row__media w-full overflow-hidden bg-[rgba(29,36,51,0.04)]">
-                      <img
-                        v-if="blog.image"
-                        :src="blog.image"
-                        :alt="blog.title"
-                        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                      />
-                      <div v-else class="h-full w-full flex items-center justify-center">
-                        <UIcon name="i-lucide-image" class="w-12 h-12 text-gray-300" />
-                      </div>
-                    </div>
+              <article class="blog-directory-card">
+                <div class="blog-directory-card__media">
+                  <img
+                    v-if="blog.image"
+                    :src="blog.image"
+                    :alt="blog.title"
+                    loading="lazy"
+                  />
+                  <div v-else class="blog-directory-card__placeholder">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="blog-directory-card__body">
+                  <div class="blog-directory-card__meta">
+                    <span class="blog-category-badge">{{ blog.category || 'Blog' }}</span>
+                    <span class="blog-card-date">{{ formatDate(blog.createdAt) }}</span>
                   </div>
 
-                  <div class="blog-directory-row__body">
-                    <div class="flex flex-wrap items-center gap-2">
-                      <span class="blog-directory-pill">
-                        {{ blog.category || 'Blog' }}
-                      </span>
-                      <span class="blog-directory-row__date">
-                        {{ formatDate(blog.createdAt) }}
-                      </span>
-                    </div>
+                  <h3 class="blog-directory-card__title">
+                    {{ blog.title }}
+                  </h3>
 
-                    <h3 class="blog-directory-row__title line-clamp-2">
-                      {{ blog.title }}
-                    </h3>
+                  <p class="blog-directory-card__desc">
+                    {{ blog.description }}
+                  </p>
 
-                    <p class="blog-directory-row__desc line-clamp-3 max-w-[46rem]">
-                      {{ blog.description }}
-                    </p>
-
-                    <div class="blog-directory-row__more">
-                      Đọc thêm
-                    </div>
-                  </div>
+                  <span class="blog-directory-card__more">
+                    Đọc tiếp
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                      <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                  </span>
                 </div>
               </article>
             </NuxtLink>
 
-            <!-- Pagination -->
-            <div v-if="totalPages > 1" class="blog-directory-pagination flex justify-end">
+            <!-- Centered Pagination -->
+            <div v-if="totalPages > 1" class="blog-directory-pagination">
               <div class="blog-directory-pagination__list">
+                <button
+                  type="button"
+                  class="blog-directory-pagination__btn"
+                  :disabled="currentPage <= 1"
+                  aria-label="Trang trước"
+                  @click="goToPage(currentPage - 1)"
+                >
+                  ‹
+                </button>
+
                 <button
                   v-for="p in visiblePages"
                   :key="p"
@@ -163,71 +171,70 @@
                   type="button"
                   class="blog-directory-pagination__btn"
                   :disabled="currentPage >= totalPages"
+                  aria-label="Trang sau"
                   @click="goToPage(currentPage + 1)"
                 >
-                  <UIcon name="i-heroicons-chevron-right" />
+                  ›
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- Right: sidebar -->
-          <aside
-            class="blog-directory-main__sidebar lg:sticky lg:self-start"
-            style="top: calc(var(--app-header-height) + 16px)"
-          >
-            <!-- Search -->
-            <div class="blog-directory-sidebar-card">
-              <h3>Tìm bài viết</h3>
-              <form class="blog-directory-search" @submit.prevent="applySearch">
-                <input
-                  v-model="searchKeyword"
-                  type="text"
-                  placeholder="Tìm theo từ khóa"
-                >
-                <button type="submit" aria-label="Tìm bài viết">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                </button>
-              </form>
-            </div>
-
-            <!-- CTA: Jobs -->
-            <div class="blog-directory-sidebar-card blog-directory-sidebar-accent">
-              <span class="blog-directory-sidebar-kicker">Dành cho ứng viên</span>
-              <h3>Xem việc làm mới</h3>
-              <p>Danh sách việc làm dành cho giáo viên.</p>
-              <NuxtLink to="/jobs/search" class="primary-btn blog-directory-sidebar-btn">
-                Tìm việc làm
+          <!-- Right: Sidebar -->
+          <aside class="blog-directory-main__sidebar">
+            <div class="blog-sidebar-card">
+              <span class="blog-sidebar-badge">Dành cho giáo viên</span>
+              <h3>Tìm việc làm giáo dục</h3>
+              <p>Hàng ngàn cơ hội việc làm tại các trường học, trung tâm uy tín trên toàn quốc.</p>
+              <NuxtLink to="/jobs/search" class="blog-sidebar-cta-btn">
+                Xem việc làm mới
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
               </NuxtLink>
             </div>
 
-            <!-- CTA: Free post -->
-            <div class="blog-directory-sidebar-card blog-directory-sidebar-accent blog-directory-sidebar-employer">
-              <span class="blog-directory-sidebar-kicker">Dành cho nhà tuyển dụng</span>
-              <h3>Đăng tin miễn phí</h3>
-              <p>Tạo tin tuyển dụng và tiếp cận giáo viên phù hợp.</p>
-              <NuxtLink to="/jobs/upload" class="primary-btn blog-directory-sidebar-btn">
+            <div class="blog-sidebar-card">
+              <span class="blog-sidebar-badge blog-sidebar-badge-employer">Dành cho nhà tuyển dụng</span>
+              <h3>Đăng tin tuyển dụng</h3>
+              <p>Tiếp cận nhanh chóng với mạng lưới hàng ngàn giáo viên tài năng, phù hợp.</p>
+              <NuxtLink to="/jobs/upload" class="blog-sidebar-outline-btn">
                 Đăng tin miễn phí
               </NuxtLink>
             </div>
-
           </aside>
         </div>
 
-        <!-- Empty state -->
-        <div v-else class="text-center py-16">
-          <UIcon name="i-lucide-file-text" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 class="text-lg font-medium text-gray-900 mb-2">Chưa có bài viết nào</h3>
-          <p class="text-gray-500 mb-6">Hãy quay lại sau để cập nhật những bài viết mới nhất.</p>
-          <UButton variant="solid" color="primary" @click="navigateTo('/')">
-            Quay lại trang chủ
-          </UButton>
-        </div>
+        <!-- 3. Empty State (Clean Card Matching New Theme) -->
+        <div v-else class="blog-empty-state-wrapper">
+          <div class="blog-empty-state-card">
+            <div class="blog-empty-icon-box" aria-hidden="true">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                <line x1="8" y1="6" x2="16" y2="6" />
+                <line x1="8" y1="10" x2="14" y2="10" />
+              </svg>
+            </div>
 
+            <h2 class="blog-empty-title">Chưa có bài viết nào</h2>
+            <p class="blog-empty-desc">
+              Chuyên mục Blog đang được ban biên tập cập nhật những bài viết và cẩm nang giáo dục mới nhất. Bạn hãy quay lại sau hoặc khám phá các cơ hội việc làm hấp dẫn nhé!
+            </p>
+
+            <div class="blog-empty-actions">
+              <NuxtLink to="/jobs/search" class="blog-empty-primary-btn">
+                Khám phá việc làm
+              </NuxtLink>
+              <NuxtLink to="/" class="blog-empty-secondary-btn">
+                Quay lại trang chủ
+              </NuxtLink>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -237,7 +244,7 @@ import type { BlogEntity } from '~/entities/blog'
 const { $api } = useNuxtApp()
 
 useHead({
-  title: 'Blog',
+  title: 'Blog & Cẩm nang nghề giáo - TuyenGiaoVien.vn',
 })
 
 const blogs = ref<BlogEntity[]>([])
@@ -247,14 +254,6 @@ const appliedKeyword = ref('')
 const pageSize = 6
 const currentPage = ref(1)
 const selectedBadges = reactive(new Set<string>())
-
-const featuredBlog = computed(() => blogs.value[0] ?? null)
-
-const featuredBlogMediaStyle = computed(() => {
-  const image = featuredBlog.value?.image
-  if (!image) return undefined
-  return { backgroundImage: `url(${image})` }
-})
 
 const applySearch = () => {
   appliedKeyword.value = searchKeyword.value.trim()
@@ -327,7 +326,7 @@ const blogBadges = computed(() => {
   return out
 })
 
-const formatDate = (date?: Date) => {
+const formatDate = (date?: Date | string) => {
   if (!date) return ''
   const d = new Date(date)
   if (Number.isNaN(d.getTime())) return ''
@@ -338,17 +337,11 @@ async function fetchBlogs() {
   loading.value = true
   try {
     const response = await $api.blog.getAllBlogs()
-    console.log('[fetchBlogs] API response:', response)
     if (Array.isArray(response)) {
-      const publishedBlogs = response.filter((blog: BlogEntity) => blog.status === 'published')
-      console.log('[fetchBlogs] filtered PUBLISHED blogs:', publishedBlogs)
-      blogs.value = publishedBlogs
+      blogs.value = response.filter((b: BlogEntity) => b.status === 'published')
     } else if (response && typeof response === 'object' && 'data' in response) {
-      const publishedBlogs = (response as any).data.filter((blog: BlogEntity) => blog.status === 'published')
-      console.log('[fetchBlogs] filtered PUBLISHED blogs:', publishedBlogs)
-      blogs.value = publishedBlogs
+      blogs.value = ((response as any).data || []).filter((b: BlogEntity) => b.status === 'published')
     } else {
-      console.log('[fetchBlogs] No blogs found, response:', response)
       blogs.value = []
     }
   } catch (e) {

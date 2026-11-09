@@ -1,6 +1,7 @@
 import type { JobEntity } from '~/entities/job'
 import type { JobModel, JobModelAddUpdate } from '~/models/job'
 import { normalizeCompanyLogo } from '~/utils/companyLogo'
+import { formatCompanyName } from '~/utils/formatCompanyName'
 
 export class JobMapper {
   static toModel(value: JobEntity): JobModel {
@@ -16,7 +17,7 @@ export class JobMapper {
       grade: value.grade ?? null,
       companyId: value.companyId,
       userId: value.userId,
-      companyName: value.companyName,
+      companyName: formatCompanyName(value.companyName),
       companyLogo: normalizeCompanyLogo(value.companyLogo) ?? '',
       companyBannerImage: (value as any).companyBannerImage || null,
       organizationType: value.organizationType,

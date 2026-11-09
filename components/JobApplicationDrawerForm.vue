@@ -1,158 +1,166 @@
 <template>
   <form class="apply-modal-form" @submit.prevent="submit">
-    <section class="apply-profile-section">
-      <div class="apply-profile-editor-grid">
-        <label
-          class="apply-modal-field"
-          :class="{ 'has-error': fieldErrors.fullName }"
-        >
-          <span>Tên của bạn <span class="is-required">*</span></span>
-          <input
-            v-model="form.fullName"
-            type="text"
-            :disabled="isFullNameDisabled"
-            @input="onFullNameInput"
-            @blur="validateFieldOnBlur('fullName')"
-          />
-          <p v-if="fieldErrors.fullName" class="apply-modal-field-error" role="alert">
-            {{ fieldErrors.fullName }}
-          </p>
-        </label>
+    <!-- 1. CV CỦA BẠN (Top Box matching VLDL) -->
+    <section class="apply-vldl-cv-box">
+      <h3 class="apply-vldl-cv-title">CV của bạn <span class="is-required">*</span></h3>
 
-        <label
-          class="apply-modal-field"
-          :class="{ 'has-error': fieldErrors.email }"
-        >
-          <span>Email <span class="is-required">*</span></span>
-          <input
-            v-model="form.email"
-            type="email"
-            :disabled="isEmailDisabled"
-            @blur="validateFieldOnBlur('email')"
-            @input="clearFieldError('email')"
-          />
-          <p v-if="fieldErrors.email" class="apply-modal-field-error" role="alert">
-            {{ fieldErrors.email }}
-          </p>
-        </label>
-
-        <label
-          class="apply-modal-field"
-          :class="{ 'has-error': fieldErrors.phone }"
-        >
-          <span>Số điện thoại <span class="is-required">*</span></span>
-          <input
-            v-model="form.phone"
-            type="tel"
-            :disabled="isPhoneDisabled"
-            @blur="validateFieldOnBlur('phone')"
-            @input="clearFieldError('phone')"
-          />
-          <p v-if="fieldErrors.phone" class="apply-modal-field-error" role="alert">
-            {{ fieldErrors.phone }}
-          </p>
-        </label>
-      </div>
-    </section>
-
-    <section class="apply-profile-section">
-      <div class="apply-profile-section-head">
-        <div>
-          <h3>Tải lên CV <span class="is-required">*</span></h3>
-        </div>
-      </div>
-
-      <div class="apply-profile-resume">
-        <div class="apply-profile-resume-file" :hidden="!hasCvFile">
-          <span class="apply-profile-resume-icon" aria-hidden="true">
-            <svg width="42" height="42" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M7 3.5h7.5L18 7v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M14.5 3.5V7H18"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M8.5 16.5 10.7 12l2.1 4.5M9.1 15.2h3.2"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
+      <!-- When CV is chosen/uploaded -->
+      <div v-if="hasCvFile" class="apply-vldl-cv-selected">
+        <div class="apply-vldl-cv-file-info">
+          <span class="apply-vldl-cv-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
             </svg>
           </span>
-
-          <div class="apply-profile-resume-copy">
-            <div class="apply-profile-resume-name-row">
-              <strong class="apply-profile-resume-name">{{ cvFileName }}</strong>
-              <span class="apply-profile-resume-status" aria-label="CV hợp lệ">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path
-                    d="m5.5 12.5 4 4 9-9"
-                    stroke="currentColor"
-                    stroke-width="2.3"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </span>
-            </div>
+          <div class="apply-vldl-cv-name-wrap">
+            <strong class="apply-vldl-cv-name">{{ cvFileName }}</strong>
+            <span class="apply-vldl-cv-status">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              {{ form.cvFile ? 'Đã chọn tệp' : 'Đã tải lên' }}
+            </span>
           </div>
         </div>
 
-        <div class="apply-profile-resume-side">
-          <label class="apply-modal-upload-btn">
-            <input
-              ref="cvInput"
-              type="file"
-              accept=".doc,.docx,.pdf"
-              hidden
-              @change="onCvSelected"
-            />
-            <span>Tải lên CV</span>
-          </label>
-          <p>Hỗ trợ .doc, .docx, .pdf · tối đa 3MB</p>
-        </div>
+        <label class="apply-vldl-change-cv-btn">
+          <input
+            ref="cvInput"
+            type="file"
+            accept=".doc,.docx,.pdf"
+            hidden
+            @change="onCvSelected"
+          />
+          <span>Đổi CV khác</span>
+        </label>
       </div>
 
-      <p v-if="cvError" class="apply-modal-field-error">{{ cvError }}</p>
+      <!-- When no CV chosen yet -->
+      <div v-else class="apply-vldl-cv-empty">
+        <label class="apply-vldl-upload-btn">
+          <input
+            ref="cvInput"
+            type="file"
+            accept=".doc,.docx,.pdf"
+            hidden
+            @change="onCvSelected"
+          />
+          <span>Tải lên CV</span>
+        </label>
+        <p class="apply-vldl-cv-hint">
+          Vui lòng tải lên tệp .doc, .docx hoặc .pdf, tối đa 3MB và không có mật khẩu bảo vệ
+        </p>
+      </div>
+
+      <p v-if="cvError" class="apply-modal-field-error" role="alert">{{ cvError }}</p>
     </section>
 
-    <section class="apply-profile-section">
-      <div class="apply-profile-section-head">
-        <div>
-          <h3>Cover Letter</h3>
-        </div>
+    <!-- 2. HỌ VÀ TÊN -->
+    <label
+      class="apply-modal-field"
+      :class="{ 'has-error': fieldErrors.fullName }"
+    >
+      <span class="field-label">Họ và tên <span class="is-required">*</span></span>
+      <div class="field-input-wrap">
+        <input
+          v-model="form.fullName"
+          type="text"
+          placeholder="Nhập họ và tên đầy đủ của bạn"
+          :disabled="isFullNameDisabled"
+          @input="onFullNameInput"
+          @blur="validateFieldOnBlur('fullName')"
+        />
       </div>
+      <p v-if="fieldErrors.fullName" class="apply-modal-field-error" role="alert">
+        {{ fieldErrors.fullName }}
+      </p>
+    </label>
 
-      <label class="apply-modal-field apply-modal-field-textarea apply-profile-cover-field">
+    <!-- 3. EMAIL LIÊN HỆ -->
+    <label
+      class="apply-modal-field"
+      :class="{ 'has-error': fieldErrors.email }"
+    >
+      <span class="field-label">Email liên hệ <span class="is-required">*</span></span>
+      <div class="field-input-wrap has-trailing-icon">
+        <input
+          v-model="form.email"
+          type="email"
+          placeholder="Nhập địa chỉ email của bạn"
+          :disabled="isEmailDisabled"
+          @blur="validateFieldOnBlur('email')"
+          @input="clearFieldError('email')"
+        />
+        <svg class="field-trailing-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect width="20" height="16" x="2" y="4" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg>
+      </div>
+      <p v-if="fieldErrors.email" class="apply-modal-field-error" role="alert">
+        {{ fieldErrors.email }}
+      </p>
+    </label>
+
+    <!-- 4. SỐ ĐIỆN THOẠI -->
+    <label
+      class="apply-modal-field"
+      :class="{ 'has-error': fieldErrors.phone }"
+    >
+      <span class="field-label">Số điện thoại <span class="is-required">*</span></span>
+      <div class="field-input-wrap has-trailing-icon">
+        <input
+          v-model="form.phone"
+          type="tel"
+          placeholder="Nhập số điện thoại liên hệ"
+          :disabled="isPhoneDisabled"
+          @blur="validateFieldOnBlur('phone')"
+          @input="clearFieldError('phone')"
+        />
+        <svg class="field-trailing-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+        </svg>
+      </div>
+      <p v-if="fieldErrors.phone" class="apply-modal-field-error" role="alert">
+        {{ fieldErrors.phone }}
+      </p>
+    </label>
+
+    <!-- 5. COVER LETTER -->
+    <label class="apply-modal-field apply-modal-field-textarea">
+      <span class="field-label">Thư giới thiệu / Cover Letter (Không bắt buộc)</span>
+      <div class="field-textarea-wrap">
         <textarea
           v-model="form.coverLetter"
-          rows="7"
+          rows="3"
           maxlength="1000"
-          placeholder="Viết vài dòng ngắn gọn về kinh nghiệm, thế mạnh và lý do bạn phù hợp với vị trí này."
+          placeholder="Hãy điền thêm thông tin để nhà tuyển dụng biết rõ hơn về thế mạnh của bạn"
         />
-        <small>{{ coverLetterCount }} / 1000</small>
-      </label>
-    </section>
+        <div class="apply-textarea-counter">{{ coverLetterCount }} / 1000</div>
+      </div>
+    </label>
 
+    <!-- 6. TERMS AGREEMENT CHECKBOX (Matching VLDL) -->
+    <label class="apply-vldl-terms-row">
+      <input v-model="termsAgreed" type="checkbox" class="apply-vldl-checkbox" />
+      <span class="terms-text">
+        Tôi đồng ý với
+        <NuxtLink to="/terms" target="_blank" class="terms-link">Điều khoản dịch vụ</NuxtLink>
+        và
+        <NuxtLink to="/privacy" target="_blank" class="terms-link">Chính sách bảo mật</NuxtLink>
+        của TuyenGiaoVien khi nộp đơn ứng tuyển.
+      </span>
+    </label>
+
+    <!-- 7. ACTIONS (Orange Submit Button) -->
     <div class="apply-modal-actions">
-      <button type="button" class="white-btn apply-modal-cancel" @click="emitCancel">
-        Hủy
-      </button>
       <button
         type="submit"
-        class="primary-btn apply-modal-submit"
-        :disabled="!isValid || loading"
+        class="apply-vldl-submit-btn"
+        :disabled="!isValid || !termsAgreed || loading"
       >
-        Nộp đơn
+        <span v-if="!loading">Nộp đơn</span>
+        <span v-else>Đang gửi hồ sơ...</span>
       </button>
     </div>
   </form>
@@ -198,6 +206,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<Emits>()
 const cvInput = ref<HTMLInputElement | null>(null)
 const cvError = ref('')
+const termsAgreed = ref(true)
 
 const fieldErrors = reactive({
   fullName: '',
@@ -375,13 +384,9 @@ function onCvSelected(e: Event) {
   form.cvUrl = null
 }
 
-function emitCancel() {
-  emit('cancel')
-}
-
 function submit() {
   validateAllFields()
-  if (!isValid.value || props.loading) return
+  if (!isValid.value || !termsAgreed.value || props.loading) return
   emit('submit', {
     fullName: form.fullName,
     phone: form.phone,

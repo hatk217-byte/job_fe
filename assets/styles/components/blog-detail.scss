@@ -127,7 +127,7 @@
 }
 
 .blog-detail-content a {
-  color: var(--blue);
+  color: #ea580c;
   font-weight: 600;
   text-decoration: none;
 }
@@ -193,7 +193,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--blue);
+  color: #ea580c;
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
@@ -201,7 +201,7 @@
 }
 
 .blog-detail-back a:hover {
-  color: var(--blue-dark);
+  color: #c2410c;
 }
 
 .blog-detail-sidebar {
@@ -222,22 +222,20 @@
 }
 
 .blog-detail-sidebar-card-primary {
-  background:
-    radial-gradient(circle at 100% 0%, rgba(53, 99, 255, 0.16), transparent 38%),
-    linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
 }
 
 .blog-detail-sidebar-card-employer {
-  background:
-    radial-gradient(circle at 100% 0%, rgba(37, 99, 235, 0.1), transparent 38%),
-    linear-gradient(180deg, #ffffff 0%, #f5f8ff 100%);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
 }
 
 .blog-detail-sidebar-kicker,
 .blog-detail-related-item span {
-  color: var(--blue);
+  color: #ea580c;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.01em;
 }
 
@@ -296,15 +294,15 @@
 
 .blog-detail-text-link {
   width: fit-content;
-  color: var(--blue);
+  color: #ea580c;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 600;
   text-decoration: none;
   transition: color 0.18s ease;
 }
 
 .blog-detail-text-link:hover {
-  color: var(--blue-dark);
+  color: #c2410c;
 }
 
 .blog-detail-loading,

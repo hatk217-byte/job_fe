@@ -4,7 +4,7 @@
       <header class="legal-hero">
         <span class="legal-eyebrow">TuyenGiaoVien.vn</span>
         <h1>Điều khoản &amp; Chính sách quyền riêng tư</h1>
-        <p>Chúng tôi cam kết bảo vệ và tôn trọng quyền riêng tư của mọi người dùng.</p>
+        <p>Đội ngũ Tuyển Giáo Viên cam kết bảo vệ và tôn trọng quyền riêng tư của mọi người dùng.</p>
         <time datetime="2025-10-20">Ngày cập nhật: 20/10/2025</time>
       </header>
 
@@ -42,7 +42,7 @@
               khoản.
             </li>
             <li>
-              Bạn có trách nhiệm bảo mật thông tin đăng nhập và thông báo cho chúng tôi nếu phát hiện truy
+              Bạn có trách nhiệm bảo mật thông tin đăng nhập và thông báo cho đội ngũ Tuyển Giáo Viên nếu phát hiện truy
               cập trái phép.
             </li>
             <li>
@@ -74,14 +74,14 @@
 
           <h3>Thay đổi điều khoản</h3>
           <p>
-            Chúng tôi có thể cập nhật Điều khoản &amp; Điều kiện theo thời gian. Phiên bản mới sẽ được
+            Đội ngũ Tuyển Giáo Viên có thể cập nhật Điều khoản &amp; Điều kiện theo thời gian. Phiên bản mới sẽ được
             công bố trên trang này và có hiệu lực kể từ ngày cập nhật.
           </p>
         </section>
 
         <section class="legal-section" id="chinh-sach-quyen-rieng-tu">
           <h2>Chính sách quyền riêng tư</h2>
-          <p>Bằng việc sử dụng dịch vụ của chúng tôi, bạn đồng ý với các điều khoản được nêu ra dưới đây.</p>
+          <p>Bằng việc sử dụng dịch vụ tại TuyenGiaoVien.vn, bạn đồng ý với các điều khoản được nêu ra dưới đây.</p>
 
           <h3>Dữ liệu chúng tôi thu thập</h3>
           <h4>Đối với ứng viên</h4>
@@ -95,7 +95,7 @@
             </li>
             <li>
               Thông tin khác: Các thông tin bạn cung cấp khi điền đơn ứng tuyển, tham gia khảo sát hoặc
-              liên hệ với chúng tôi.
+              liên hệ với đội ngũ Tuyển Giáo Viên.
             </li>
           </ul>
 
@@ -140,7 +140,7 @@
 
           <h3>Chia sẻ và tiết lộ dữ liệu</h3>
           <p>
-            Chúng tôi cam kết không bán, thuê hay cho thuê thông tin cá nhân của bạn cho bên thứ ba.
+            Đội ngũ Tuyển Giáo Viên cam kết không bán, thuê hay cho thuê thông tin cá nhân của bạn cho bên thứ ba.
             Thông tin của bạn có thể được chia sẻ trong các trường hợp sau:
           </p>
           <ul>
@@ -171,7 +171,7 @@
             <li>Truy cập: Yêu cầu một bản sao các dữ liệu cá nhân mà chúng tôi lưu trữ về bạn.</li>
             <li>Chỉnh sửa: Cập nhật hoặc sửa đổi các thông tin không chính xác trong tài khoản của bạn.</li>
             <li>Xóa bỏ: Yêu cầu xóa tài khoản và các dữ liệu cá nhân liên quan.</li>
-            <li>Từ chối: Ngừng nhận các email thông tin, tuyển dụng từ chúng tôi.</li>
+            <li>Từ chối: Ngừng nhận các email thông tin, tuyển dụng từ TuyenGiaoVien.vn.</li>
           </ul>
           <p>
             Để thực hiện các quyền này, bạn có thể trực tiếp chỉnh sửa trong phần cài đặt tài khoản hoặc
@@ -192,7 +192,7 @@
           <h2>Liên hệ</h2>
           <p>
             Nếu bạn có bất kỳ câu hỏi hoặc thắc mắc nào về Điều khoản &amp; Chính sách quyền riêng tư này,
-            vui lòng liên hệ với chúng tôi.
+            vui lòng liên hệ với đội ngũ Tuyển Giáo Viên.
           </p>
           <dl class="legal-contact-list">
             <div>
@@ -304,4 +304,8 @@ useHead({
   ],
 })
 </script>
+
+<style lang="scss">
+@import '~/assets/styles/components/legal-page.scss';
+</style>
 

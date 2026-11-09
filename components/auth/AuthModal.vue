@@ -2,9 +2,9 @@
   <UModal
     v-model:open="open"
     :ui="{
-      overlay: 'bg-[rgba(29,36,51,0.45)] backdrop-blur-sm',
+      overlay: '!bg-slate-900/40 !backdrop-blur-none',
       content:
-        'sm:max-w-[520px] w-[94vw] overflow-visible rounded-none border-0 ring-0 shadow-none bg-transparent p-0',
+        '!bg-transparent !shadow-none !ring-0 !border-0 !p-0 sm:!max-w-[620px] !w-[92vw] !max-w-[620px] !rounded-none !divide-none overflow-visible',
       header: 'hidden',
       close: 'hidden',
       body: 'p-0',
@@ -12,7 +12,7 @@
   >
     <slot />
 
-    <template #body>
+    <template #content>
       <div
         class="auth-modal-panel"
         role="dialog"
@@ -458,6 +458,7 @@
 </template>
 
 <script setup lang="ts">
+import { markRaw, toRaw } from 'vue'
 import { loginSchema, type LoginType } from '~/constants/schema/login'
 import {
   registerSchema,
@@ -613,8 +614,11 @@ function onEmployerTaxCodeInput(event: Event) {
   )
 }
 
+const loginSchemaInstance = markRaw(loginSchema())
+const candidateSchemaInstance = markRaw(registerSchema())
+const employerSchemaInstance = markRaw(registerCompanySchema())
+
 const loginForm = reactive({
-  schema: loginSchema(),
   state: reactive<Partial<LoginType>>({
     email: '',
     password: '',
@@ -623,13 +627,6 @@ const loginForm = reactive({
 
 const registerForm = reactive({
   activeTab: 'candidate' as 'candidate' | 'employer',
-  candidateSchema: registerSchema(),
-  employerSchema: registerCompanySchema(),
-  get currentSchema() {
-    return this.activeTab === 'candidate'
-      ? this.candidateSchema
-      : this.employerSchema
-  },
   state: reactive({
     fullName: '',
     taxCode: '',
@@ -686,7 +683,7 @@ async function onSubmitLogin() {
   validateLoginFieldOnBlur('email')
   if (loginFieldErrors.email) return
 
-  const parsed = loginForm.schema.safeParse(loginForm.state)
+  const parsed = loginSchemaInstance.safeParse(toRaw(loginForm.state))
   if (!parsed.success) {
     loginError.value = firstZodMessage(parsed)
     return
@@ -734,7 +731,11 @@ async function onSubmitRegister() {
     return
   }
 
-  const parsed = registerForm.currentSchema.safeParse(registerForm.state)
+  const currentSchema =
+    registerForm.activeTab === 'candidate'
+      ? candidateSchemaInstance
+      : employerSchemaInstance
+  const parsed = currentSchema.safeParse(toRaw(registerForm.state))
   if (!parsed.success) {
     registerError.value = firstZodMessage(parsed)
     return
@@ -812,3 +813,7 @@ async function onSubmitRegister() {
   }
 }
 </script>
+
+<style lang="scss">
+@use "~/assets/styles/components/auth-modal.scss";
+</style>

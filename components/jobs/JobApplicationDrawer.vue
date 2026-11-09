@@ -1,39 +1,33 @@
 <template>
-  <UDrawer
-    v-model:open="open"
-    direction="right"
-    handle-only
-    :handle="false"
-    class="job-apply-drawer-root"
-    :ui="drawerUi"
-  >
-    <template #body>
-      <div
-        class="apply-modal-panel"
+  <Teleport to="body">
+    <Transition name="job-apply-slide">
+      <aside
+        v-if="open"
+        ref="drawerPanelRef"
+        class="job-apply-drawer-aside"
         role="dialog"
-        aria-modal="true"
+        aria-modal="false"
         aria-label="Hồ sơ ứng tuyển"
       >
-        <button
-          type="button"
-          class="apply-modal-close"
-          aria-label="Đóng hồ sơ ứng tuyển"
-          @click="open = false"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path
-              d="M6 6L18 18M18 6L6 18"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-            />
-          </svg>
-        </button>
-
+        <!-- Header Row (Compact & clean with inline close button) -->
         <div class="apply-modal-header">
-          <span class="apply-modal-eyebrow">Hồ sơ ứng tuyển</span>
-          <h2>{{ job?.title || '' }}</h2>
-          <p>{{ job?.companyName || '' }}</p>
+          <div class="apply-modal-header-info">
+            <span class="apply-modal-eyebrow">Hồ sơ ứng tuyển</span>
+            <h2 :title="job?.title">{{ job?.title || '' }}</h2>
+            <p v-if="job?.companyName" :title="job.companyName">{{ job.companyName }}</p>
+          </div>
+
+          <button
+            type="button"
+            class="apply-modal-close"
+            aria-label="Đóng hồ sơ ứng tuyển"
+            @click="open = false"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
         </div>
 
         <JobApplicationDrawerForm
@@ -42,9 +36,9 @@
           @cancel="open = false"
           @submit="onSubmit"
         />
-      </div>
-    </template>
-  </UDrawer>
+      </aside>
+    </Transition>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -53,27 +47,6 @@ import type { JobApplicationFormPayload } from '~/composables/useJobApplicationS
 import { resolveUserPhoneNumber } from '~/utils/user-profile'
 
 const open = defineModel<boolean>('open', { default: false })
-
-const drawerUi = {
-  overlay: 'job-apply-drawer-overlay',
-  content: [
-    'job-apply-drawer-content',
-    '!fixed !top-0 !right-0 !bottom-0 !left-auto',
-    '!w-[min(520px,calc(100vw-48px))]',
-    '!max-w-[min(520px,calc(100vw-48px))]',
-    '!min-w-0',
-    '!h-dvh !max-h-none',
-    '!m-0 !p-0',
-    '!rounded-none !border-0',
-    '!bg-transparent !shadow-none',
-    'data-[vaul-drawer-direction=right]:!w-[min(520px,calc(100vw-48px))]',
-    'data-[vaul-drawer-direction=right]:!max-w-[min(520px,calc(100vw-48px))]',
-  ].join(' '),
-  container: '!h-full !w-full !max-w-none !p-0',
-  header: '!hidden',
-  body: 'job-apply-drawer-body !h-full !flex-1 !min-h-0 !p-0',
-  handle: '!hidden',
-}
 
 const props = defineProps<{
   job: Pick<JobModel, 'id' | 'title' | 'companyName'> | null
@@ -87,6 +60,7 @@ const authStore = useAuthStore()
 const { submitApplication } = useJobApplicationSubmit()
 const { markJobAsApplied } = useAppliedJobs()
 const formSubmitting = ref(false)
+const drawerPanelRef = ref<HTMLElement | null>(null)
 
 watch(open, async (isOpen) => {
   if (!isOpen) {
@@ -101,6 +75,40 @@ watch(open, async (isOpen) => {
     catch (error) {
       console.error('Failed to refresh user profile for apply drawer:', error)
     }
+  }
+})
+
+// Close on Escape or click outside (wheel/scroll on JD remains completely free!)
+function onKeyDown(e: KeyboardEvent) {
+  if (e.key === 'Escape' && open.value) {
+    open.value = false
+  }
+}
+
+function onDocumentPointerDown(e: PointerEvent) {
+  if (!open.value || !drawerPanelRef.value) return
+  const target = e.target as HTMLElement
+  if (
+    !drawerPanelRef.value.contains(target) &&
+    !target.closest('.job-vldl-cta-btn') &&
+    !target.closest('.apply-trigger-btn') &&
+    !target.closest('.job-apply-trigger')
+  ) {
+    open.value = false
+  }
+}
+
+onMounted(() => {
+  if (import.meta.client) {
+    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('pointerdown', onDocumentPointerDown)
+  }
+})
+
+onUnmounted(() => {
+  if (import.meta.client) {
+    window.removeEventListener('keydown', onKeyDown)
+    window.removeEventListener('pointerdown', onDocumentPointerDown)
   }
 })
 

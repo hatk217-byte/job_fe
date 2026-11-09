@@ -292,7 +292,7 @@
             class="h-9 w-9 rounded-xl bg-[#eef5ff] grid place-items-center"
             style="border: 1px solid rgba(29, 36, 51, 0.10)"
           >
-            <UIcon name="i-lucide-upload" class="w-5 h-5 text-[var(--blue)]" />
+            <UIcon name="i-lucide-upload" class="w-5 h-5 text-emerald-600" />
           </div>
         </div>
       </div>
@@ -319,7 +319,7 @@
             class="h-9 w-9 rounded-xl bg-[#eef5ff] grid place-items-center"
             style="border: 1px solid rgba(29, 36, 51, 0.10)"
           >
-            <UIcon name="i-lucide-upload" class="w-5 h-5 text-[var(--blue)]" />
+            <UIcon name="i-lucide-upload" class="w-5 h-5 text-emerald-600" />
           </div>
         </div>
       </div>
@@ -339,7 +339,7 @@
             class="h-9 w-9 rounded-xl bg-[#eef5ff] grid place-items-center"
             style="border: 1px solid rgba(29, 36, 51, 0.10)"
           >
-            <UIcon name="i-lucide-upload" class="w-5 h-5 text-[var(--blue)]" />
+            <UIcon name="i-lucide-upload" class="w-5 h-5 text-emerald-600" />
           </div>
         </div>
         <UButton v-if="bannerPreview" size="xs" color="error" class="mt-2" @click.stop="removeBanner">Xóa</UButton>

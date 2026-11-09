@@ -27,18 +27,9 @@
           </span>
 
           <div class="hero-copy">
-            <span class="hero-kicker hero-trust-pill">
-              <span class="hero-trust-avatars" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-              </span>
-              <span>Được tin dùng bởi <strong>2.000+</strong> giáo viên và trường học</span>
-            </span>
-
-            <h1>Việc Làm Giáo Viên <span>Toàn Quốc</span></h1>
+            <h1>Việc Làm Giáo Viên <span class="highlight-text">Toàn Quốc</span></h1>
             <p>
-              Nền tảng tuyển dụng chuyên biệt cho giáo viên, trường học và các đơn vị giáo dục tại Việt Nam.
+              Hơn <strong>700+</strong> vị trí tuyển dụng, <strong>200+</strong> trường học & trung tâm uy tín trên cả nước.
             </p>
 
             <form
@@ -81,95 +72,19 @@
               style="--delay: 0.28s"
             >
               <div class="hero-search-meta-row">
-                <span>Tìm nhanh:</span>
+                <span class="meta-label">Tìm nhanh:</span>
                 <button
-                  v-for="tag in popularTags.slice(0, 5)"
+                  v-for="tag in heroQuickTags"
                   :key="tag.value"
                   type="button"
+                  class="popular-tag-btn"
                   @click="onCategoryClick(tag.value)"
                 >
-                  {{ $t(tag.label) }}
+                  {{ tag.label }}
                 </button>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Search by category -->
-    <section
-      id="home-categories"
-      data-reveal-jobs
-      class="section-block category-block"
-      data-animate
-    >
-      <div class="container">
-        <div class="section-head">
-          <div class="category-copy">
-            <h2>Khám phá theo danh mục</h2>
-            <p class="category-lead">
-              Chọn nhanh nhóm công việc phù hợp để xem các vị trí tuyển dụng mới nhất.
-            </p>
-          </div>
-          <div class="category-head-actions">
-            <button
-              type="button"
-              class="category-all-link"
-              @click="viewAllClick()"
-            >
-              {{ $t('homePage.searchByCategory.allCategories') }}
-            </button>
-          </div>
-        </div>
-
-        <div class="category-rail-wrap">
-          <button
-            type="button"
-            class="category-nav-btn category-nav-btn-prev"
-            data-category-prev
-            aria-label="Danh mục trước"
-            :disabled="!canScrollCategoryPrev"
-            @click="scrollCategoryRail(-1)"
-          >
-            <span aria-hidden="true">‹</span>
-          </button>
-
-          <div
-            ref="categoryRailRef"
-            class="category-rail"
-            data-category-rail
-            @scroll="updateCategoryRailNav"
-          >
-            <NuxtLink
-              v-for="item in categoryJobsRes"
-              :key="item.category"
-              class="category-card"
-              :to="{
-                path: '/jobs/search',
-                query: { category: item.category },
-              }"
-            >
-              <span class="category-card-icon">
-                {{ getCategoryInitials(getCategoryLabel(item.category)) }}
-              </span>
-              <span class="category-card-copy">
-                <strong>{{ getCategoryLabel(item.category) }}</strong>
-                <span>{{ item.jobCount }} vị trí mở</span>
-              </span>
-            </NuxtLink>
-          </div>
-
-          <button
-            type="button"
-            class="category-nav-btn category-nav-btn-next"
-            data-category-next
-            aria-label="Danh mục tiếp theo"
-            :disabled="!canScrollCategoryNext"
-            @click="scrollCategoryRail(1)"
-          >
-            <span aria-hidden="true">›</span>
-          </button>
         </div>
       </div>
     </section>
@@ -225,10 +140,13 @@
     </section>
 
     <!-- Featured Job Offers -->
-    <section class="section-block latest-jobs-block py-8 relative z-10">
+    <section class="section-block latest-jobs-block py-10 relative z-10">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head section-head-center">
           <h2>Việc làm mới nhất</h2>
+          <p class="section-subtitle">
+            Danh sách được cập nhật hằng giờ.
+          </p>
         </div>
 
         <div class="job-frame">
@@ -257,54 +175,59 @@
               </div>
 
               <div class="job-row-content">
-                <div class="job-row-head">
-                  <div>
+                <div class="job-row-main">
+                  <div class="job-row-header">
                     <NuxtLink
                       :to="`/jobs/${job.id}`"
                       class="job-row-title-link"
                       @click.stop
                     >
-                      <div class="job-row-title">{{ job.title }}</div>
+                      <h3 class="job-row-title">{{ job.title }}</h3>
                     </NuxtLink>
-                    <div class="job-row-company">
-                      <NuxtLink
-                        v-if="job.companyId"
-                        :to="`/companies/${job.companyId}`"
-                        class="jobs-employer-link"
-                        @click.stop
-                      >
-                        {{ job.companyName }}
-                      </NuxtLink>
-                      <span v-else>{{ job.companyName }}</span>
-                    </div>
+                    <span v-if="job.postType === 'Urgent'" class="job-tag-badge job-tag-urgent">Tuyển gấp</span>
                   </div>
-                      <NuxtLink
-                        v-if="canApplyToJobs"
-                        :to="`/jobs/${job.id}`"
-                        class="apply-chip"
-                        @click.stop
-                      >
-                        Ứng tuyển
-                      </NuxtLink>
-                </div>
 
-                <div class="job-row-meta">
-                  <span v-if="getFullLocationText(job)">
-                    <span class="meta-ico">📍</span>
-                    {{ truncateText(getFullLocationText(job), 24) }}
-                  </span>
-                  <span>
-                    <span class="meta-ico">₫</span>
-                    {{ formatSalaryRange(job) }}
-                  </span>
-                  <span v-if="job.createdAt">
-                    <span class="meta-ico">🕒</span>
-                    {{ timeAgo(job.createdAt) }}
-                  </span>
-                  <span v-if="getExperienceText(job)">
-                    <span class="meta-ico">⚑</span>
-                    {{ getExperienceText(job) }}
-                  </span>
+                  <div class="job-row-company">
+                    <NuxtLink
+                      v-if="job.companyId"
+                      :to="`/companies/${job.companyId}`"
+                      class="jobs-employer-link"
+                      @click.stop
+                    >
+                      {{ job.companyName }}
+                    </NuxtLink>
+                    <span v-else>{{ job.companyName }}</span>
+                  </div>
+
+                  <div class="job-row-meta">
+                    <span v-if="getFullLocationText(job)" class="meta-item">
+                      {{ truncateText(getFullLocationText(job), 24) }}
+                    </span>
+                    <span v-if="getEmploymentTypeText(job)" class="meta-item">
+                      {{ getEmploymentTypeText(job) }}
+                    </span>
+                    <span v-if="getExperienceText(job) && getExperienceText(job) !== 'Không yêu cầu'" class="meta-item">
+                      {{ getExperienceText(job) }}
+                    </span>
+                    <span v-if="job.createdAt" class="meta-item meta-item-date">
+                      {{ timeAgo(job.createdAt) }}
+                    </span>
+                  </div>
+
+                  <div class="job-row-footer">
+                    <div class="job-row-salary">
+                      {{ formatSalaryRange(job) }}
+                    </div>
+
+                    <NuxtLink
+                      :to="`/jobs/${job.id}`"
+                      class="job-row-apply"
+                      @click.stop
+                    >
+                      <span>Ứng tuyển</span>
+                      <span class="apply-arrow" aria-hidden="true">→</span>
+                    </NuxtLink>
+                  </div>
                 </div>
               </div>
             </article>
@@ -317,21 +240,54 @@
             class="section-cta-link"
             @click="viewAllClick()"
           >
-            <span>Xem tất cả</span>
+            <span>Xem tất cả việc làm</span>
+            <span class="cta-arrow" aria-hidden="true">→</span>
           </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Popular Categories -->
+    <section class="section-block popular-categories-block py-10 relative z-10">
+      <div class="container">
+        <div class="section-head section-head-center">
+          <h2>Danh mục môn học phổ biến</h2>
+          <p class="section-subtitle">
+            Hơn 700+ cơ hội giảng dạy đa dạng theo từng chuyên môn đào tạo
+          </p>
+        </div>
+
+        <div class="categories-grid">
+          <NuxtLink
+            v-for="cat in featuredCategories"
+            :key="cat.id"
+            :to="{ path: '/jobs/search', query: { category: cat.id } }"
+            class="category-card"
+          >
+            <div class="category-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" v-html="cat.iconSvg" />
+            </div>
+            <div class="category-info">
+              <h3 class="category-name">{{ cat.name }}</h3>
+              <span class="category-count">({{ cat.countText }})</span>
+            </div>
+          </NuxtLink>
         </div>
       </div>
     </section>
 
     <!-- Urgent Jobs -->
     <section
-      class="section-block urgent-jobs-block py-8 relative z-10"
+      class="section-block urgent-jobs-block py-10 relative z-10"
       data-animate
       style="--delay: 0.08s"
     >
       <div class="container">
-        <div class="section-head">
+        <div class="section-head section-head-center">
           <h2>Việc làm tuyển gấp</h2>
+          <p class="section-subtitle">
+            Cơ hội việc làm hấp dẫn.
+          </p>
         </div>
 
         <div class="job-frame job-frame-urgent">
@@ -360,54 +316,62 @@
               </div>
 
               <div class="job-row-content">
-                <div class="job-row-head">
-                  <div>
-                    <NuxtLink
-                      :to="`/jobs/${job.id}`"
-                      class="job-row-title-link"
-                      @click.stop
-                    >
-                      <div class="job-row-title">{{ job.title }}</div>
-                    </NuxtLink>
-                    <div class="job-row-company">
-                      <NuxtLink
-                        v-if="job.companyId"
-                        :to="`/companies/${job.companyId}`"
-                        class="jobs-employer-link"
-                        @click.stop
-                      >
-                        {{ job.companyName }}
-                      </NuxtLink>
-                      <span v-else>{{ job.companyName }}</span>
-                    </div>
-                  </div>
+                <NuxtLink
+                  :to="`/jobs/${job.id}`"
+                  class="job-row-title-link"
+                  @click.stop
+                >
+                  <h3 class="job-row-title">{{ job.title }}</h3>
+                </NuxtLink>
+
+                <div class="job-row-company">
                   <NuxtLink
-                    :to="`/jobs/${job.id}`"
-                    class="apply-chip apply-chip-urgent"
+                    v-if="job.companyId"
+                    :to="`/companies/${job.companyId}`"
+                    class="jobs-employer-link"
                     @click.stop
                   >
-                    Tuyển gấp
+                    {{ job.companyName }}
                   </NuxtLink>
+                  <span v-else>{{ job.companyName }}</span>
                 </div>
 
                 <div class="job-row-meta">
-                  <span v-if="getFullLocationText(job)">
-                    <span class="meta-ico">📍</span>
-                    {{ truncateText(getFullLocationText(job), 24) }}
+                  <span v-if="getFullLocationText(job)" class="meta-item">
+                    {{ truncateText(getFullLocationText(job), 32) }}
                   </span>
-                  <span>
-                    <span class="meta-ico">₫</span>
-                    {{ formatSalaryRange(job) }}
+                  <span v-if="getEmploymentTypeText(job)" class="meta-item">
+                    {{ getEmploymentTypeText(job) }}
                   </span>
-                  <span v-if="job.createdAt">
-                    <span class="meta-ico">🕒</span>
-                    {{ timeAgo(job.createdAt) }}
-                  </span>
-                  <span v-if="getExperienceText(job)">
-                    <span class="meta-ico">⚑</span>
+                  <span v-if="getExperienceText(job) && getExperienceText(job) !== 'Không yêu cầu'" class="meta-item">
                     {{ getExperienceText(job) }}
                   </span>
+                  <span v-if="job.createdAt" class="meta-item meta-item-date">
+                    {{ timeAgo(job.createdAt) }}
+                  </span>
                 </div>
+
+                <div class="job-row-salary">
+                  {{ formatSalaryRange(job) }}
+                </div>
+              </div>
+
+              <div class="job-row-side">
+                <span class="job-fire-icon" title="Tuyển gấp" aria-label="Tuyển gấp">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
+                    <path fill="#ea580c" d="M12 23c-4.97 0-9-4.03-9-9 0-4.92 3.84-9.36 6.89-12.06.4-.35.99-.21 1.2.29.98 2.27 2.7 4.09 3.91 5.37.28.29.74.22.92-.14.73-1.42 1.61-3.66 1.15-5.96-.08-.41.28-.78.7-.72 4.16.59 7.23 4.8 7.23 8.22 0 4.97-4.03 9-9 9z" />
+                    <path fill="#f59e0b" d="M11.5 17.5c1.93 0 3.5-1.57 3.5-3.5 0-1.88-1.55-3.41-3.23-4.88-.23-.2-.58-.09-.67.19-.51 1.63-1.6 3.19-1.6 4.69 0 1.93 1.57 3.5 2 3.5z" />
+                  </svg>
+                </span>
+
+                <NuxtLink
+                  :to="`/jobs/${job.id}`"
+                  class="job-row-apply"
+                  @click.stop
+                >
+                  <span>Ứng tuyển</span>
+                  <span class="apply-arrow" aria-hidden="true">→</span>
+                </NuxtLink>
               </div>
             </article>
           </div>
@@ -417,74 +381,53 @@
           <button
             type="button"
             class="section-cta-link"
-            @click="viewAllClick()"
+            @click="viewAllClick({ postType: 'Urgent' })"
           >
-            <span>Xem tất cả</span>
+            <span>Xem tất cả việc làm tuyển gấp</span>
+            <span class="cta-arrow" aria-hidden="true">→</span>
           </button>
         </div>
       </div>
     </section>
 
-    <!-- Blogs -->
-    <section
-      id="home-blog"
-      class="py-8"
-      data-animate
-      style="--delay: 0.1s"
-    >
+    <!-- Featured Cities Section (Above Footer) -->
+    <section class="section-block featured-cities-block py-10 relative z-10" data-animate style="--delay: 0.1s">
       <div class="container">
-        <section class="guide-block">
-          <div class="section-head">
-            <h2>Blog &amp; Cẩm nang</h2>
-            <NuxtLink
-              to="/blog"
-              class="section-cta-link section-cta-link-right"
-            >
-              <span>Xem tất cả</span>
-              <span aria-hidden="true">→</span>
-            </NuxtLink>
+        <div class="section-head section-head-between">
+          <div>
+            <h2>Địa điểm nổi bật</h2>
+            <p class="section-subtitle">
+              Khám phá cơ hội việc làm giáo dục tại các thành phố trọng điểm cả nước
+            </p>
           </div>
+          <NuxtLink to="/jobs/search" class="section-head-link">
+            <span>Xem tất cả địa điểm</span>
+            <span aria-hidden="true">→</span>
+          </NuxtLink>
+        </div>
 
-          <div
-            v-if="blogRes.length > 0"
-            class="guide-rail-wrap"
+        <div class="cities-grid">
+          <NuxtLink
+            v-for="city in featuredCities"
+            :key="city.id"
+            :to="{ path: '/jobs/search', query: { location: city.id } }"
+            class="city-card"
+            :class="{ 'city-card-large': city.isLarge }"
           >
-            <div
-              class="guide-grid"
-              data-guide-rail
-            >
-              <article
-                v-for="(item, index) in blogRes.slice(0, 5)"
-                :key="item.id"
-                class="guide-card"
+            <div class="city-card-bg">
+              <img
+                :src="city.image"
+                :alt="`Việc làm giáo viên tại ${city.name}`"
+                loading="lazy"
               >
-                <div
-                  class="guide-card-media"
-                  :class="getGuideCardMediaClass(index)"
-                  :style="getGuideCardMediaStyle(item)"
-                />
-                <div class="guide-card-body">
-                  <div class="guide-card-meta">
-                    <span class="guide-card-tag">{{ getBlogBadgeText(item) }}</span>
-                    <span>{{ getReadingTimeText(item) }}</span>
-                  </div>
-                  <h3>{{ item.title }}</h3>
-                  <div class="guide-card-footer">
-                    <NuxtLink :to="`/blog/${item.id}`">
-                      Đọc bài viết
-                    </NuxtLink>
-                  </div>
-                </div>
-              </article>
             </div>
-          </div>
-          <div
-            v-else
-            class="py-8 text-center text-[rgba(29,36,51,0.55)]"
-          >
-            Hiện tại không có blog nào.
-          </div>
-        </section>
+            <div class="city-card-overlay" />
+            <div class="city-card-content">
+              <h3 class="city-card-name">{{ city.name }}</h3>
+              <span class="city-card-count">{{ city.countText }}</span>
+            </div>
+          </NuxtLink>
+        </div>
       </div>
     </section>
 
@@ -503,6 +446,7 @@ import type { CompanyBannerModel } from '~/models/company'
 import { CompanyMapper } from '~/mapper/company'
 import type { BlogModel } from '~/models/blog'
 import { BlogMapper } from '~/mapper/blog'
+import { formatSalaryRange } from '~/utils/formatSalary'
 
 const config = useRuntimeConfig()
 
@@ -737,6 +681,109 @@ const shuffled = categoryValues.sort(() => 0.5 - Math.random())
 const randomLength = Math.floor(Math.random() * 2) + 6
 const popularTags = shuffled.slice(0, randomLength)
 
+const heroQuickTags = [
+  { label: 'Trợ Giảng', value: '26' },
+  { label: 'Giáo Viên Toán', value: '4' },
+  { label: 'Giáo Viên Ngữ Văn', value: '3' },
+  { label: 'Giáo Viên Tiếng Anh', value: '5' },
+]
+
+const featuredCategories = [
+  {
+    id: '5',
+    name: 'Giáo viên Tiếng Anh',
+    countText: '350+ vị trí tuyển dụng',
+    iconSvg: '<circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>',
+  },
+  {
+    id: '2',
+    name: 'Giáo viên Tiểu học',
+    countText: '170+ vị trí tuyển dụng',
+    iconSvg: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>',
+  },
+  {
+    id: '13',
+    name: 'Giáo viên Nghệ thuật',
+    countText: '130+ vị trí tuyển dụng',
+    iconSvg: '<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"></path>',
+  },
+  {
+    id: '4',
+    name: 'Giáo viên Toán học',
+    countText: '60+ vị trí tuyển dụng',
+    iconSvg: '<rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path>',
+  },
+  {
+    id: '1',
+    name: 'Giáo viên Mầm non',
+    countText: '30+ vị trí tuyển dụng',
+    iconSvg: '<circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line>',
+  },
+  {
+    id: '23',
+    name: 'Giáo viên Tiếng Trung',
+    countText: '40+ vị trí tuyển dụng',
+    iconSvg: '<path d="m5 8 6 6"></path><path d="m4 14 6-6 2-3"></path><path d="M2 5h12"></path><path d="M7 2h1"></path><path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path>',
+  },
+  {
+    id: '11',
+    name: 'Giáo viên Tin học',
+    countText: '20+ vị trí tuyển dụng',
+    iconSvg: '<rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line>',
+  },
+  {
+    id: '25',
+    name: 'Giáo viên STEM / STEAM',
+    countText: '10+ vị trí tuyển dụng',
+    iconSvg: '<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>',
+  },
+  {
+    id: '12',
+    name: 'Giáo dục Thể chất',
+    countText: '10+ vị trí tuyển dụng',
+    iconSvg: '<circle cx="12" cy="12" r="10"></circle><path d="m4.93 4.93 4.24 4.24"></path><path d="m14.83 9.17 4.24-4.24"></path><path d="m14.83 14.83 4.24 4.24"></path><path d="m9.17 14.83-4.24 4.24"></path><circle cx="12" cy="12" r="4"></circle>',
+  },
+]
+
+const featuredCities = [
+  {
+    id: '29',
+    name: 'TP. Hồ Chí Minh',
+    countText: '350+ việc làm',
+    image: '/images/cities/hcm.jpg',
+    isLarge: true,
+  },
+  {
+    id: '12',
+    name: 'Hà Nội',
+    countText: '280+ việc làm',
+    image: '/images/cities/hanoi.jpg',
+    isLarge: false,
+  },
+  {
+    id: '21',
+    name: 'Đà Nẵng',
+    countText: '120+ việc làm',
+    image: '/images/cities/danang.jpg',
+    isLarge: false,
+  },
+  {
+    id: '13',
+    name: 'Hải Phòng',
+    countText: '85+ việc làm',
+    image: '/images/cities/haiphong.jpg',
+    isLarge: false,
+  },
+  {
+    id: '33',
+    name: 'Cần Thơ',
+    countText: '60+ việc làm',
+    image: '/images/cities/cantho.jpg',
+    isLarge: false,
+  },
+]
+
+
 const stats = [
   { count: '2,543', label: 'Việc làm' },
   { count: '856', label: 'Cơ sở giáo dục' },
@@ -901,7 +948,7 @@ onMounted(() => {
   document.addEventListener('click', handleClickOutside)
 
   // Fetch Api
-  Promise.all([getFeatureJobs(), getCategoryJobs(), getCompanyBanners(), getBlogs()]).finally(
+  Promise.allSettled([getFeatureJobs(), getBlogs(), getCategoryJobs(), getCompanyBanners()]).finally(
     () =>
       nextTick(() => {
         bindHomeRevealAnimations()
@@ -1038,8 +1085,8 @@ function scrollCategoryRail(direction: -1 | 1) {
   rail.scrollBy({ left: direction * step, behavior: 'smooth' })
 }
 
-const latestJobs = computed(() => featureJobsRes.value.slice(0, 10))
-const urgentLatestJobs = computed(() => urgentJobsRes.value.slice(0, 10))
+const latestJobs = computed(() => featureJobsRes.value.slice(0, 6))
+const urgentLatestJobs = computed(() => urgentJobsRes.value.slice(0, 6))
 
 watch([latestJobs, urgentLatestJobs, blogRes, categoryJobsRes], () => {
   nextTick(() => {
@@ -1069,41 +1116,65 @@ const getExperienceText = (job: JobModel) => {
   )
 }
 
+const getEmploymentTypeText = (job: JobModel) => {
+  const key = job.typeOfEmployment
+  const label =
+    (employmentTypesEnumLabel as Record<string, string>)?.[String(key)] ??
+    (employmentTypesEnumLabel as Record<number, string>)?.[Number(key)]
+
+  return label || String(key ?? '').trim()
+}
+
 // initialize Api
 const { $api } = useNuxtApp()
 
 // Fetch FeatureJobs
 const getFeatureJobs = async () => {
   try {
-    // Build search parameters
     const apiParams: Record<string, any> = {}
-
-    // Call API
     const response = await $api.job.searchJob(apiParams)
-    console.log('[getFeatureJobs] API response:', response)
 
     if (response && Array.isArray(response)) {
       // Filter: Featured section chỉ hiển thị job tag "Mới nhất" (postType = Hot)
-      const hotJobs = response
-        .filter((job: any) => job.postType === 'Hot' && job.status === 'APPROVED')
+      let hotJobs = response
+        .filter(
+          (job: any) =>
+            String(job.postType || job.post_type || '').toLowerCase() === 'hot' &&
+            String(job.status || '').toUpperCase() === 'APPROVED',
+        )
         .sort((a: any, b: any) => {
           const dateA = new Date(a.createdAt || 0).getTime()
           const dateB = new Date(b.createdAt || 0).getTime()
           return dateB - dateA // Newest first
         })
 
-      console.log('[getFeatureJobs] filtered Hot jobs:', hotJobs)
+      if (hotJobs.length === 0) {
+        hotJobs = response
+          .filter((job: any) => String(job.status || '').toUpperCase() === 'APPROVED')
+          .sort((a: any, b: any) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+      }
+
       featureJobsRes.value = hotJobs.map((job: any) => JobMapper.toModel(job))
 
       // Section "Việc làm tuyển gấp": postType = Urgent
-      const urgentJobs = response
-        .filter((job: any) => job.postType === 'Urgent' && job.status === 'APPROVED')
+      let urgentJobs = response
+        .filter(
+          (job: any) =>
+            String(job.postType || job.post_type || '').toLowerCase() === 'urgent' &&
+            String(job.status || '').toUpperCase() === 'APPROVED',
+        )
         .sort((a: any, b: any) => {
           const dateA = new Date(a.createdAt || 0).getTime()
           const dateB = new Date(b.createdAt || 0).getTime()
           return dateB - dateA
         })
-      console.log('[getFeatureJobs] filtered Urgent jobs:', urgentJobs)
+
+      if (urgentJobs.length === 0) {
+        urgentJobs = response
+          .filter((job: any) => String(job.status || '').toUpperCase() === 'APPROVED')
+          .sort((a: any, b: any) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+      }
+
       urgentJobsRes.value = urgentJobs.map((job: any) => JobMapper.toModel(job))
     } else {
       featureJobsRes.value = []
@@ -1111,9 +1182,6 @@ const getFeatureJobs = async () => {
     }
   } catch (error: any) {
     console.error('Search failed:', error)
-    useNotify({
-      message: error.message,
-    })
     featureJobsRes.value = []
     urgentJobsRes.value = []
   }
@@ -1122,9 +1190,7 @@ const getFeatureJobs = async () => {
 // Fetch Category JobModel
 const getCategoryJobs = async () => {
   try {
-    // Call API
     const response = await $api.job.getCategoryJobs()
-
     if (response && Array.isArray(response)) {
       categoryJobsRes.value = response.map((cateJob) =>
         CategoryJobMapper.toModel(cateJob),
@@ -1133,10 +1199,6 @@ const getCategoryJobs = async () => {
       categoryJobsRes.value = []
     }
   } catch (error: any) {
-    console.error('Get Category Jobs failed:', error)
-    useNotify({
-      message: error.message,
-    })
     categoryJobsRes.value = []
   }
 }
@@ -1144,17 +1206,11 @@ const getCategoryJobs = async () => {
 // Fetch Company Banners
 const getCompanyBanners = async () => {
   try {
-    // Build search parameters
-
     const apiParams: Record<string, any> = {}
-
-    // Call API
     const response = await $api.company.searchCompany(apiParams)
 
     if (response && Array.isArray(response)) {
-      // Filter only featured companies
       const featuredCompanies = response.filter((comp: any) => comp.isFeatured === true)
-
       bannerRes.value = featuredCompanies.map((comp) =>
         CompanyMapper.toBannerModel(comp),
       )
@@ -1162,10 +1218,6 @@ const getCompanyBanners = async () => {
       bannerRes.value = []
     }
   } catch (error: any) {
-    console.error('Search company failed:', error)
-    useNotify({
-      message: error.message,
-    })
     bannerRes.value = []
   }
 }

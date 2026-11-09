@@ -27,6 +27,7 @@
 
 <script setup lang="ts">
 import type { CompanyEntity } from '~/entities/company'
+import { formatCompanyName } from '~/utils/formatCompanyName'
 
 const route = useRoute()
 const { $api } = useNuxtApp()
@@ -39,7 +40,7 @@ const { resetMediaState } = useCompanyDetailView(company)
 
 useHead({
   title: computed(() => {
-    const n = company.value?.name?.trim()
+    const n = formatCompanyName(company.value?.name)
     return n && n.length > 0 ? n : 'Nhà tuyển dụng'
   }),
 })

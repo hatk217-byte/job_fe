@@ -114,11 +114,22 @@ export const useCvUpload = () => {
       progress.value = 30
 
       // Upload to backend (will delete old file if oldUrl provided)
-      const result = await $api.upload.uploadCv(file, oldUrl)
-
-      progress.value = 100
-
-      return result
+      try {
+        const result = await $api.upload.uploadCv(file, oldUrl)
+        progress.value = 100
+        return result
+      } catch (uploadErr: any) {
+        // Fallback for local development when Cloudflare R2 credentials are dummy
+        if (import.meta.dev) {
+          console.warn('[useCvUpload] Backend R2 upload failed (likely dummy credentials in local .env). Using mock CV URL for testing.', uploadErr)
+          progress.value = 100
+          return {
+            url: `https://storage.mock.local/cv/${Date.now()}-${encodeURIComponent(file.name)}`,
+            originalName: file.name,
+          }
+        }
+        throw uploadErr
+      }
     } catch (err: any) {
       const errorMessage = err.message || 'Không thể tải lên CV'
       error.value = errorMessage
@@ -160,11 +171,21 @@ export const useCvUpload = () => {
       progress.value = 30
 
       // Upload to backend (will delete old file if oldUrl provided)
-      const result = await $api.upload.uploadCoverLetter(file, oldUrl)
-
-      progress.value = 100
-
-      return result
+      try {
+        const result = await $api.upload.uploadCoverLetter(file, oldUrl)
+        progress.value = 100
+        return result
+      } catch (uploadErr: any) {
+        if (import.meta.dev) {
+          console.warn('[useCvUpload] Backend R2 upload failed. Using mock cover letter URL for testing.', uploadErr)
+          progress.value = 100
+          return {
+            url: `https://storage.mock.local/cover-letter/${Date.now()}-${encodeURIComponent(file.name)}`,
+            originalName: file.name,
+          }
+        }
+        throw uploadErr
+      }
     } catch (err: any) {
       const errorMessage = err.message || 'Không thể tải lên thư ứng tuyển'
       error.value = errorMessage

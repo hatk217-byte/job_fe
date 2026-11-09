@@ -83,6 +83,8 @@
                   <div class="candidate-application-position-copy">
                     <NuxtLink
                       :to="jobDetailUrl(application.jobId)"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       class="candidate-application-title"
                       :title="application.jobTitle || undefined"
                     >

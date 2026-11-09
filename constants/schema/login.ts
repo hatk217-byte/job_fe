@@ -11,7 +11,6 @@ export const loginSchema = () => {
     ),
     password: Validate.field($i18n.t('common.fields.password')).createSchema(
       (field) => field.required(),
-      (field) => field.password(),
       (field) => field.maxLength(CONSTANTS.MAX_LENGTH.PASSWORD),
     ),
   })

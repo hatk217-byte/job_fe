@@ -2,11 +2,11 @@
   <section class="candidate-overview">
     <div class="candidate-overview-grid">
       <article class="candidate-overview-card candidate-overview-cv-card">
-        <h1>CV đính kèm của bạn</h1>
+        <h2>CV đính kèm của bạn</h2>
 
         <div class="candidate-overview-cv">
           <span class="candidate-overview-file-icon is-yellow" aria-hidden="true">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
               <path
                 d="M7 3.5h7.5L18 7v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z"
                 stroke="currentColor"
@@ -25,7 +25,11 @@
 
           <div class="candidate-overview-cv-copy">
             <template v-if="latestCv">
-              <strong>{{ latestCv.fileName }}</strong>
+              <UTooltip :text="decodeURIComponent(latestCv.fileName)" :popper="{ placement: 'top' }">
+                <strong class="candidate-overview-cv-filename">
+                  {{ formatDisplayFileName(latestCv.fileName) }}
+                </strong>
+              </UTooltip>
               <span>Lần cuối chỉnh sửa: {{ formatDate(latestCv.modifiedDate) }}</span>
               <NuxtLink to="/users/dashboard?view=resume">Hồ sơ ứng tuyển</NuxtLink>
             </template>
@@ -199,21 +203,22 @@
                 <span v-else class="candidate-overview-job-date">-</span>
               </td>
               <td class="is-action">
-                <button
-                  type="button"
+                <NuxtLink
+                  :to="`/jobs/${application.jobId}`"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   class="candidate-overview-view"
                   :aria-label="`Xem chi tiết công việc ${application.jobTitle}`"
-                  @click="emit('view-job', application.jobId)"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path
-                      d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+                      d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6Z"
                       stroke="currentColor"
                       stroke-width="2"
                     />
                     <circle cx="12" cy="12" r="2.8" stroke="currentColor" stroke-width="2" />
                   </svg>
-                </button>
+                </NuxtLink>
               </td>
             </tr>
           </tbody>
@@ -237,6 +242,16 @@ const loading = ref(false)
 const recentApplications = ref<any[]>([])
 const totalApplications = ref(0)
 const latestCv = ref<{ fileName: string; modifiedDate: Date | string } | null>(null)
+
+const formatDisplayFileName = (fileName?: string | null): string => {
+  if (!fileName) return ''
+  try {
+    const decoded = decodeURIComponent(fileName)
+    return decoded.replace(/^\d+[-_]/, '')
+  } catch {
+    return fileName.replace(/^\d+[-_]/, '')
+  }
+}
 
 const formatDate = (date: Date | string | null | undefined): string => {
   if (!date) return 'N/A'

@@ -137,6 +137,23 @@ export function useJobDetailView(job: Ref<JobModel | null>) {
     return processedBenefits.value.join(', ')
   })
 
+  const employmentTypeText = computed(() => {
+    if (!job.value?.typeOfEmployment) return t('common.nanValue')
+    return (
+      (employmentTypesEnumLabel as Record<string, string>)?.[job.value.typeOfEmployment] ??
+      job.value.typeOfEmployment ??
+      t('common.nanValue')
+    )
+  })
+
+  const deadlineText = computed(() => {
+    return job.value?.deadline ? formatDate(new Date(job.value.deadline)) : t('common.nanValue')
+  })
+
+  const categoryText = computed(() => {
+    return getCategoryLabels(job.value?.category) || t('common.nanValue')
+  })
+
   const requirementsList = computed((): string[] => {
     if (!job.value) return []
 
@@ -246,6 +263,18 @@ export function useJobDetailView(job: Ref<JobModel | null>) {
     processedBenefits,
     requirementsList,
     metaItems,
+    salaryText,
+    salaryTypeText,
+    fullLocationText,
+    postedText,
+    deadlineText,
+    categoryText,
+    employmentTypeText,
+    gradeText,
+    qualificationText,
+    experienceText,
+    genderText,
+    benefitsPreview,
     getExperienceText,
     getFullLocationTextFor,
     truncateText,

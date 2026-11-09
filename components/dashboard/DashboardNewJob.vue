@@ -2,11 +2,11 @@
   <div ref="jobFormRootRef" class="page-dashboard-newjob page-job-upload">
     <!-- Trang standalone: title + description (drawer có header riêng) -->
     <div v-if="!embeddedInDrawer" class="mb-6">
-      <h1 class="text-3xl font-bold text-gray-900">
-        {{ $t('dashboard.sidebar.newJob') }}
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+        {{ isEditMode ? 'Chỉnh sửa tin tuyển dụng' : ($t('dashboard.sidebar.newJob') || 'Đăng tin tuyển dụng mới') }}
       </h1>
-      <p class="text-gray-600 mt-2">
-        {{ $t('dashboard.newJob.description') }}
+      <p class="text-gray-600 mt-1.5 text-sm">
+        {{ isEditMode ? 'Cập nhật thông tin chi tiết của tin tuyển dụng.' : ($t('dashboard.newJob.description') || 'Tạo tin tuyển dụng để tiếp cận hàng nghìn giáo viên và nhân sự giáo dục.') }}
       </p>
     </div>
     <!-- Form Content — đồng bộ upload step 2 (employer-step-detail-wrap) -->

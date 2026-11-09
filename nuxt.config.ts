@@ -52,12 +52,17 @@ export default defineNuxtConfig({
   fonts: {
     families: [
       {
-        name: 'Manrope',
-        weights: [300, 400, 500, 600, 700],
+        name: 'Plus Jakarta Sans',
+        weights: [300, 400, 500, 600, 700, 800],
         provider: 'google',
       },
       {
-        name: 'Noto Serif JP',
+        name: 'Inter',
+        weights: [400, 500, 600, 700, 800],
+        provider: 'google',
+      },
+      {
+        name: 'Manrope',
         weights: [300, 400, 500, 600, 700],
         provider: 'google',
       },

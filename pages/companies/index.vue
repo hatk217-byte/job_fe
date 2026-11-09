@@ -1,12 +1,19 @@
 <template>
-  <div class="min-h-screen companies-directory-page" style="background: #f7faff">
+  <div class="min-h-screen companies-directory-page">
+    <!-- Top Hero Section (White background) -->
     <section class="school-directory-hero">
       <div class="container school-directory-shell">
+        <div class="school-directory-heading">
+          <h1 class="school-directory-title">Nhà tuyển dụng & Cơ sở Giáo dục</h1>
+          <p class="school-directory-subtitle">Khám phá hàng ngàn cơ hội việc làm từ các cơ sở giáo dục hàng đầu.</p>
+        </div>
+
         <form
           class="search-card school-directory-search-card"
           @submit.prevent="performSearch"
         >
           <div class="search-row search-row-directory">
+            <!-- 1. Keyword Input -->
             <div class="search-item search-item-directory">
               <span class="search-item-icon" aria-hidden="true">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -17,30 +24,11 @@
                 v-model="searchParams.keyword"
                 type="text"
                 name="keyword"
-                :placeholder="$t('companies.search.placeholder')"
+                placeholder="Nhập trường học, trung tâm hoặc từ khóa..."
               >
             </div>
 
-            <div class="search-item search-item-directory">
-              <span class="search-item-icon" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M4 7H20M7 4V7M17 4V7M6 11H18V18H6V11Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </span>
-              <USelectMenu
-                v-model="searchParams.organizationType"
-                :items="organizationTypeItemsSearchable"
-                value-key="value"
-                variant="none"
-                class="school-directory-select"
-                :placeholder="$t('companies.search.organizationType')"
-                :search-input="{ placeholder: 'Tìm loại hình...', variant: 'none' }"
-                :ui="companyDirectorySelectUi"
-                @update:open="onCompanySelectMenuOpenChange"
-              />
-              <span class="arr">▾</span>
-            </div>
-
+            <!-- 2. Location Select -->
             <div class="search-item search-item-directory">
               <span class="search-item-icon" aria-hidden="true">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -62,13 +50,37 @@
               <span class="arr">▾</span>
             </div>
 
+            <!-- 3. Organization Type Select -->
+            <div class="search-item search-item-directory">
+              <span class="search-item-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M4 7H20M7 4V7M17 4V7M6 11H18V18H6V11Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              <USelectMenu
+                v-model="searchParams.organizationType"
+                :items="organizationTypeItemsSearchable"
+                value-key="value"
+                variant="none"
+                class="school-directory-select"
+                :placeholder="$t('companies.search.organizationType')"
+                :search-input="{ placeholder: 'Tìm loại hình...', variant: 'none' }"
+                :ui="companyDirectorySelectUi"
+                @update:open="onCompanySelectMenuOpenChange"
+              />
+              <span class="arr">▾</span>
+            </div>
+
+            <!-- 4. Submit Button (Brand Orange) -->
             <button
               type="submit"
-              class="primary-btn school-directory-submit"
-              aria-label="Tìm công ty"
+              class="school-directory-submit"
+              aria-label="Tìm kiếm"
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              <span>Tìm kiếm</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
               </svg>
             </button>
           </div>
@@ -76,137 +88,125 @@
       </div>
     </section>
 
-    <!-- Main content -->
-    <div style="background: #f7faff">
+    <!-- Main Content Section (Soft Neutral Background) -->
+    <div class="school-directory-content">
       <div class="container">
-        <div class="py-8">
-        <!-- Results Grid - Full width, no filters sidebar -->
-        <div class="w-full">
-          <!-- Total count -->
-          <div
-            v-if="!loading && filteredCompanies.length > 0"
-            class="company-results-count"
-          >
-            <span class="company-results-count__number">{{ filteredCompanies.length }}</span>
-            <!-- eslint-disable @intlify/vue-i18n/no-raw-text -->
-            <span class="company-results-count__label">công ty</span>
-            <!-- eslint-enable @intlify/vue-i18n/no-raw-text -->
-          </div>
+        <!-- Results Count -->
+        <div
+          v-if="!loading && filteredCompanies.length > 0"
+          class="company-results-count"
+        >
+          <span>Đang hiển thị </span>
+          <strong class="company-results-count__number">{{ filteredCompanies.length }}</strong>
+          <span class="company-results-count__label"> công ty</span>
+        </div>
 
-          <!-- Loading -->
-          <div
-            v-if="loading"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            <USkeleton v-for="i in 8" :key="i" class="h-64 w-full" />
-          </div>
+        <!-- Loading Skeleton -->
+        <div
+          v-if="loading"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
+          <USkeleton v-for="i in 8" :key="i" class="h-80 w-full rounded-2xl" />
+        </div>
 
-          <!-- Has results -->
-          <div v-else-if="filteredCompanies.length > 0">
-            <div class="school-company-grid">
-              <article
-                v-for="company in paginatedCompanies"
-                :key="company.id"
-                class="school-company-card"
-                @click="viewCompany(company)"
-              >
-                <div class="school-company-card-top">
-                  <div
-                    class="school-company-logo"
-                    :class="{ 'logo-has-image': !!company.logo }"
-                  >
-                    <img
-                      v-if="company.logo"
-                      :src="company.logo"
-                      :alt="`${company.name} logo`"
-                      loading="lazy"
-                    >
-                    <template v-else>
-                      {{ getCompanyLogoInitials(company.name) }}
-                    </template>
-                  </div>
-                  <div class="school-company-jobs">
-                    <!-- eslint-disable-next-line @intlify/vue-i18n/no-raw-text -->
-                    {{ company.openPositions || 0 }} việc làm
-                  </div>
-                </div>
-
-                <div class="school-company-card-body">
-                  <h3>{{ company.name }}</h3>
-                  <p>{{ getCompanySubtitle(company) }}</p>
-                  <div
-                    v-if="getCompanyLocationLabel(company)"
-                    class="school-company-meta"
-                  >
-                    <span>{{ getCompanyLocationLabel(company) }}</span>
-                  </div>
-                </div>
-
-                <div class="school-company-card-footer">
-                  <NuxtLink
-                    :to="`/companies/${company.id}`"
-                    @click.stop
-                  >
-                    <!-- eslint-disable-next-line @intlify/vue-i18n/no-raw-text -->
-                    <span>Xem hồ sơ</span>
-                    <span aria-hidden="true">↗</span>
-                  </NuxtLink>
-                </div>
-              </article>
-            </div>
-
-            <!-- Pagination -->
-            <div
-              v-if="totalPages > 1"
-              class="school-company-pagination-wrap"
+        <!-- Results Grid -->
+        <div v-else-if="filteredCompanies.length > 0">
+          <div class="school-company-grid">
+            <article
+              v-for="company in paginatedCompanies"
+              :key="company.id"
+              class="school-company-card"
+              @click="viewCompany(company)"
             >
-              <div class="company-pagination">
-                <button
-                  v-if="currentPage > 1"
-                  type="button"
-                  class="company-pagination__btn"
-                  @click="goToPage(currentPage - 1)"
+              <!-- 1. Centered Logo -->
+              <div
+                class="school-company-logo"
+                :class="{ 'logo-has-image': !!company.logo }"
+              >
+                <img
+                  v-if="company.logo"
+                  :src="company.logo"
+                  :alt="`${company.name} logo`"
+                  loading="lazy"
                 >
-                  <UIcon name="i-heroicons-chevron-left" class="company-pagination__icon" />
-                </button>
-
-                <button
-                  v-for="p in visiblePages"
-                  :key="p"
-                  type="button"
-                  class="company-pagination__btn"
-                  :class="p === currentPage ? 'company-pagination__btn--active' : ''"
-                  @click="goToPage(p)"
-                >
-                  {{ p }}
-                </button>
-
-                <button
-                  v-if="currentPage < totalPages"
-                  type="button"
-                  class="company-pagination__btn"
-                  @click="goToPage(currentPage + 1)"
-                >
-                  <UIcon name="i-heroicons-chevron-right" class="company-pagination__icon" />
-                </button>
+                <template v-else>
+                  {{ getCompanyLogoInitials(company.name) }}
+                </template>
               </div>
-            </div>
+
+              <!-- 2. Centered Company Name -->
+              <h3 class="school-company-name" :title="company.name">
+                {{ company.name }}
+              </h3>
+
+              <!-- 3. Centered Location -->
+              <div class="school-company-location">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+                <span>{{ getCompanyLocationLabel(company) || 'Toàn quốc' }}</span>
+              </div>
+
+              <!-- 4. Centered Jobs Open Pill -->
+              <div class="school-company-jobs-pill">
+                <span>{{ company.openPositions || 0 }} việc làm</span>
+              </div>
+            </article>
           </div>
 
-          <!-- Empty -->
-          <div v-else class="text-center py-12">
-            <UIcon
-              name="i-heroicons-building-office"
-              class="w-16 h-16 text-neutral-400 mx-auto mb-4"
-            />
-            <h3 class="text-lg font-medium text-gray-900 mb-2">
-              {{ $t('companies.noResults.title') }}
-            </h3>
-            <UButton variant="outline" color="primary" @click="clearSearch">
-              {{ $t('companies.noResults.clearSearch') }}
-            </UButton>
+          <!-- Centered Modern Pagination -->
+          <div
+            v-if="totalPages > 1"
+            class="school-company-pagination-wrap"
+          >
+            <div class="company-pagination">
+              <button
+                v-if="currentPage > 1"
+                type="button"
+                class="company-pagination__btn"
+                title="Trang trước"
+                @click="goToPage(currentPage - 1)"
+              >
+                <UIcon name="i-heroicons-chevron-left" class="company-pagination__icon" />
+              </button>
+
+              <button
+                v-for="p in visiblePages"
+                :key="p"
+                type="button"
+                class="company-pagination__btn"
+                :class="p === currentPage ? 'company-pagination__btn--active' : ''"
+                @click="goToPage(p)"
+              >
+                {{ p }}
+              </button>
+
+              <button
+                v-if="currentPage < totalPages"
+                type="button"
+                class="company-pagination__btn"
+                title="Trang tiếp"
+                @click="goToPage(currentPage + 1)"
+              >
+                <UIcon name="i-heroicons-chevron-right" class="company-pagination__icon" />
+              </button>
+            </div>
           </div>
         </div>
+
+        <!-- Empty State -->
+        <div v-else class="text-center py-16">
+          <UIcon
+            name="i-heroicons-building-office"
+            class="w-16 h-16 text-neutral-400 mx-auto mb-4"
+          />
+          <h3 class="text-lg font-medium text-gray-900 mb-2">
+            {{ $t('companies.noResults.title') }}
+          </h3>
+          <UButton variant="outline" color="primary" @click="clearSearch">
+            {{ $t('companies.noResults.clearSearch') }}
+          </UButton>
         </div>
       </div>
     </div>
@@ -268,7 +268,7 @@ const route = useRoute()
 const companies = ref<CompanyEntity[]>([])
 const loading = ref(false)
 
-const pageSize = 8
+const pageSize = 12
 const currentPage = ref(1)
 
 const searchParams = ref<{

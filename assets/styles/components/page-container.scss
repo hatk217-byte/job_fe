@@ -1,8 +1,9 @@
-/* Container đồng bộ với blog — căn lề nội dung trang */
+/* Container đồng bộ với footer và toàn trang — 1320px */
 .home-page .container,
 .jobs-directory-page .container,
 .companies-directory-page .container {
-  width: min(calc(100% - 48px), var(--focus-max));
+  width: min(calc(100% - 48px), 1320px) !important;
+  max-width: 1320px !important;
   margin-left: auto;
   margin-right: auto;
 }
@@ -11,6 +12,6 @@
   .home-page .container,
   .jobs-directory-page .container,
   .companies-directory-page .container {
-    width: min(calc(100% - 32px), var(--focus-max));
+    width: min(calc(100% - 32px), 1320px) !important;
   }
 }

@@ -28,7 +28,7 @@
     <!-- Applications Table -->
     <div class="bg-white rounded-2xl shadow-sm overflow-hidden" style="border: 1px solid rgba(29, 36, 51, 0.10)">
       <div v-if="loading" class="text-center py-12">
-        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
         <p class="mt-2 text-gray-600">{{ $t('dashboard.appliedJobs.loading') }}</p>
       </div>
 
@@ -40,7 +40,7 @@
       <div v-else class="overflow-x-auto">
         <table class="w-full">
           <thead>
-            <tr class="text-left text-[11px] font-extrabold text-[rgba(29,36,51,0.55)]" style="background: rgba(247, 250, 255, 0.9)">
+            <tr class="text-left text-[11px] font-extrabold text-[rgba(29,36,51,0.55)]" style="background: #ffffff; border-bottom: 1px solid rgba(29, 36, 51, 0.08)">
               <th class="px-6 py-4">VỊ TRÍ ỨNG TUYỂN</th>
               <th class="px-6 py-4">TỈNH THÀNH</th>
               <th class="px-6 py-4">LĨNH VỰC</th>
@@ -75,7 +75,7 @@
                     <div class="text-[13px] font-extrabold text-[#1d2433] truncate">
                       {{ application.jobTitle }}
                     </div>
-                    <div class="mt-1 text-[12px] text-[var(--blue)] truncate">
+                    <div class="mt-1 text-[12px] text-emerald-600 truncate">
                       {{ application.companyName || '-' }}
                     </div>
                   </div>
@@ -103,7 +103,7 @@
 
               <td class="px-6 py-5 text-right">
                 <button
-                  class="inline-flex items-center justify-center h-9 w-9 rounded-xl text-[var(--blue)] hover:bg-[rgba(53,99,255,0.10)] transition-colors"
+                  class="inline-flex items-center justify-center h-9 w-9 rounded-xl text-emerald-600 hover:bg-emerald-50 transition-colors"
                   @click="handleViewJob(application.jobId)"
                 >
                   <UIcon name="i-lucide-eye" class="w-5 h-5" />
@@ -122,7 +122,7 @@
       >
         <button
           type="button"
-          class="h-10 w-10 rounded-xl bg-[var(--blue)] text-white font-extrabold text-[12px] shadow-sm"
+          class="h-10 w-10 rounded-xl bg-orange-600 text-white font-extrabold text-[12px] shadow-sm"
         >
           {{ currentPage }}
         </button>

@@ -18,10 +18,7 @@
   min-height: 100dvh;
   display: grid;
   grid-template-columns: 232px minmax(0, 1fr);
-  background:
-    radial-gradient(circle at top left, rgba(53, 99, 255, 0.12) 0%, rgba(53, 99, 255, 0.035) 28%, transparent 46%),
-    radial-gradient(circle at 88% 12%, rgba(120, 181, 255, 0.1) 0%, rgba(120, 181, 255, 0.025) 24%, transparent 42%),
-    linear-gradient(180deg, #f6f9ff 0%, #eef4ff 52%, #f7faff 100%);
+  background: #ffffff;
 }
 
 .employer-sidebar {
@@ -37,17 +34,18 @@
   box-sizing: border-box;
   overflow-x: hidden;
   overflow-y: auto;
-  background: linear-gradient(180deg, rgba(247, 250, 255, 0.98), rgba(237, 243, 252, 0.96));
+  background: #ffffff;
+  border-right: 1px solid rgba(226, 232, 240, 0.95);
   border-right: 1px solid rgba(216, 224, 238, 0.92);
   backdrop-filter: blur(16px);
 }
 
 .employer-dashboard-simple .employer-sidebar {
   padding: 22px 16px;
-  background: linear-gradient(180deg, rgba(243, 247, 255, 0.92), rgba(238, 244, 255, 0.88));
-  border-right: 0;
+  background: #ffffff;
+  border-right: 1px solid rgba(226, 232, 240, 0.95);
   box-shadow: none;
-  backdrop-filter: blur(10px);
+  backdrop-filter: none;
 }
 
 .employer-sidebar-brand-wrap {
@@ -155,12 +153,13 @@
 .employer-sidebar-link.is-active {
   color: #ffffff;
   border-color: transparent;
-  background: linear-gradient(135deg, #3563ff 0%, #2e57ef 100%);
-  box-shadow: 0 12px 24px rgba(53, 99, 255, 0.16);
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.25);
 }
 
 .employer-sidebar-link.is-active:hover {
   color: #ffffff;
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
 }
 
 .employer-sidebar-link-icon {
@@ -277,7 +276,8 @@
   min-width: 0;
 }
 
-.employer-dashboard-simple .employer-dashboard-main.is-company-layout {
+.employer-dashboard-simple .employer-dashboard-main.is-company-layout,
+.employer-dashboard-simple .employer-dashboard-main.is-newjob-layout {
   display: block;
   overflow-y: auto;
   overflow-x: hidden;
@@ -326,7 +326,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #3563ff 0%, #507cff 100%);
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
   color: #ffffff;
   font-size: 14px;
   font-weight: bold;
@@ -383,8 +383,8 @@
 }
 
 .employer-dashboard-simple .employer-topbar-btn-outline:hover {
-  border-color: rgba(53, 99, 255, 0.35);
-  color: #3563ff;
+  border-color: rgba(22, 163, 74, 0.35);
+  color: #16a34a;
   background: #ffffff;
 }
 
@@ -393,11 +393,23 @@
 }
 
 .employer-topbar-btn.primary-btn {
-  min-height: 42px;
-  height: 42px;
+  min-height: 40px;
+  height: 40px;
   padding: 0 18px;
-  border-radius: 12px;
-  font-size: 14px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.28) !important;
+  font-weight: 700;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%) !important;
+    box-shadow: 0 6px 18px rgba(249, 115, 22, 0.38) !important;
+    transform: translateY(-1px);
+  }
 }
 
 .employer-dashboard-simple .employer-dashboard-content.employer-overview-content {
@@ -441,9 +453,10 @@
   justify-content: center;
 }
 
-.employer-overview-stat-icon.is-blue {
-  background: #dbeafe;
-  color: #2563eb;
+.employer-overview-stat-icon.is-blue,
+.employer-overview-stat-icon.is-green {
+  background: #ecfdf5;
+  color: #16a34a;
 }
 
 .employer-overview-stat-icon.is-yellow {
@@ -538,22 +551,24 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(53, 99, 255, 0.18);
-  background: rgba(53, 99, 255, 0.06);
-  color: #2f59f5;
+  border: 1px solid rgba(22, 163, 74, 0.22);
+  background: rgba(22, 163, 74, 0.06);
+  color: #16a34a;
   font-size: 13px;
-  font-weight: bold;
+  font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
   font-family: inherit;
   transition:
     background 0.18s ease,
-    border-color 0.18s ease;
+    border-color 0.18s ease,
+    color 0.18s ease;
 }
 
 .employer-overview-panel-link:hover {
-  background: rgba(53, 99, 255, 0.1);
-  border-color: rgba(53, 99, 255, 0.28);
+  background: rgba(22, 163, 74, 0.12);
+  border-color: rgba(22, 163, 74, 0.35);
+  color: #15803d;
 }
 
 .employer-overview-table-shell {
@@ -663,7 +678,7 @@
   border: 0;
   border-radius: 8px;
   background: transparent;
-  color: #2563eb;
+  color: #0f172a;
   font: inherit;
   text-align: left;
   cursor: pointer;
@@ -675,44 +690,44 @@
 
 .employer-candidate-name-btn strong {
   display: inline;
-  color: #2563eb;
+  color: #0f172a;
   font-weight: 700;
   transition: color 0.18s ease;
 }
 
 .employer-candidate-name-btn:hover {
-  background: rgba(239, 246, 255, 0.98);
+  background: #f0fdf4;
 }
 
 .employer-candidate-name-btn:hover strong {
-  color: #1d4ed8;
+  color: #16a34a;
 }
 
 .employer-candidate-name-btn:active {
-  background: rgba(219, 234, 254, 0.98);
+  background: #dcfce7;
 }
 
 .employer-candidate-name-btn:active strong {
-  color: #1e40af;
+  color: #15803d;
 }
 
 .employer-candidate-name-btn:focus-visible {
   outline: none;
-  background: rgba(239, 246, 255, 0.98);
-  box-shadow: 0 0 0 3px rgba(53, 99, 255, 0.18);
+  background: #f0fdf4;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
 }
 
 .employer-candidate-name-btn:focus-visible strong {
-  color: #1d4ed8;
+  color: #16a34a;
 }
 
 .employer-candidates-table tbody tr:hover .employer-candidate-name-btn strong {
-  color: #1d4ed8;
+  color: #16a34a;
 }
 
 .employer-candidate-cv {
   display: inline;
-  color: #1d4ed8;
+  color: #16a34a;
   font-size: 13px;
   font-weight: 600;
   text-decoration: underline;
@@ -722,7 +737,7 @@
 }
 
 .employer-candidate-cv:hover {
-  color: #1e40af;
+  color: #15803d;
 }
 
 .employer-overview-table .is-action {
@@ -784,8 +799,8 @@
   width: 52px;
   height: 52px;
   border-radius: 16px;
-  background: rgba(53, 99, 255, 0.08);
-  color: #2f59f5;
+  background: #fff7ed;
+  color: #ea580c;
 }
 
 .employer-overview-empty-state strong {
@@ -805,23 +820,26 @@
 
 .employer-overview-empty-action {
   min-height: 38px;
-  padding: 0 14px;
+  padding: 0 18px;
   border: 0;
   border-radius: 10px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #3563ff;
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   color: #ffffff;
-  font-size: 13px;
-  font-weight: bold;
+  font-size: 13.5px;
+  font-weight: 700;
   cursor: pointer;
   font-family: inherit;
-  transition: background 0.18s ease;
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.25);
+  transition: all 0.2s ease;
 }
 
 .employer-overview-empty-action:hover {
-  background: #2e57ef;
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  box-shadow: 0 6px 18px rgba(249, 115, 22, 0.35);
+  transform: translateY(-1px);
 }
 
 .employer-overview-pagination {
@@ -873,19 +891,21 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #3563ff;
+  background: #ea580c;
   color: #ffffff;
   font-size: 13px;
   font-weight: bold;
 }
 
-/* ——— Hồ sơ công ty (?view=editProfile) ——— */
+/* ——— Hồ sơ công ty (?view=editProfile) & Đăng tin (?view=newJob) ——— */
 
-.employer-company-page.employer-company-scroll {
+.employer-company-page.employer-company-scroll,
+.employer-newjob-page.employer-company-scroll {
   gap: 0;
 }
 
-.employer-company-page .employer-company-panel {
+.employer-company-page .employer-company-panel,
+.employer-newjob-page .employer-company-panel {
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -897,13 +917,22 @@
   overflow: hidden;
 }
 
-.employer-company-page .employer-company-panel-topbar {
+.employer-company-page .employer-company-panel-topbar,
+.employer-newjob-page .employer-company-panel-topbar {
   flex-shrink: 0;
   border-radius: 0;
   border: 0;
   background: transparent;
   box-shadow: none;
   backdrop-filter: none;
+  border-bottom: 1px solid rgba(220, 227, 239, 0.85);
+}
+
+.employer-newjob-body {
+  padding: 28px 24px 48px;
+  max-width: 980px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .employer-company-content {
@@ -1018,7 +1047,7 @@
   color: #2d3750;
   font-size: 14px;
   font-weight: 500;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
   box-sizing: border-box;
   outline: none;
   box-shadow: none;
@@ -1052,8 +1081,8 @@
 .employer-dashboard-simple .employer-field input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):focus,
 .employer-dashboard-simple .employer-field select:focus,
 .employer-dashboard-simple .employer-field textarea:focus {
-  border-color: rgba(53, 99, 255, 0.55);
-  box-shadow: 0 0 0 3px rgba(53, 99, 255, 0.12);
+  border-color: rgba(234, 88, 12, 0.55);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12);
   background: #ffffff;
 }
 
@@ -1067,7 +1096,7 @@
   color: #2d3750;
   font-size: 14px;
   font-weight: 500;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
   box-shadow: none;
   --tw-ring-shadow: 0 0 #0000;
   --tw-ring-offset-shadow: 0 0 #0000;
@@ -1079,8 +1108,8 @@
 }
 
 .employer-dashboard-simple .employer-field :deep([data-slot="base"]:focus-within) {
-  border-color: rgba(53, 99, 255, 0.55);
-  box-shadow: 0 0 0 3px rgba(53, 99, 255, 0.12);
+  border-color: rgba(234, 88, 12, 0.55);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12);
   background: #ffffff;
 }
 
@@ -1095,7 +1124,7 @@
   color: inherit;
   font-size: 14px;
   font-weight: 500;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
   box-shadow: none;
   outline: none;
 }
@@ -1112,7 +1141,7 @@
   color: #2d3750;
   font-size: 14px;
   font-weight: 500;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
   box-shadow: none;
   --tw-ring-shadow: 0 0 #0000;
   --tw-ring-offset-shadow: 0 0 #0000;
@@ -1136,8 +1165,8 @@
 .employer-dashboard-simple .employer-field :deep(button[role="combobox"]:focus-visible),
 .employer-dashboard-simple .employer-field-select :deep([data-slot="base"]:focus),
 .employer-dashboard-simple .employer-field-select :deep([data-slot="base"]:focus-visible) {
-  border-color: rgba(53, 99, 255, 0.55);
-  box-shadow: 0 0 0 3px rgba(53, 99, 255, 0.12);
+  border-color: rgba(234, 88, 12, 0.55);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12);
   background-color: #ffffff;
 }
 
@@ -1164,7 +1193,7 @@
 }
 
 .employer-field-editor .employer-editor:focus-within {
-  border-color: rgba(53, 99, 255, 0.55);
+  border-color: rgba(234, 88, 12, 0.55);
   border-width: 1.5px;
   box-shadow: none;
   outline: none;
@@ -1259,7 +1288,7 @@
   border-radius: 14px;
   border: 1.5px dashed rgba(184, 198, 222, 0.9);
   background: #fbfdff;
-  color: #3563ff;
+  color: #ea580c;
   transition:
     border-color 0.18s ease,
     background 0.18s ease,
@@ -1287,9 +1316,9 @@
 }
 
 .employer-company-upload-zone.is-dragging {
-  border-color: rgba(53, 99, 255, 0.45);
-  background: rgba(53, 99, 255, 0.06);
-  box-shadow: 0 0 0 3px rgba(53, 99, 255, 0.12);
+  border-color: rgba(234, 88, 12, 0.45);
+  background: rgba(234, 88, 12, 0.06);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12);
 }
 
 .employer-company-upload-zone:has(img) {
@@ -1304,7 +1333,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(53, 99, 255, 0.1);
+  background: rgba(234, 88, 12, 0.1);
   color: currentColor;
 }
 
@@ -1312,7 +1341,7 @@
   width: 34px;
   height: 34px;
   border-radius: 10px;
-  background: rgba(53, 99, 255, 0.07);
+  background: rgba(234, 88, 12, 0.07);
 }
 
 .employer-company-upload-empty {
@@ -1363,15 +1392,15 @@
   min-height: 42px;
   padding: 0 18px;
   border-radius: 12px;
-  background: rgba(53, 99, 255, 0.08);
-  border: 1px solid rgba(53, 99, 255, 0.22);
+  background: rgba(234, 88, 12, 0.08);
+  border: 1px solid rgba(234, 88, 12, 0.22);
   color: #2f59f5;
   box-shadow: none;
 }
 
 .employer-company-page .employer-company-actions .employer-settings-primary:hover:not(:disabled) {
-  background: rgba(53, 99, 255, 0.12);
-  border-color: rgba(53, 99, 255, 0.32);
+  background: rgba(234, 88, 12, 0.12);
+  border-color: rgba(234, 88, 12, 0.32);
 }
 
 .employer-settings-primary:disabled {
@@ -1477,7 +1506,7 @@
   background: transparent;
   color: #334155;
   font-size: 14px;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
 }
 
 .employer-candidates-search input::placeholder {
@@ -1528,7 +1557,7 @@
 
 .employer-candidates-th-sort-btn.is-active,
 .employer-candidates-th-sort-btn:hover {
-  color: #2e57ef;
+  color: #c2410c;
 }
 
 .employer-candidates-sort-menu {
@@ -1561,7 +1590,7 @@
 .employer-candidates-sort-option:hover,
 .employer-candidates-sort-option.is-selected {
   background: rgba(239, 246, 255, 0.95);
-  color: #2e57ef;
+  color: #c2410c;
 }
 
 .employer-candidates-th-hint {
@@ -1611,20 +1640,20 @@
   color: #334155;
   font-size: 13px;
   font-weight: 600;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
   line-height: 1.25;
   cursor: pointer;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .application-status-trigger:hover:not(:disabled) {
-  border-color: rgba(53, 99, 255, 0.45);
+  border-color: rgba(234, 88, 12, 0.45);
 }
 
 .application-status-trigger:focus-visible {
   outline: none;
-  border-color: rgba(53, 99, 255, 0.55);
-  box-shadow: 0 0 0 3px rgba(53, 99, 255, 0.12);
+  border-color: rgba(234, 88, 12, 0.55);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12);
 }
 
 .application-status-trigger:disabled {
@@ -1656,7 +1685,7 @@
 .application-status-trigger.is-reviewing {
   background: rgba(239, 246, 255, 0.96);
   border-color: rgba(191, 219, 254, 0.95);
-  color: #1d4ed8;
+  color: #15803d;
 }
 
 .application-status-trigger.is-interview {
@@ -1703,7 +1732,7 @@
   color: #334155;
   font-size: 13px;
   font-weight: 600;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
   text-align: left;
   cursor: pointer;
 }
@@ -1718,7 +1747,7 @@
 }
 
 .application-status-menu-option.is-reviewing {
-  color: #1d4ed8;
+  color: #15803d;
 }
 
 .application-status-menu-option.is-interview {
@@ -1742,15 +1771,15 @@
   background: #fff;
   color: #334155;
   font-size: 13px;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
   line-height: 1.5;
   resize: vertical;
 }
 
 .application-status-message:focus {
   outline: none;
-  border-color: rgba(53, 99, 255, 0.55);
-  box-shadow: 0 0 0 3px rgba(53, 99, 255, 0.12);
+  border-color: rgba(234, 88, 12, 0.55);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12);
 }
 
 .application-status-message:disabled {
@@ -1894,7 +1923,7 @@ body:has(.employer-candidates-page) {
   font-size: 13px;
   font-weight: 700;
   letter-spacing: -0.01em;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
 }
 
 .employer-candidates-page .job-vselect {
@@ -1919,7 +1948,7 @@ body:has(.employer-candidates-page) {
   border: var(--employer-input-border) !important;
   padding: 4px 10px !important;
   background-color: var(--employer-input-bg) !important;
-  font-family: "Manrope", sans-serif !important;
+  font-family: sans-serif !important;
 }
 
 .employer-candidates-page .job-vselect .v-select .vs__selected-options {
@@ -1930,8 +1959,8 @@ body:has(.employer-candidates-page) {
 .employer-candidates-page .job-vselect .v-select.vs--open .vs__dropdown-toggle,
 .employer-candidates-page .job-vselect .v-select .vs__dropdown-toggle:focus,
 .employer-candidates-page .job-vselect .v-select .vs__dropdown-toggle:focus-within {
-  border-color: rgba(53, 99, 255, 0.55) !important;
-  box-shadow: 0 0 0 3px rgba(53, 99, 255, 0.12) !important;
+  border-color: rgba(234, 88, 12, 0.55) !important;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12) !important;
   outline: none !important;
 }
 
@@ -1942,7 +1971,7 @@ body:has(.employer-candidates-page) {
   color: #2d3750;
   font-size: 14px;
   font-weight: 500;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
   line-height: 1.25;
   padding: 4px 10px;
   margin: 3px 6px 3px 0;
@@ -1952,7 +1981,7 @@ body:has(.employer-candidates-page) {
 .employer-candidates-page .job-vselect .v-select .vs__selected button {
   font-size: 14px;
   font-weight: 500;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
   color: #2d3750;
 }
 
@@ -1962,7 +1991,7 @@ body:has(.employer-candidates-page) {
   line-height: 24px;
   font-size: 14px;
   font-weight: 500;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
   color: var(--employer-input-color);
 }
 
@@ -1975,7 +2004,7 @@ body:has(.employer-candidates-page) {
 .employer-candidates-page .job-vselect .vs__placeholder {
   font-size: 14px;
   font-weight: 500;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
   color: #94a3b8;
 }
 
@@ -2023,7 +2052,7 @@ html body .employer-candidates-page .job-vselect .v-select .vs__dropdown-toggle 
   box-shadow: 0 8px 24px rgba(31, 49, 93, 0.1) !important;
   padding: 4px 0 !important;
   margin-top: 6px !important;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
 }
 
 .employer-candidates-page .job-vselect .vs__dropdown-option {
@@ -2069,7 +2098,7 @@ body:has(.employer-admin-applications-filters) .vs__dropdown-menu {
   box-shadow: 0 8px 24px rgba(31, 49, 93, 0.1) !important;
   padding: 4px 0 !important;
   margin-top: 6px !important;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
 }
 
 body:has(.employer-candidates-page) .vs__dropdown-option,
@@ -2146,7 +2175,7 @@ body:has(.employer-admin-applications-filters) .vs__no-options {
 }
 
 .employer-candidates-page .employer-topbar-btn-outline:hover {
-  border-color: rgba(53, 99, 255, 0.35);
+  border-color: rgba(234, 88, 12, 0.35);
   background: rgba(255, 255, 255, 1);
 }
 
@@ -2392,7 +2421,7 @@ body:has(.employer-admin-applications-filters) .vs__no-options {
   padding: 0 8px;
   border-radius: 999px;
   background: rgba(59, 130, 246, 0.12);
-  color: #1d4ed8;
+  color: #15803d;
   font-size: 13px;
   font-weight: 700;
 }
@@ -2495,7 +2524,7 @@ body:has(.employer-admin-applications-filters) .vs__no-options {
   background: rgba(255, 255, 255, 0.88);
   color: #334155;
   font-size: 14px;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
   box-shadow: none;
   outline: none;
   transition:
@@ -2504,8 +2533,8 @@ body:has(.employer-admin-applications-filters) .vs__no-options {
 }
 
 .employer-dashboard-simple .employer-dashboard-search input:focus {
-  border-color: rgba(53, 99, 255, 0.55);
-  box-shadow: 0 0 0 3px rgba(53, 99, 255, 0.12);
+  border-color: rgba(234, 88, 12, 0.55);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12);
 }
 
 .employer-dashboard-stats {
@@ -2536,12 +2565,12 @@ body:has(.employer-admin-applications-filters) .vs__no-options {
 }
 
 .employer-dashboard-stat:hover {
-  border-color: rgba(53, 99, 255, 0.35);
+  border-color: rgba(234, 88, 12, 0.35);
 }
 
 .employer-dashboard-stat.is-active {
-  border-color: rgba(53, 99, 255, 0.92);
-  box-shadow: inset 0 0 0 1px rgba(53, 99, 255, 0.14);
+  border-color: rgba(234, 88, 12, 0.92);
+  box-shadow: inset 0 0 0 1px rgba(234, 88, 12, 0.14);
 }
 
 .employer-dashboard-page .employer-dashboard-stat-label {
@@ -2657,8 +2686,8 @@ body:has(.employer-admin-applications-filters) .vs__no-options {
   z-index: 8;
   padding: 16px 18px;
   border-bottom: 1px solid rgba(226, 232, 240, 0.95);
-  background: #edf4ff;
-  color: #475467;
+  background: #ffffff;
+  color: #64748b;
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
@@ -2691,7 +2720,7 @@ body:has(.employer-admin-applications-filters) .vs__no-options {
   font-size: 14px;
   font-weight: 700;
   line-height: 1.35;
-  color: #0f172a;
+  color: #111827;
   overflow-wrap: anywhere;
 }
 
@@ -2703,12 +2732,12 @@ body:has(.employer-admin-applications-filters) .vs__no-options {
   font-family: inherit;
   text-align: left;
   cursor: pointer;
-  color: #2e57ef;
+  color: #111827;
   transition: color 0.18s ease;
 }
 
 .employer-row-title-btn:hover {
-  color: #1d4ed8;
+  color: #15803d;
   text-decoration: underline;
 }
 
@@ -2818,8 +2847,8 @@ body:has(.employer-admin-applications-filters) .vs__no-options {
 
 /* Loại tin: Cơ bản — blue-100 / blue-800 */
 .employer-row-badge.is-post-type.is-basic {
-  background: #dbeafe;
-  color: #1e40af;
+  background: #ecfdf5;
+  color: #166534;
 }
 
 /* Loại tin: Mới nhất — amber-100 / amber-800 */
@@ -2902,8 +2931,8 @@ body:has(.employer-admin-applications-filters) .vs__no-options {
 }
 
 .employer-row-action:hover:not(:disabled) {
-  border-color: rgba(53, 99, 255, 0.35);
-  color: #3563ff;
+  border-color: rgba(234, 88, 12, 0.35);
+  color: #ea580c;
 }
 
 .employer-row-action.is-danger:hover:not(:disabled) {
@@ -2965,15 +2994,15 @@ body:has(.employer-admin-applications-filters) .vs__no-options {
 
 .employer-dashboard-page-btn:hover,
 .employer-dashboard-page-nav:hover {
-  border-color: rgba(53, 99, 255, 0.35);
-  color: #3563ff;
+  border-color: rgba(234, 88, 12, 0.35);
+  color: #ea580c;
 }
 
 .employer-dashboard-page-btn.is-active {
   border-color: transparent;
-  background: linear-gradient(135deg, #3563ff 0%, #2e57ef 100%);
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   color: #ffffff;
-  box-shadow: 0 12px 24px rgba(53, 99, 255, 0.16);
+  box-shadow: 0 12px 24px rgba(234, 88, 12, 0.16);
 }
 
 .employer-dashboard-page-ellipsis {
@@ -3244,7 +3273,7 @@ body:has(.employer-admin-applications-filters) .vs__no-options {
 
 .employer-settings-page .employer-settings-primary {
   border: 0;
-  background: linear-gradient(135deg, #3563ff 0%, #2e57ef 100%);
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   color: #ffffff;
 }
 
@@ -3523,7 +3552,7 @@ body:has(.employer-admin-applications-filters) .vs__no-options {
   border: 0;
   padding: 0;
   background: transparent;
-  color: #3563ff;
+  color: #ea580c;
   font-size: inherit;
   font-weight: bold;
   cursor: pointer;
@@ -3662,13 +3691,13 @@ body:has(.employer-admin-applications-filters) .vs__no-options {
 }
 
 .employer-admin-jobs-stat:hover {
-  border-color: rgba(53, 99, 255, 0.35);
+  border-color: rgba(234, 88, 12, 0.35);
 }
 
 .employer-admin-jobs-stat.is-active {
-  border-color: rgba(53, 99, 255, 0.92);
+  border-color: rgba(234, 88, 12, 0.92);
   background: rgba(239, 246, 255, 0.95);
-  box-shadow: inset 0 0 0 1px rgba(53, 99, 255, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(234, 88, 12, 0.14);
 }
 
 .employer-admin-jobs-stat-label {
@@ -4082,7 +4111,7 @@ body:has(.employer-company-page) [data-reka-combobox-content] {
   margin: 0;
   padding: 4px 12px;
   border-radius: 999px;
-  background: rgba(53, 99, 255, 0.12);
+  background: rgba(234, 88, 12, 0.12);
   color: var(--blue);
   font-size: 11px;
   font-weight: 800;
@@ -4205,7 +4234,7 @@ body:has(.employer-company-page) [data-reka-combobox-content] {
   color: #2d3750 !important;
   font-size: 14px !important;
   font-weight: 500 !important;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
   box-shadow: none !important;
   justify-content: flex-start !important;
   text-align: left !important;
@@ -4237,7 +4266,7 @@ body:has(.employer-company-page) [data-reka-combobox-content] {
 
 .employer-field-hint {
   margin: 0;
-  color: #3563ff;
+  color: #ea580c;
   font-size: 12px;
   font-weight: 600;
   line-height: 1.45;
@@ -4267,7 +4296,7 @@ body:has(.employer-company-page) [data-reka-combobox-content] {
 
 .employer-admin-company-drawer-form .employer-field-editor .employer-editor:focus-within,
 .employer-admin-blog-drawer-form .employer-field-editor .employer-editor:focus-within {
-  border-color: rgba(53, 99, 255, 0.55);
+  border-color: rgba(234, 88, 12, 0.55);
   border-width: 1.5px;
   box-shadow: none;
   outline: none;
@@ -4395,7 +4424,7 @@ body:has(.employer-company-page) [data-reka-combobox-content] {
   color: #2d3750 !important;
   font-size: 14px !important;
   font-weight: 500 !important;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
   box-shadow: none !important;
   justify-content: flex-start !important;
   text-align: left !important;
@@ -4449,8 +4478,8 @@ body:has(.employer-company-page) [data-reka-combobox-content] {
 .employer-org-type-select [data-slot="base"]:focus-visible,
 .employer-org-type-select button[role="combobox"]:focus,
 .employer-org-type-select button[role="combobox"]:focus-visible {
-  border-color: rgba(53, 99, 255, 0.55) !important;
-  box-shadow: 0 0 0 3px rgba(53, 99, 255, 0.12) !important;
+  border-color: rgba(234, 88, 12, 0.55) !important;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12) !important;
   background-color: #ffffff !important;
   background-image:
     linear-gradient(45deg, transparent 50%, rgba(152, 166, 191, 0.72) 50%),
@@ -4512,9 +4541,9 @@ body:has(.employer-company-page) [data-reka-combobox-content] {
 }
 
 .employer-admin-company-upload-zone.is-dragging {
-  border-color: rgba(53, 99, 255, 0.55);
+  border-color: rgba(234, 88, 12, 0.55);
   background: rgba(239, 246, 255, 0.95);
-  box-shadow: 0 0 0 3px rgba(53, 99, 255, 0.12);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12);
 }
 
 .employer-admin-company-upload-zone.is-disabled {
@@ -4591,8 +4620,8 @@ body:has(.employer-company-page) [data-reka-combobox-content] {
 }
 
 .employer-admin-company-status-btn:hover {
-  border-color: rgba(53, 99, 255, 0.35);
-  color: #3563ff;
+  border-color: rgba(234, 88, 12, 0.35);
+  color: #ea580c;
 }
 
 .employer-admin-company-status-btn.is-active.is-approved {
@@ -4614,9 +4643,9 @@ body:has(.employer-company-page) [data-reka-combobox-content] {
 }
 
 .employer-admin-company-status-btn.is-active.is-published {
-  border-color: rgba(53, 99, 255, 0.55);
+  border-color: rgba(234, 88, 12, 0.55);
   background: rgba(239, 246, 255, 0.95);
-  color: #1d4ed8;
+  color: #15803d;
 }
 
 .employer-admin-blog-cover-grid {
@@ -4669,8 +4698,8 @@ body:has(.employer-company-page) [data-reka-combobox-content] {
 }
 
 .employer-admin-blog-cover-preview:hover {
-  border-color: rgba(53, 99, 255, 0.45);
-  box-shadow: 0 0 0 3px rgba(53, 99, 255, 0.1);
+  border-color: rgba(234, 88, 12, 0.45);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
 }
 
 .employer-admin-blog-cover-preview img {
@@ -4701,8 +4730,8 @@ body:has(.employer-company-page) [data-reka-combobox-content] {
 }
 
 .employer-admin-blog-textarea-counter textarea:focus {
-  border-color: rgba(53, 99, 255, 0.55);
-  box-shadow: 0 0 0 3px rgba(53, 99, 255, 0.12);
+  border-color: rgba(234, 88, 12, 0.55);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12);
   background: #ffffff;
 }
 
@@ -4788,14 +4817,14 @@ body:has(.employer-company-page) [data-reka-combobox-content] {
 }
 
 .employer-admin-user-type-btn:hover {
-  border-color: rgba(53, 99, 255, 0.35);
-  color: #3563ff;
+  border-color: rgba(234, 88, 12, 0.35);
+  color: #ea580c;
 }
 
 .employer-admin-user-type-btn.is-active.is-candidate {
-  border-color: rgba(53, 99, 255, 0.55);
+  border-color: rgba(234, 88, 12, 0.55);
   background: rgba(239, 246, 255, 0.95);
-  color: #1d4ed8;
+  color: #15803d;
 }
 
 .employer-admin-user-type-btn.is-active.is-system-admin {
@@ -4846,7 +4875,7 @@ body:has(.employer-company-page) [data-reka-combobox-content] {
 }
 
 .employer-admin-user-password-toggle:hover {
-  color: #3563ff;
+  color: #ea580c;
 }
 
 /* Khi crop mở: tắt pointer-events overlay/drawer Vaul để modal crop nhận click */
@@ -5000,7 +5029,7 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
 }
 
 .employer-admin-users-summary strong {
-  color: #3563ff;
+  color: #ea580c;
   font-weight: bold;
 }
 
@@ -5036,15 +5065,15 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
 }
 
 .employer-admin-users-filter-pill:hover {
-  border-color: rgba(53, 99, 255, 0.35);
+  border-color: rgba(234, 88, 12, 0.35);
   color: #475569;
 }
 
 .employer-admin-users-filter-pill.is-active {
-  border-color: rgba(53, 99, 255, 0.92);
+  border-color: rgba(234, 88, 12, 0.92);
   background: rgba(239, 246, 255, 0.95);
-  color: #3563ff;
-  box-shadow: inset 0 0 0 1px rgba(53, 99, 255, 0.14);
+  color: #ea580c;
+  box-shadow: inset 0 0 0 1px rgba(234, 88, 12, 0.14);
 }
 
 .employer-admin-users-search {
@@ -5170,7 +5199,7 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
 
 .employer-admin-user-type.is-candidate {
   background: rgba(219, 234, 254, 0.95);
-  color: #1d4ed8;
+  color: #15803d;
 }
 
 .employer-admin-user-type.is-employer {
@@ -5338,7 +5367,7 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
 .employer-field-help-trigger:hover,
 .employer-field-help-trigger:focus-visible {
   background: rgba(219, 234, 254, 0.95);
-  color: #2563eb;
+  color: #16a34a;
   outline: none;
 }
 
@@ -5394,7 +5423,7 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
 .employer-smtp-pass-help-link {
   display: inline-block;
   margin-top: 4px;
-  color: #2563eb;
+  color: #16a34a;
   font-size: 12px;
   font-weight: 600;
   line-height: 1.5;
@@ -5404,7 +5433,7 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
 }
 
 .employer-smtp-pass-help-link:hover {
-  color: #1d4ed8;
+  color: #15803d;
 }
 
 .employer-settings-actions-split {
@@ -5503,7 +5532,7 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
   color: #0f172a;
   font-size: 14px;
   font-weight: 500;
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
   box-sizing: border-box;
   outline: none;
   box-shadow: none;
@@ -5524,13 +5553,13 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
 }
 
 .employer-admin-email-test-field-input:focus {
-  border-color: rgba(53, 99, 255, 0.55);
+  border-color: rgba(234, 88, 12, 0.55);
   background: #fff;
-  box-shadow: 0 0 0 4px rgba(53, 99, 255, 0.12);
+  box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.12);
 }
 
 .employer-admin-email-test-field-control:focus-within .employer-admin-email-test-field-icon {
-  color: #3563ff;
+  color: #ea580c;
 }
 
 .employer-admin-email-test-field.has-error .employer-admin-email-test-field-input {
@@ -5688,8 +5717,8 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
 }
 
 .employer-admin-company-host-btn:hover:not(:disabled) {
-  border-color: rgba(53, 99, 255, 0.35);
-  color: #3563ff;
+  border-color: rgba(234, 88, 12, 0.35);
+  color: #ea580c;
 }
 
 .employer-admin-company-host-btn:disabled {
@@ -5733,9 +5762,9 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
 }
 
 .employer-admin-dashboard-page .employer-admin-content :deep(.grid button.rounded-lg.border-2.border-blue-600) {
-  border-color: rgba(53, 99, 255, 0.92) !important;
+  border-color: rgba(234, 88, 12, 0.92) !important;
   background: rgba(239, 246, 255, 0.95) !important;
-  box-shadow: inset 0 0 0 1px rgba(53, 99, 255, 0.14) !important;
+  box-shadow: inset 0 0 0 1px rgba(234, 88, 12, 0.14) !important;
 }
 
 .employer-admin-dashboard-page .employer-admin-content :deep(table.w-full) {
@@ -5836,12 +5865,12 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
 }
 
 .employer-admin-import-alert--info {
-  border-color: rgba(53, 99, 255, 0.28);
+  border-color: rgba(234, 88, 12, 0.28);
   background: rgba(243, 246, 255, 0.95);
 }
 
 .employer-admin-import-alert--info .employer-admin-import-alert-icon {
-  color: #3563ff;
+  color: #ea580c;
 }
 
 .employer-admin-import-alert--info .employer-admin-import-alert-copy strong {
@@ -5907,7 +5936,7 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
   height: 40px;
   border-radius: 12px;
   background: rgba(239, 246, 255, 0.95);
-  color: #3563ff;
+  color: #ea580c;
   flex-shrink: 0;
 }
 
@@ -5974,7 +6003,7 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
 .employer-admin-import-mode-option input {
   width: 16px;
   height: 16px;
-  accent-color: #3563ff;
+  accent-color: #ea580c;
   cursor: pointer;
 }
 
@@ -6192,7 +6221,7 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
   align-items: center;
   gap: 8px;
   margin-bottom: 10px;
-  color: #1e40af;
+  color: #166534;
   font-size: 14px;
 }
 
@@ -6326,15 +6355,15 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
 }
 
 .employer-email-template-btn.is-primary {
-  background: linear-gradient(135deg, #3563ff 0%, #2e57ef 100%);
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   border-color: transparent;
   color: #fff;
-  box-shadow: 0 8px 20px rgba(53, 99, 255, 0.22);
+  box-shadow: 0 8px 20px rgba(234, 88, 12, 0.22);
 }
 
 .employer-email-template-btn.is-primary:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(53, 99, 255, 0.28);
+  box-shadow: 0 10px 24px rgba(234, 88, 12, 0.28);
 }
 
 .employer-email-template-variables {
@@ -6354,9 +6383,9 @@ html.employer-admin-crop-modal-open [data-vaul-drawer] {
 }
 
 .employer-email-template-variable-chip {
-  border: 1px solid #dbeafe;
+  border: 1px solid #ecfdf5;
   background: #eff6ff;
-  color: #1d4ed8;
+  color: #15803d;
   border-radius: 999px;
   padding: 4px 10px;
   font-size: 12px;

@@ -26,9 +26,9 @@
 @import "./components/rich-text-editor.scss";
 
 :root {
-  --ui-primary: #3563ff;
+  --ui-primary: #ea580c;
   --ui-secondary: #1d1a16;
-  --ui-success: #75cd69;
+  --ui-success: #16a34a;
   --ui-neutral: #b7ac9c;
   --ui-warning: #cd5c5c;
   --ui-error: #df3939;
@@ -41,19 +41,16 @@
   --ui-border-line-light: #eaeaea;
   --ui-cream: #fff8ec;
   --ui-main-light: #ebeff3;
-  --blue: #3563ff;
-  --blue-dark: #2550e8;
-  --blue-soft: #eef0fe;
-  --blue-glow: rgba(53, 99, 255, 0.14);
+  --blue: #ea580c;
+  --blue-dark: #c2410c;
+  --blue-soft: #fff7ed;
+  --blue-glow: rgba(234, 88, 12, 0.16);
   --text: #1d2433;
   --muted: #7d8698;
   --border-default: 1px solid rgba(29, 36, 51, 0.12);
   --line: #e8ebf3;
   --bg: #f5f7fb;
-  --page-bg:
-    radial-gradient(circle at 9% 0%, rgba(53, 99, 255, 0.12) 0%, rgba(53, 99, 255, 0.035) 28%, transparent 46%),
-    radial-gradient(circle at 88% 10%, rgba(120, 181, 255, 0.1) 0%, rgba(120, 181, 255, 0.025) 24%, transparent 42%),
-    linear-gradient(180deg, #f6f9ff 0%, #eef4ff 52%, #f7faff 100%);
+  --page-bg: #ffffff;
   --bg-white: #ffffff;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -144,8 +141,9 @@ body,
 }
 
 @theme static {
-  --font-sans: "Manrope", sans-serif;
-  --font-serif: "Noto Serif JP", serif;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+  --font-serif: "Plus Jakarta Sans", sans-serif;
+  --font-display: "Plus Jakarta Sans", sans-serif;
   --app-header-height: 74px;
   --app-tab-bar-height: 90px;
 }
@@ -205,11 +203,12 @@ h3 {
   font-family: inherit;
   font-weight: 600;
   color: #fff;
-  background: var(--blue);
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   border: none;
   cursor: pointer;
   letter-spacing: -0.01em;
   white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.22);
   transition:
     background 0.2s ease,
     transform 0.25s var(--ease-spring),
@@ -218,9 +217,9 @@ h3 {
 }
 
 .primary-btn:hover {
-  background: var(--blue-dark);
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-blue);
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.32);
 }
 
 .white-btn {

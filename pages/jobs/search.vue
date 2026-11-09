@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="min-h-screen bg-[var(--bg)] jobs-directory-page"
-    :class="{ 'jobs-directory-page--compact-list': isCompactJobSearch }"
-  >
+  <div class="min-h-screen bg-[var(--bg)] jobs-directory-page">
     <section class="jobs-directory-hero">
       <div class="container jobs-directory-shell">
         <form
@@ -43,7 +40,31 @@
                   :clear-search-on-blur="() => true"
                   @open="onMultiSelectOpen"
                   @close="onMultiSelectClose"
-                />
+                >
+                  <template #selected-option-container="{ option, deselect }">
+                    <span
+                      v-if="String(categoryForSelect[0]?.value) === String(option.value)"
+                      class="vs__selected"
+                    >
+                      <span class="vs__selected-label" :title="option.label">{{ option.label }}</span>
+                      <button
+                        type="button"
+                        class="vs__deselect"
+                        :title="`Bỏ chọn ${option.label}`"
+                        @click.stop="deselect(option)"
+                      >
+                        ✕
+                      </button>
+                    </span>
+                    <span
+                      v-if="String(categoryForSelect[0]?.value) === String(option.value) && categoryForSelect.length > 1"
+                      class="vs__selected-more-badge"
+                      :title="categoryForSelect.slice(1).map((x: any) => x.label).join(', ')"
+                    >
+                      +{{ categoryForSelect.length - 1 }}
+                    </span>
+                  </template>
+                </v-select>
               </div>
               <span class="arr">▾</span>
             </div>
@@ -68,7 +89,31 @@
                   :clear-search-on-blur="() => true"
                   @open="onMultiSelectOpen"
                   @close="onMultiSelectClose"
-                />
+                >
+                  <template #selected-option-container="{ option, deselect }">
+                    <span
+                      v-if="String(locationForSelect[0]?.value) === String(option.value)"
+                      class="vs__selected"
+                    >
+                      <span class="vs__selected-label" :title="option.label">{{ option.label }}</span>
+                      <button
+                        type="button"
+                        class="vs__deselect"
+                        :title="`Bỏ chọn ${option.label}`"
+                        @click.stop="deselect(option)"
+                      >
+                        ✕
+                      </button>
+                    </span>
+                    <span
+                      v-if="String(locationForSelect[0]?.value) === String(option.value) && locationForSelect.length > 1"
+                      class="vs__selected-more-badge"
+                      :title="locationForSelect.slice(1).map((x: any) => x.label).join(', ')"
+                    >
+                      +{{ locationForSelect.length - 1 }}
+                    </span>
+                  </template>
+                </v-select>
               </div>
               <span class="arr">▾</span>
             </div>
@@ -84,460 +129,276 @@
             </button>
           </div>
         </form>
-
-        <div ref="filterPillsRoot" class="jobs-directory-filter-pills">
-          <div class="jobs-directory-filter-pill-wrap">
-            <button
-              type="button"
-              class="jobs-directory-filter-pill"
-              :class="{ 'is-active': activePanel === 'experienceLevel' }"
-              :aria-expanded="activePanel === 'experienceLevel'"
-              @click.stop="toggleFilterPanel('experienceLevel')"
-            >
-              <span>Kinh nghiệm</span>
-              <span
-                v-if="selectedFilters.experienceLevel.length"
-                class="jobs-directory-filter-pill__count"
-              >
-                {{ selectedFilters.experienceLevel.length }}
-              </span>
-              <span class="jobs-directory-filter-pill__caret" aria-hidden="true">▾</span>
-            </button>
-            <div
-              v-if="activePanel === 'experienceLevel'"
-              class="jobs-directory-filter-popup"
-              role="dialog"
-              aria-label="Lọc kinh nghiệm"
-              @click.stop
-            >
-              <div class="jobs-directory-filter-popup__head">
-                <span>Kinh nghiệm</span>
-                <button type="button" class="jobs-directory-filter-popup__close" @click="closeFilterPanel">
-                  Đóng
-                </button>
-              </div>
-              <div class="jobs-directory-filter-popup__list">
-                <label
-                  v-for="level in experienceLevelItems"
-                  :key="level.value"
-                  class="jobs-directory-filter-popup__option"
-                >
-                  <input
-                    type="checkbox"
-                    :checked="selectedFilters.experienceLevel.includes(level.value)"
-                    @change="toggleFilter('experienceLevel', level.value)"
-                  >
-                  <span>{{ level.label }}</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="jobs-directory-filter-pill-wrap">
-            <button
-              type="button"
-              class="jobs-directory-filter-pill"
-              :class="{ 'is-active': activePanel === 'employmentType' }"
-              :aria-expanded="activePanel === 'employmentType'"
-              @click.stop="toggleFilterPanel('employmentType')"
-            >
-              <span>Hình thức</span>
-              <span
-                v-if="selectedFilters.employmentType.length"
-                class="jobs-directory-filter-pill__count"
-              >
-                {{ selectedFilters.employmentType.length }}
-              </span>
-              <span class="jobs-directory-filter-pill__caret" aria-hidden="true">▾</span>
-            </button>
-            <div
-              v-if="activePanel === 'employmentType'"
-              class="jobs-directory-filter-popup"
-              role="dialog"
-              aria-label="Lọc hình thức"
-              @click.stop
-            >
-              <div class="jobs-directory-filter-popup__head">
-                <span>Hình thức</span>
-                <button type="button" class="jobs-directory-filter-popup__close" @click="closeFilterPanel">
-                  Đóng
-                </button>
-              </div>
-              <div class="jobs-directory-filter-popup__list">
-                <label
-                  v-for="type in employmentTypeItems"
-                  :key="type.value"
-                  class="jobs-directory-filter-popup__option"
-                >
-                  <input
-                    type="checkbox"
-                    :checked="selectedFilters.employmentType.includes(type.value)"
-                    @change="toggleFilter('employmentType', type.value)"
-                  >
-                  <span>{{ type.label }}</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="jobs-directory-filter-pill-wrap">
-            <button
-              type="button"
-              class="jobs-directory-filter-pill"
-              :class="{ 'is-active': activePanel === 'grade' }"
-              :aria-expanded="activePanel === 'grade'"
-              @click.stop="toggleFilterPanel('grade')"
-            >
-              <span>Cấp học</span>
-              <span
-                v-if="selectedFilters.grade.length"
-                class="jobs-directory-filter-pill__count"
-              >
-                {{ selectedFilters.grade.length }}
-              </span>
-              <span class="jobs-directory-filter-pill__caret" aria-hidden="true">▾</span>
-            </button>
-            <div
-              v-if="activePanel === 'grade'"
-              class="jobs-directory-filter-popup"
-              role="dialog"
-              aria-label="Lọc cấp học"
-              @click.stop
-            >
-              <div class="jobs-directory-filter-popup__head">
-                <span>Cấp học</span>
-                <button type="button" class="jobs-directory-filter-popup__close" @click="closeFilterPanel">
-                  Đóng
-                </button>
-              </div>
-              <div class="jobs-directory-filter-popup__list">
-                <label
-                  v-for="g in gradeItems"
-                  :key="g.value"
-                  class="jobs-directory-filter-popup__option"
-                >
-                  <input
-                    type="checkbox"
-                    :checked="selectedFilters.grade.includes(g.value)"
-                    @change="toggleFilter('grade', g.value)"
-                  >
-                  <span>{{ g.label }}</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <button
-            v-if="
-              selectedFilters.employmentType.length ||
-              selectedFilters.experienceLevel.length ||
-              selectedFilters.grade.length
-            "
-            type="button"
-            class="jobs-directory-filter-clear"
-            @click="clearFilters"
-          >
-            Xóa bộ lọc
-          </button>
-        </div>
       </div>
     </section>
 
     <!-- Main content -->
     <div class="container">
       <div class="jobs-directory-main">
-        <div>
-          <!-- Loading state -->
-          <div v-if="loading" class="space-y-4">
-            <USkeleton v-for="i in 5" :key="i" class="h-32 w-full" />
-          </div>
-
-          <div v-else-if="filteredJobs.length > 0" class="jobs-directory-results space-y-4">
-            <p class="job-results-count">
-              <span class="job-results-count__number">{{ jobs.length }}</span>
-              <span class="job-results-count__label">việc làm phù hợp</span>
-            </p>
-
-            <div
-              class="jobs-browser-layout grid min-h-0 grid-cols-1 items-start gap-6"
-              :class="{ 'jobs-browser-split': !isCompactJobSearch }"
-            >
-              <!-- Left: results list (cùng chiều cao với cột phải, scroll nội bộ) -->
-              <div
-                class="jobs-browser-list-pane flex min-h-0 flex-col"
-                :style="splitPaneStyle"
+        <div class="jobs-search-layout">
+          <!-- Left: Filter Sidebar -->
+          <aside class="jobs-filter-sidebar">
+            <div v-if="hasActiveFilters" class="sidebar-clear-wrap">
+              <button
+                type="button"
+                class="sidebar-clear-btn"
+                @click="clearFilters"
               >
-                <div
-                  class="jobs-browser-list min-h-0 flex-1 overflow-y-auto overscroll-contain pr-0.5"
+                <span>Xóa bộ lọc đã chọn</span>
+                <span class="clear-icon" aria-hidden="true">✕</span>
+              </button>
+            </div>
+
+            <!-- Group 1: Hình thức làm việc -->
+            <div class="filter-group">
+              <div class="filter-group-title">
+                <span>Hình thức làm việc</span>
+                <span v-if="selectedFilters.employmentType.length" class="text-xs font-semibold text-emerald-600">
+                  ({{ selectedFilters.employmentType.length }})
+                </span>
+              </div>
+              <div class="filter-group-list">
+                <label
+                  v-for="type in employmentTypeItems"
+                  :key="type.value"
+                  class="filter-option"
                 >
+                  <input
+                    type="checkbox"
+                    :checked="selectedFilters.employmentType.includes(type.value)"
+                    @change="toggleFilter('employmentType', type.value)"
+                  >
+                  <span class="filter-label">{{ type.label }}</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Group 2: Kinh nghiệm -->
+            <div class="filter-group">
+              <div class="filter-group-title">
+                <span>Kinh nghiệm</span>
+                <span v-if="selectedFilters.experienceLevel.length" class="text-xs font-semibold text-emerald-600">
+                  ({{ selectedFilters.experienceLevel.length }})
+                </span>
+              </div>
+              <div class="filter-group-list">
+                <label
+                  v-for="level in experienceLevelItems"
+                  :key="level.value"
+                  class="filter-option"
+                >
+                  <input
+                    type="checkbox"
+                    :checked="selectedFilters.experienceLevel.includes(level.value)"
+                    @change="toggleFilter('experienceLevel', level.value)"
+                  >
+                  <span class="filter-label">{{ level.label }}</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Group 3: Cấp học -->
+            <div class="filter-group">
+              <div class="filter-group-title">
+                <span>Cấp học</span>
+                <span v-if="selectedFilters.grade.length" class="text-xs font-semibold text-emerald-600">
+                  ({{ selectedFilters.grade.length }})
+                </span>
+              </div>
+              <div class="filter-group-list">
+                <label
+                  v-for="g in gradeItems"
+                  :key="g.value"
+                  class="filter-option"
+                >
+                  <input
+                    type="checkbox"
+                    :checked="selectedFilters.grade.includes(g.value)"
+                    @change="toggleFilter('grade', g.value)"
+                  >
+                  <span class="filter-label">{{ g.label }}</span>
+                </label>
+              </div>
+            </div>
+          </aside>
+
+          <!-- Right: Job Results -->
+          <main class="jobs-results-content">
+            <!-- Loading state -->
+            <div v-if="loading" class="space-y-4">
+              <USkeleton v-for="i in 5" :key="i" class="h-32 w-full" />
+            </div>
+
+            <div v-else-if="filteredJobs.length > 0" class="jobs-directory-results space-y-4">
+              <p class="job-results-count">
+                <span class="job-results-count__number">{{ filteredJobs.length }}</span>
+                <span class="job-results-count__label">việc làm phù hợp</span>
+              </p>
+
+              <div class="job-list-urgent">
                 <article
-                  v-for="job in filteredJobs"
+                  v-for="job in paginatedJobs"
                   :key="job.id"
-                  class="jobs-browser-card"
-                  :class="{
-                    'is-active': selectedJob?.id === job.id,
-                    'is-urgent': shouldShowUrgentTag(job),
-                  }"
+                  class="job-row-urgent is-visible"
                   role="link"
                   tabindex="0"
-                  @click="selectJob(job)"
-                  @keydown.enter.prevent="selectJob(job)"
+                  @click="viewJob(job)"
+                  @keydown.enter.prevent="viewJob(job)"
                 >
-                  <span
-                    v-if="shouldShowUrgentTag(job)"
-                    class="jobs-browser-urgent-badge"
+                  <div
+                    class="job-logo"
+                    :class="{ 'logo-has-image': !!job.companyLogo }"
                   >
-                    {{ URGENT_TAG_LABEL }}
-                  </span>
-
-                  <div class="jobs-browser-card-head">
-                    <div
-                      class="job-logo jobs-browser-job-logo"
-                      :class="{ 'logo-has-image': !!job.companyLogo }"
+                    <img
+                      v-if="job.companyLogo"
+                      :src="job.companyLogo"
+                      :alt="`${job.companyName} logo`"
+                      loading="lazy"
                     >
-                      <img
-                        v-if="job.companyLogo"
-                        :src="job.companyLogo"
-                        :alt="`${job.companyName} logo`"
-                        loading="lazy"
+                    <template v-else>
+                      {{ (job.companyName || 'CT').slice(0, 2).toUpperCase() }}
+                    </template>
+                  </div>
+
+                  <div class="job-row-content">
+                    <NuxtLink
+                      :to="`/jobs/${job.id}`"
+                      class="job-row-title-link"
+                      @click.stop
+                    >
+                      <h3 class="job-row-title">{{ job.title }}</h3>
+                    </NuxtLink>
+
+                    <div class="job-row-company">
+                      <NuxtLink
+                        v-if="job.companyId"
+                        :to="`/companies/${job.companyId}`"
+                        class="jobs-employer-link"
+                        @click.stop
                       >
-                      <template v-else>
-                        {{ getJobLogoLetters(job) }}
-                      </template>
+                        {{ job.companyName }}
+                      </NuxtLink>
+                      <span v-else>{{ job.companyName }}</span>
                     </div>
 
-                    <div class="jobs-browser-card-main">
-                      <h2>{{ job.title }}</h2>
-                      <p>
-                        <NuxtLink
-                          v-if="job.companyId"
-                          :to="`/companies/${job.companyId}`"
-                          class="jobs-employer-link"
-                          @click.stop
-                        >
-                          {{ job.companyName }}
-                        </NuxtLink>
-                        <span v-else>{{ job.companyName }}</span>
-                      </p>
+                    <div class="job-row-meta">
+                      <span v-if="getFullLocationText(job)" class="meta-item">
+                        {{ truncateText(getFullLocationText(job), 32) }}
+                      </span>
+                      <span v-if="getEmploymentTypeText(job)" class="meta-item">
+                        {{ getEmploymentTypeText(job) }}
+                      </span>
+                      <span v-if="getExperienceText(job) && getExperienceText(job) !== 'Không yêu cầu'" class="meta-item">
+                        {{ getExperienceText(job) }}
+                      </span>
+                      <span v-if="job.createdAt" class="meta-item meta-item-date">
+                        {{ timeAgo(job.createdAt) }}
+                      </span>
+                    </div>
+
+                    <div class="job-row-salary">
+                      {{ formatSalaryRange(job) }}
                     </div>
                   </div>
 
-                  <div class="jobs-browser-card-meta is-basic">
-                    <span v-if="getFullLocationText(job)">
-                      <span class="meta-ico">📍</span>
-                      {{ truncateText(getFullLocationText(job), 24) }}
+                  <div class="job-row-side">
+                    <span v-if="shouldShowUrgentTag(job)" class="job-fire-icon" title="Tuyển gấp" aria-label="Tuyển gấp">
+                      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
+                        <path fill="#ea580c" d="M12 23c-4.97 0-9-4.03-9-9 0-4.92 3.84-9.36 6.89-12.06.4-.35.99-.21 1.2.29.98 2.27 2.7 4.09 3.91 5.37.28.29.74.22.92-.14.73-1.42 1.61-3.66 1.15-5.96-.08-.41.28-.78.7-.72 4.16.59 7.23 4.8 7.23 8.22 0 4.97-4.03 9-9 9z" />
+                        <path fill="#f59e0b" d="M11.5 17.5c1.93 0 3.5-1.57 3.5-3.5 0-1.88-1.55-3.41-3.23-4.88-.23-.2-.58-.09-.67.19-.51 1.63-1.6 3.19-1.6 4.69 0 1.93 1.57 3.5 2 3.5z" />
+                      </svg>
                     </span>
-                    <span>
-                      <span class="meta-ico">₫</span>
-                      {{ formatSalaryRange(job) }}
-                    </span>
-                    <span v-if="job.createdAt">
-                      <span class="meta-ico">🕒</span>
-                      {{ timeAgo(job.createdAt) }}
-                    </span>
+                    <span v-else />
+
+                    <NuxtLink
+                      :to="`/jobs/${job.id}`"
+                      class="job-row-apply"
+                      @click.stop
+                    >
+                      <span>Ứng tuyển</span>
+                      <span class="apply-arrow" aria-hidden="true">→</span>
+                    </NuxtLink>
                   </div>
                 </article>
-                </div>
               </div>
 
-              <!-- Right: job detail (desktop split view) -->
-              <aside
-                v-if="selectedJob && !isCompactJobSearch"
-                class="jobs-browser-detail"
+              <!-- Pagination -->
+              <nav
+                v-if="totalPages > 1"
+                class="jobs-search-pagination"
+                aria-label="Phân trang việc làm"
               >
-                <div class="jobs-detail-top">
-                  <div class="jobs-detail-brand">
-                    <div
-                      class="job-logo jobs-detail-job-logo"
-                      :class="{ 'logo-has-image': !!selectedJob.companyLogo }"
-                    >
-                      <img
-                        v-if="selectedJob.companyLogo"
-                        :src="selectedJob.companyLogo"
-                        :alt="`${selectedJob.companyName} logo`"
-                        loading="lazy"
-                      >
-                      <template v-else>
-                        {{ getJobLogoLetters(selectedJob) }}
-                      </template>
-                    </div>
-                    <div>
-                      <h3>{{ selectedJob.title }}</h3>
-                      <p>
-                        <NuxtLink
-                          v-if="selectedJob.companyId"
-                          :to="`/companies/${selectedJob.companyId}`"
-                          class="jobs-employer-link"
-                        >
-                          {{ selectedJob.companyName }}
-                        </NuxtLink>
-                        <span v-else>{{ selectedJob.companyName }}</span>
-                      </p>
-                      <NuxtLink
-                        :to="`/jobs/${selectedJob.id}`"
-                        class="jobs-detail-link"
-                      >
-                        Xem chi tiết
-                      </NuxtLink>
-                    </div>
-                  </div>
+                <button
+                  type="button"
+                  class="pagination-nav-btn"
+                  :disabled="currentPage <= 1"
+                  aria-label="Trang trước"
+                  @click="goToPage(currentPage - 1)"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
 
-                  <div v-if="canApplyToJobs" class="jobs-detail-actions">
-                    <button
-                      v-if="!hasAppliedToJob(selectedJob.id)"
-                      type="button"
-                      class="jobs-detail-cta"
-                      @click.stop.prevent="openApplyDrawer(selectedJob)"
-                    >
-                      Ứng tuyển
-                    </button>
+                <div class="pagination-pages">
+                  <template v-for="(item, idx) in paginationItems" :key="`${item}-${idx}`">
+                    <span v-if="item === 'ellipsis'" class="pagination-ellipsis" aria-hidden="true">…</span>
                     <button
                       v-else
                       type="button"
-                      class="jobs-detail-cta"
-                      disabled
+                      class="pagination-page-btn"
+                      :class="{ 'is-active': item === currentPage }"
+                      :aria-label="`Trang ${item}`"
+                      :aria-current="item === currentPage ? 'page' : undefined"
+                      @click="goToPage(item)"
                     >
-                      Đã ứng tuyển
+                      {{ item }}
                     </button>
-                  </div>
+                  </template>
                 </div>
 
-                <div class="jobs-detail-meta">
-                  <span v-if="getFullLocationText(selectedJob)">
-                    <span class="meta-ico">📍</span>
-                    <span>{{ getFullLocationText(selectedJob) }}</span>
-                  </span>
-                  <span>
-                    <span class="meta-ico">₫</span>
-                    <span>{{ formatSalaryRange(selectedJob) }}</span>
-                  </span>
-                  <span v-if="selectedJob.createdAt">
-                    <span class="meta-ico">🕒</span>
-                    <span>{{ timeAgo(selectedJob.createdAt) }}</span>
-                  </span>
-                  <span v-if="getEmploymentTypeText(selectedJob)">
-                    <span class="meta-ico">⚑</span>
-                    <span>{{ getEmploymentTypeText(selectedJob) }}</span>
-                  </span>
-                </div>
-
-                <div class="jobs-detail-section">
-                  <h4>Mô tả công việc</h4>
-                  <div
-                    v-if="hasRichTextContent(selectedJob.detailDescription)"
-                    class="jobs-detail-description rich-text-output"
-                    v-html="selectedJob.detailDescription"
-                  />
-                  <p
-                    v-else
-                    class="jobs-detail-lead"
-                  >
-                    {{ $t('common.nanValue') }}
-                  </p>
-                </div>
-
-                <div class="jobs-detail-section">
-                  <h4>Yêu cầu</h4>
-                  <ul
-                    v-if="requiredQualificationList(selectedJob).length"
-                    class="jobs-detail-reasons"
-                  >
-                    <li
-                      v-for="rq in requiredQualificationList(selectedJob)"
-                      :key="rq"
-                    >
-                      {{ rq }}
-                    </li>
-                  </ul>
-                  <p
-                    v-else
-                    class="jobs-detail-lead"
-                  >
-                    {{ $t('common.nanValue') }}
-                  </p>
-                </div>
-
-                <div class="jobs-detail-section">
-                  <h4>Quyền lợi</h4>
-                  <ul
-                    v-if="benefitsList(selectedJob).length"
-                    class="jobs-detail-reasons"
-                  >
-                    <li
-                      v-for="b in benefitsList(selectedJob)"
-                      :key="b"
-                    >
-                      {{ b }}
-                    </li>
-                  </ul>
-                  <p
-                    v-else
-                    class="jobs-detail-lead"
-                  >
-                    {{ $t('common.nanValue') }}
-                  </p>
-                </div>
-
-                <div class="jobs-detail-section">
-                  <h4>Địa chỉ làm việc</h4>
-                  <div
-                    v-if="hasRichTextContent(selectedJob.jobAddress || selectedJob.address)"
-                    class="jobs-detail-address rich-text-output"
-                    v-html="selectedJob.jobAddress || selectedJob.address"
-                  />
-                  <p
-                    v-else
-                    class="jobs-detail-lead"
-                  >
-                    {{ $t('common.nanValue') }}
-                  </p>
-                </div>
-
-                <div v-if="canApplyToJobs" class="jobs-detail-bottom-cta">
-                  <button
-                    v-if="!hasAppliedToJob(selectedJob.id)"
-                    type="button"
-                    class="jobs-detail-cta"
-                    @click.stop.prevent="openApplyDrawer(selectedJob)"
-                  >
-                    Ứng tuyển
-                  </button>
-                  <button
-                    v-else
-                    type="button"
-                    class="jobs-detail-cta"
-                    disabled
-                  >
-                    Đã ứng tuyển
-                  </button>
-                </div>
-              </aside>
-
-              <aside
-                v-else-if="!isCompactJobSearch"
-                class="jobs-browser-detail jobs-browser-detail--empty"
-              >
-                <p>Chọn một công việc để xem chi tiết.</p>
-              </aside>
+                <button
+                  type="button"
+                  class="pagination-nav-btn"
+                  :disabled="currentPage >= totalPages"
+                  aria-label="Trang tiếp theo"
+                  @click="goToPage(currentPage + 1)"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </button>
+              </nav>
             </div>
-          </div>
 
-          <!-- Empty state -->
-          <div v-else class="text-center py-12">
-            <UIcon
-              name="i-heroicons-magnifying-glass"
-              class="w-16 h-16 text-neutral-400 mx-auto mb-4"
-            />
-            <h3 class="text-lg font-medium text-gray-900 mb-2">
-              {{ $t('search.noResults') }}
-            </h3>
-            <p class="text-gray-600 mb-6">
-              {{ $t('search.noResultsDescription') }}
-            </p>
-            <UButton variant="outline" color="primary" @click="clearSearch">
-              {{ $t('search.clearSearch') }}
-            </UButton>
-          </div>
+            <!-- Empty state -->
+            <div v-else class="jobs-empty-state">
+              <div class="empty-icon-circle">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  <line x1="8" y1="11" x2="14" y2="11" />
+                </svg>
+              </div>
+              <h3 class="empty-title">
+                {{ $t('search.noResults') }}
+              </h3>
+              <p class="empty-desc">
+                {{ $t('search.noResultsDescription') }}
+              </p>
+              <button
+                type="button"
+                class="empty-reset-btn"
+                @click="clearSearch"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                  <path d="M3 3v5h5" />
+                </svg>
+                <span>Xóa bộ lọc & tìm kiếm lại</span>
+              </button>
+            </div>
+          </main>
         </div>
       </div>
     </div>
@@ -553,6 +414,7 @@
 <script setup lang="ts">
 import type { JobModel } from '~/models/job'
 import { JobMapper } from '~/mapper/job'
+import { formatSalaryRange } from '~/utils/formatSalary'
 import { hasRichTextContent } from '~/utils/rich-text'
 
 interface SearchParams {
@@ -607,7 +469,7 @@ const {
   locationEnumLabel,
   categoryEnumLabel,
   employmentTypesEnumLabel,
-  experienceLevelsEnumLabel: _experienceLevelsEnumLabel,
+  experienceLevelsEnumLabel,
   postTypeOptions,
   jobBenefits,
   requiredQualificationLabel,
@@ -639,6 +501,16 @@ const getEmploymentTypeText = (job: JobModel) => {
   return label || String(key ?? '').trim()
 }
 
+const getExperienceText = (job: JobModel) => {
+  const v = (job.experienceLevel ?? '').toString().trim()
+  if (!v) return ''
+  return (
+    (experienceLevelsEnumLabel as any)?.[v as any] ??
+    (experienceLevelsEnumLabel as any)?.[Number(v) as any] ??
+    v
+  )
+}
+
 useHead({
   title: 'Tìm việc',
 })
@@ -652,102 +524,6 @@ const { ensureLoaded, hasAppliedToJob, canApplyToJobs } = useAppliedJobs()
 // Reactive data
 const loading = ref(false)
 const jobs = ref<JobModel[]>([])
-const selectedJob = ref<JobModel | null>(null)
-const isCompactJobSearch = ref(false)
-
-const JOB_SEARCH_COMPACT_MQ = '(max-width: 1020px)'
-
-const updateCompactJobSearch = () => {
-  if (!import.meta.client) return
-  isCompactJobSearch.value = window.matchMedia(JOB_SEARCH_COMPACT_MQ).matches
-}
-
-const compactListMaxHeight = ref('')
-let compactLayoutObserver: ResizeObserver | null = null
-
-const getAppHeaderHeightPx = () => {
-  const raw = getComputedStyle(document.documentElement)
-    .getPropertyValue('--app-header-height')
-    .trim()
-  const parsed = parseFloat(raw)
-  return Number.isFinite(parsed) ? parsed : 74
-}
-
-const measureCompactListHeight = () => {
-  if (!import.meta.client || !isCompactJobSearch.value) {
-    compactListMaxHeight.value = ''
-    return
-  }
-
-  requestAnimationFrame(() => {
-    const headerHeight = getAppHeaderHeightPx()
-    const hero = document.querySelector('.jobs-directory-hero') as HTMLElement | null
-    const countEl = document.querySelector(
-      '.jobs-directory-results .job-results-count',
-    ) as HTMLElement | null
-    const mainEl = document.querySelector('.jobs-directory-main') as HTMLElement | null
-
-    let offset = headerHeight
-
-    if (hero) offset += hero.offsetHeight
-    if (countEl) offset += countEl.offsetHeight + 12
-    if (mainEl) {
-      const styles = getComputedStyle(mainEl)
-      offset += parseFloat(styles.paddingTop) + parseFloat(styles.paddingBottom)
-    }
-
-    offset += 12
-
-    compactListMaxHeight.value = `calc(100dvh - ${Math.ceil(offset)}px)`
-  })
-}
-
-const bindCompactListLayout = () => {
-  if (!import.meta.client) return
-
-  compactLayoutObserver?.disconnect()
-  compactLayoutObserver = null
-
-  if (!isCompactJobSearch.value) {
-    compactListMaxHeight.value = ''
-    return
-  }
-
-  measureCompactListHeight()
-
-  const hero = document.querySelector('.jobs-directory-hero')
-  if (!hero) return
-
-  compactLayoutObserver = new ResizeObserver(() => {
-    measureCompactListHeight()
-  })
-  compactLayoutObserver.observe(hero)
-  if (filterPillsRoot.value) {
-    compactLayoutObserver.observe(filterPillsRoot.value)
-  }
-}
-
-/** Cùng một chiều cao cho cột list + cột chi tiết; scroll ở từng cột, không lệch nhau. */
-const splitPaneStyle = computed(() => {
-  if (isCompactJobSearch.value) {
-    if (!compactListMaxHeight.value) {
-      return { minHeight: 0 }
-    }
-
-    return {
-      height: compactListMaxHeight.value,
-      maxHeight: compactListMaxHeight.value,
-      minHeight: 0,
-    } as const
-  }
-
-  return {
-    height: 'calc(100vh - var(--app-header-height) - 50px)',
-    minHeight: 0,
-    maxHeight: 'calc(100vh - var(--app-header-height) - 50px)',
-  } as const
-})
-
 const applyDrawerOpen = ref(false)
 const applyingJob = ref<JobModel | null>(null)
 
@@ -829,45 +605,12 @@ const selectedFilters = ref<SelectedFilters>({
   grade: [],
 })
 
-type FilterPanelKey = 'employmentType' | 'experienceLevel' | 'grade'
-const activePanel = ref<FilterPanelKey | null>(null)
-const filterPillsRoot = ref<HTMLElement | null>(null)
-
-let filterOutsideListener: ((e: PointerEvent) => void) | null = null
-
-const removeFilterOutsideListener = () => {
-  if (!filterOutsideListener) return
-  document.removeEventListener('pointerdown', filterOutsideListener, true)
-  filterOutsideListener = null
-}
-
-const closeFilterPanel = () => {
-  activePanel.value = null
-  removeFilterOutsideListener()
-}
-
-const toggleFilterPanel = (panel: FilterPanelKey) => {
-  if (activePanel.value === panel) {
-    closeFilterPanel()
-    return
-  }
-
-  activePanel.value = panel
-  removeFilterOutsideListener()
-
-  nextTick(() => {
-    filterOutsideListener = (e: PointerEvent) => {
-      if (filterPillsRoot.value && !filterPillsRoot.value.contains(e.target as Node)) {
-        closeFilterPanel()
-      }
-    }
-    document.addEventListener('pointerdown', filterOutsideListener, true)
-  })
-}
-
-onBeforeUnmount(() => {
-  removeFilterOutsideListener()
-})
+const hasActiveFilters = computed(
+  () =>
+    selectedFilters.value.employmentType.length > 0 ||
+    selectedFilters.value.experienceLevel.length > 0 ||
+    selectedFilters.value.grade.length > 0,
+)
 
 // Computed
 const filteredJobs = computed(() => {
@@ -919,18 +662,85 @@ const filteredJobs = computed(() => {
     })
 })
 
-// Methods
-const selectJob = (job: JobModel) => {
-  if (isCompactJobSearch.value) {
-    viewJob(job)
-    return
+// Pagination
+const pageSize = ref(10)
+const currentPage = ref(1)
+
+const totalPages = computed(() => {
+  return Math.max(1, Math.ceil(filteredJobs.value.length / pageSize.value))
+})
+
+const paginatedJobs = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value
+  return filteredJobs.value.slice(start, start + pageSize.value)
+})
+
+type PaginationItem = number | 'ellipsis'
+
+const paginationItems = computed((): PaginationItem[] => {
+  const total = totalPages.value
+  const current = currentPage.value
+  const items: PaginationItem[] = []
+
+  if (total <= 7) {
+    for (let i = 1; i <= total; i++) {
+      items.push(i)
+    }
+    return items
   }
 
-  selectedJob.value = job
+  items.push(1)
+
+  if (current > 3) {
+    items.push('ellipsis')
+  }
+
+  const start = Math.max(2, current - 1)
+  const end = Math.min(total - 1, current + 1)
+
+  for (let i = start; i <= end; i++) {
+    items.push(i)
+  }
+
+  if (current < total - 2) {
+    items.push('ellipsis')
+  }
+
+  items.push(total)
+  return items
+})
+
+const goToPage = (p: number) => {
+  const next = Math.min(Math.max(1, p), totalPages.value)
+  currentPage.value = next
+  if (import.meta.client) {
+    const listTop = document.querySelector('.jobs-results-content') as HTMLElement | null
+    if (listTop) {
+      const topOffset = listTop.getBoundingClientRect().top + window.scrollY - 100
+      window.scrollTo({ top: Math.max(0, topOffset), behavior: 'smooth' })
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+}
+
+watch(
+  () => filteredJobs.value.length,
+  () => {
+    if (currentPage.value > totalPages.value) {
+      currentPage.value = 1
+    }
+  },
+)
+
+// Methods
+const selectJob = (job: JobModel) => {
+  viewJob(job)
 }
 
 const performSearch = async () => {
   loading.value = true
+  currentPage.value = 1
 
   try {
     // Build search parameters
@@ -997,7 +807,6 @@ const toggleFilter = (filterType: keyof SelectedFilters, value: string) => {
 }
 
 const clearFilters = () => {
-  closeFilterPanel()
   selectedFilters.value = {
     employmentType: [],
     experienceLevel: [],
@@ -1017,7 +826,6 @@ const clearSearch = async () => {
     experienceLevel: [],
     grade: [],
   }
-  closeFilterPanel()
   await router.replace({ path: route.path, query: {} })
   await performSearch()
 }
@@ -1132,21 +940,6 @@ const timeAgo = (d: Date | string) => {
 
 // Initialize search from route query
 onMounted(async () => {
-  updateCompactJobSearch()
-
-  if (import.meta.client) {
-    const mediaQuery = window.matchMedia(JOB_SEARCH_COMPACT_MQ)
-    const onMediaChange = () => {
-      updateCompactJobSearch()
-      nextTick(() => bindCompactListLayout())
-    }
-    mediaQuery.addEventListener('change', onMediaChange)
-    onUnmounted(() => mediaQuery.removeEventListener('change', onMediaChange))
-
-    window.addEventListener('resize', measureCompactListHeight)
-    onUnmounted(() => window.removeEventListener('resize', measureCompactListHeight))
-  }
-
   await ensureLoaded()
   const query = route.query
 
@@ -1171,54 +964,11 @@ onMounted(async () => {
   if (locationIds.length) searchParams.value.location = locationIds
 
   performSearch()
-  await nextTick()
-  bindCompactListLayout()
 })
 
 onUnmounted(() => {
-  compactLayoutObserver?.disconnect()
-  compactLayoutObserver = null
   setVSelectScrollLock(false)
   vSelectOpenCount.value = 0
 })
-
-watch(isCompactJobSearch, (compact) => {
-  nextTick(() => bindCompactListLayout())
-
-  if (compact) return
-
-  const list = filteredJobs.value
-  if (!list.length) {
-    selectedJob.value = null
-    return
-  }
-
-  if (!selectedJob.value || !list.some((j) => j.id === selectedJob.value?.id)) {
-    selectedJob.value = list[0]
-  }
-})
-
-watch([loading, () => filteredJobs.value.length], () => {
-  nextTick(() => measureCompactListHeight())
-})
-
-watch(
-  () => filteredJobs.value,
-  (list) => {
-    if (!list.length) {
-      selectedJob.value = null
-      return
-    }
-
-    if (isCompactJobSearch.value) {
-      return
-    }
-
-    if (!selectedJob.value || !list.some((j) => j.id === selectedJob.value?.id)) {
-      selectedJob.value = list[0]
-    }
-  },
-  { immediate: true },
-)
 </script>
 

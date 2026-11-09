@@ -4,9 +4,9 @@
   left: 0;
   right: 0;
   z-index: 50;
-  background: rgba(255, 255, 255, 0.78);
-  border-bottom: 1px solid rgba(232, 235, 243, 0.78);
-  backdrop-filter: blur(20px) saturate(1.5);
+  background: rgba(255, 255, 255, 0.88);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  backdrop-filter: blur(16px) saturate(1.5);
   transition: box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
 
   &__container,
@@ -61,7 +61,7 @@
     transition: background 0.2s ease;
 
     &:hover {
-      background: #f0f2fb;
+      background: #f1f5f9;
     }
   }
 
@@ -74,34 +74,64 @@
     z-index: 3;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     flex-shrink: 0;
 
     .small-btn {
-      height: 46px;
-      padding: 0 20px;
+      height: 42px;
+      padding: 0 18px;
       font-size: 14px;
-      border-radius: 12px;
-      letter-spacing: -0.02em;
+      border-radius: 10px;
+      letter-spacing: -0.01em;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      cursor: pointer;
     }
 
-    .white-btn {
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.96);
-      border: 1px solid rgba(29, 36, 51, 0.12);
-      box-shadow: 0 6px 18px rgba(18, 22, 60, 0.04);
+    &__auth {
+      background: #ffffff;
+      color: #1e293b;
+      border: 1.5px solid #e2e8f0;
+      font-weight: 600;
+
+      &:hover {
+        background: #f8fafc;
+        border-color: #cbd5e1;
+        color: #0f172a;
+        transform: translateY(-1px);
+      }
     }
 
-    .white-btn:hover {
-      color: var(--text);
-      background: #f5f7ff;
-      border-color: rgba(29, 36, 51, 0.16);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(18, 22, 60, 0.12);
+    &__post {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #ffffff;
+      border: 1.5px solid #f97316;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.25);
+
+      &:hover {
+        background: #ea580c;
+        border-color: #ea580c;
+        color: #ffffff;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(249, 115, 22, 0.35);
+      }
     }
 
     &__user {
       max-width: 280px;
+      background: #f8fafc;
+      color: #0f172a;
+      border: 1.5px solid #e2e8f0;
+      font-weight: 600;
+
+      &:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+      }
     }
 
     &__userLabel {
@@ -119,7 +149,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 8px;
     max-width: min(560px, calc(100% - 520px));
     transform: translate(-50%, -50%);
     pointer-events: none;
@@ -130,34 +160,34 @@
       align-items: center;
       gap: 5px;
       min-height: 38px;
-      padding: 0 14px;
-      border-radius: 12px;
-      font-size: 14px;
-      color: #7d8698;
+      padding: 0 16px;
+      border-radius: 8px;
+      font-size: 14.5px;
+      color: #475569;
       font-weight: 500;
       position: relative;
       transition: color 0.2s ease, background 0.2s ease;
       white-space: nowrap;
-      letter-spacing: -0.025em;
+      letter-spacing: -0.01em;
       text-decoration: none;
 
       &::after {
         content: '';
         position: absolute;
         bottom: 4px;
-        left: 14px;
-        right: 14px;
+        left: 16px;
+        right: 16px;
         height: 2px;
         border-radius: 2px;
-        background: var(--blue);
+        background: #16a34a;
         transform: scaleX(0);
         transform-origin: left;
         transition: transform 0.25s var(--ease-out);
       }
 
       &:hover {
-        color: #1d2433;
-        background: #f0f2fb;
+        color: #0f172a;
+        background: #f1f5f9;
 
         &::after {
           transform: scaleX(1);
@@ -166,7 +196,8 @@
 
       &.is-active,
       &.router-link-active {
-        color: #1d2433;
+        color: #16a34a;
+        font-weight: 600;
         background: transparent;
 
         &::after {
@@ -194,18 +225,19 @@
   }
 
   .wordmark-main {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: -0.055em;
-    color: #1d2433;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    color: #0f172a;
     text-transform: none;
+    font-family: inherit;
   }
 
   .wordmark-dot {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: -0.04em;
-    color: #3563ff;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #16a34a;
   }
 
   &__backdrop {
@@ -331,17 +363,39 @@
         cursor: pointer;
         transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 
+        &--auth {
+          color: #0f172a;
+          background: #f8fafc;
+          border-color: #e2e8f0;
+
+          &:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+          }
+        }
+
+        &--post {
+          color: #ffffff;
+          background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+          box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25);
+          font-weight: 700;
+
+          &:hover {
+            background: #ea580c;
+          }
+        }
+
         &--primary {
-          color: #fff;
-          background: linear-gradient(135deg, #3563ff 0%, #2b4fd6 100%);
-          box-shadow: 0 8px 20px rgba(53, 99, 255, 0.22);
+          color: #ffffff;
+          background: #16a34a;
+          box-shadow: 0 4px 12px rgba(22, 163, 74, 0.22);
+          font-weight: 700;
         }
 
         &--secondary {
-          color: #1d2433;
-          background: rgba(255, 255, 255, 0.96);
-          border-color: rgba(29, 36, 51, 0.12);
-          box-shadow: 0 6px 18px rgba(18, 22, 60, 0.04);
+          color: #0f172a;
+          background: #f8fafc;
+          border-color: #e2e8f0;
         }
 
         &:not(.site-mobile-menu__action--primary):not(.site-mobile-menu__action--secondary) {

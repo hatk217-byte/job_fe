@@ -74,19 +74,25 @@
   place-items: center;
   align-content: center;
   gap: 8px;
-  border: 1px dashed rgba(200, 214, 236, 0.9);
-  border-radius: 10px;
-  background: #fafbfe;
-  color: #4f75ff;
+  border: 1.5px dashed #fed7aa;
+  border-radius: 12px;
+  background: #fffaf5;
+  color: #ea580c;
   font-size: 14px;
   text-align: center;
   overflow: hidden;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+
+.candidate-account-page .candidate-avatar-upload:hover .candidate-avatar-preview {
+  border-color: #f97316;
+  background: #fff7ed;
 }
 
 .candidate-account-page .candidate-avatar-preview.has-image {
   padding: 0;
   border-style: solid;
-  border-color: rgba(200, 214, 236, 0.9);
+  border-color: #e2e8f0;
 }
 
 .candidate-account-page .candidate-avatar-preview img {
@@ -103,9 +109,9 @@
 }
 
 .candidate-account-page .candidate-avatar-preview strong {
-  color: #4f607d;
+  color: #64748b;
   font-size: 13px;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .candidate-account-page .candidate-avatar-remove {
@@ -188,9 +194,9 @@
 }
 
 .candidate-account-page .candidate-field input:focus:not([readonly]) {
-  border-color: rgba(53, 99, 255, 0.45);
+  border-color: #f97316;
   background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(53, 99, 255, 0.12);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
 }
 
 .candidate-account-page .candidate-field-error {
@@ -235,9 +241,9 @@
 
 .candidate-account-page .candidate-select-field [data-slot="base"]:focus-within,
 .candidate-account-page .candidate-select-field button[role="combobox"]:focus {
-  border-color: rgba(53, 99, 255, 0.45) !important;
+  border-color: rgba(249, 115, 22, 0.45) !important;
   background: #ffffff !important;
-  box-shadow: 0 0 0 3px rgba(53, 99, 255, 0.12) !important;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12) !important;
   outline: none !important;
 }
 
@@ -275,7 +281,7 @@
 .candidate-account-page .candidate-checkbox input {
   width: 18px;
   height: 18px;
-  accent-color: #3563ff;
+  accent-color: #ea580c;
 }
 
 .candidate-account-page .candidate-checkbox {
@@ -297,13 +303,13 @@
   padding: 0 18px;
   border: 0;
   border-radius: 12px;
-  background: linear-gradient(135deg, #3563ff 0%, #2e57ef 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%) !important;
+  color: #ffffff !important;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 600;
   line-height: 1;
   cursor: pointer;
-  box-shadow: none;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25) !important;
   transition:
     background 0.18s ease,
     color 0.18s ease,
@@ -311,7 +317,7 @@
 }
 
 .candidate-account-page .candidate-primary-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #2e57ef 0%, #2550e8 100%);
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%) !important;
 }
 
 .candidate-account-page .candidate-primary-btn:disabled {
@@ -335,7 +341,7 @@
   font-size: 13px !important;
   font-weight: 700 !important;
   letter-spacing: -0.01em !important;
-  font-family: "Manrope", sans-serif;
+  font-family: inherit;
 }
 
 .candidate-account-page .candidate-expertise-field .job-vselect input,

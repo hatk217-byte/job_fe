@@ -9,8 +9,17 @@ export function useCompanyDetailView(company: Ref<CompanyEntity | null>) {
   )
 
   const companyLocationText = computed(() => {
-    const raw = (company.value?.address || company.value?.provinceName || '').toString()
-    return stripHtmlToText(raw)
+    if (company.value?.provinceName?.trim()) {
+      return company.value.provinceName.trim()
+    }
+    const raw = (company.value?.address || '').toString()
+    const stripped = stripHtmlToText(raw)
+    if (stripped.includes(',')) {
+      const parts = stripped.split(',').map((s) => s.trim()).filter(Boolean)
+      const last = parts[parts.length - 1]
+      if (last) return last
+    }
+    return stripped
   })
 
   function getOrganizationTypeLabel(type: number) {

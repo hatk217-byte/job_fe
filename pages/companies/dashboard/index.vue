@@ -147,6 +147,7 @@
             <button
               type="button"
               class="employer-sidebar-link employer-sidebar-link--post-job"
+              :class="{ 'is-active': activeView === 'newJob' }"
               data-open-post-wizard=""
               @click="handleCreateNewJob"
             >
@@ -226,6 +227,7 @@
         :class="{
           'is-overview-layout': activeView === 'dashboard' && !isAdmin,
           'is-company-layout': activeView === 'editProfile' && !isAdmin,
+          'is-newjob-layout': activeView === 'newJob' && !isAdmin,
           'is-manage-jobs-layout': activeView === 'manageJobs' && !isAdmin,
           'is-candidates-layout': activeView === 'candidates' && !isAdmin,
           'is-settings-layout': activeView === 'settings' && !isAdmin,
@@ -334,6 +336,46 @@
           />
         </template>
 
+        <template v-else-if="activeView === 'newJob' && !isAdmin">
+          <div class="employer-company-scroll employer-company-page employer-newjob-page">
+            <div class="employer-company-panel">
+              <header class="employer-dashboard-topbar employer-company-panel-topbar">
+                <div class="employer-topbar-company">
+                  <span
+                    class="employer-topbar-avatar"
+                    data-company-profile-company-avatar=""
+                  >{{ companyInitial }}</span>
+                  <div class="employer-topbar-company-copy">
+                    <strong data-company-profile-company-name="">
+                      {{ companyData?.name || 'CÔNG TY' }}
+                    </strong>
+                  </div>
+                </div>
+                <div class="employer-topbar-actions flex items-center gap-3">
+                  <button
+                    type="button"
+                    class="employer-topbar-btn employer-topbar-btn-outline inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 transition"
+                    @click="handleBackFromNewJob"
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="text-gray-500">
+                      <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Quay lại
+                  </button>
+                </div>
+              </header>
+
+              <div class="employer-newjob-body">
+                <DashboardNewJob
+                  :company-data="companyData"
+                  :job-to-edit="jobToEdit"
+                  @job-created="handleJobCreatedFromPage"
+                />
+              </div>
+            </div>
+          </div>
+        </template>
+
         <template v-else>
           <header v-if="!isAdmin" class="employer-topbar">
             <div class="employer-topbar-company">
@@ -373,7 +415,7 @@
             </p>
           </div>
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
-            <UIcon name="i-lucide-layout-dashboard" class="w-16 h-16 text-blue-500 mx-auto mb-4" />
+            <UIcon name="i-lucide-layout-dashboard" class="w-16 h-16 text-emerald-600 mx-auto mb-4" />
             <p class="text-gray-600">
               Chào mừng đến trang quản trị. Sử dụng menu bên trái để quản lý Công ty, Tin tuyển dụng, Ứng viên, Users và Blogs.
             </p>
@@ -431,7 +473,7 @@
         <!-- New Job View -->
         <div v-else-if="activeView === 'newJob'">
           <div class="bg-white rounded-2xl shadow-sm p-8 text-center" style="border: 1px solid rgba(29, 36, 51, 0.10)">
-            <UIcon name="i-lucide-panel-right-open" class="w-10 h-10 text-[var(--blue)] mx-auto mb-3" />
+            <UIcon name="i-lucide-panel-right-open" class="w-10 h-10 text-orange-600 mx-auto mb-3" />
             <div class="text-sm text-[rgba(29,36,51,0.65)]">
               Form tạo tin đã chuyển sang drawer bên phải. Vui lòng bấm “Đăng tin tuyển dụng”.
             </div>
@@ -744,28 +786,35 @@ const handleJobCreatedFromDrawer = () => {
   handleJobCreated()
 }
 
-// Navigation methods (for external navigation only)
+// Navigation methods
 const navigateToPostJob = () => {
   jobToEdit.value = null
-  jobDrawerOpen.value = true
+  setActiveView('newJob')
 }
 
-// Mở drawer đăng tin — giữ nguyên menu/view hiện tại
+// Chuyển sang màn đăng tin mới trong dashboard
 const handleCreateNewJob = () => {
   jobToEdit.value = null
-  jobDrawerOpen.value = true
+  setActiveView('newJob')
 }
 
-// Handle edit job from manage jobs
+// Chỉnh sửa tin tuyển dụng trong dashboard
 const handleEditJob = (job: import('~/models/job').JobModel) => {
   jobToEdit.value = job
-  jobDrawerOpen.value = true
+  setActiveView('newJob')
+}
+
+// Xử lý tạo / sửa tin xong từ trang full
+const handleJobCreatedFromPage = () => {
+  jobToEdit.value = null
+  handleJobCreated()
 }
 
 // Handle back from new job view
 const handleBackFromNewJob = () => {
+  const targetView = jobToEdit.value ? 'manageJobs' : 'dashboard'
   jobToEdit.value = null
-  setActiveView('dashboard')
+  setActiveView(targetView)
 }
 
 const closeJobDrawer = () => {
@@ -957,9 +1006,8 @@ onMounted(async () => {
   const viewParam = route.query.view as string
 
   if (viewParam === 'newJob') {
-    activeView.value = 'dashboard'
+    activeView.value = 'newJob'
     jobToEdit.value = null
-    jobDrawerOpen.value = true
   } else if (viewParam === 'changePassword') {
     activeView.value = 'settings'
     await router.replace({

@@ -271,7 +271,7 @@ const toggleUserDropdown = () => {
 
 // Navigation methods
 const handleViewJob = (jobId: number) => {
-  router.push(`/jobs/${jobId}`)
+  window.open(`/jobs/${jobId}`, '_blank', 'noopener,noreferrer')
 }
 
 const logout = () => {
@@ -326,3 +326,11 @@ const handleClickOutside = (event: Event) => {
 }
 
 </script>
+
+<style lang="scss">
+@import '~/assets/styles/components/candidate-dashboard.scss';
+@import '~/assets/styles/components/candidate-account.scss';
+@import '~/assets/styles/components/candidate-applications.scss';
+@import '~/assets/styles/components/candidate-cv-manager.scss';
+@import '~/assets/styles/components/candidate-settings.scss';
+</style>

@@ -364,9 +364,9 @@
               </p>
             </div>
 
-            <div class="flex items-start gap-3 p-4 bg-blue-50 rounded-lg border border-blue-100">
-              <UIcon name="i-lucide-info" class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-              <p class="text-sm text-blue-700">
+            <div class="flex items-start gap-3 p-4 bg-emerald-50 rounded-lg border border-emerald-100">
+              <UIcon name="i-lucide-info" class="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
+              <p class="text-sm text-emerald-800">
                 {{ $t('dashboard.manageJobs.approveModal.warning') }}
               </p>
             </div>

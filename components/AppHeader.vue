@@ -77,7 +77,7 @@
             <template v-else>
               <button
                 type="button"
-                class="site-mobile-menu__action site-mobile-menu__action--primary"
+                class="site-mobile-menu__action site-mobile-menu__action--auth"
                 data-auth-open
                 data-auth-view-target="login"
                 @click="openAuthFromMobile('login')"
@@ -87,7 +87,7 @@
               <button
                 v-if="showPostButton"
                 type="button"
-                class="site-mobile-menu__action site-mobile-menu__action--secondary"
+                class="site-mobile-menu__action site-mobile-menu__action--post"
                 @click="handlePostJobFree"
               >
                 Đăng tin miễn phí
@@ -114,7 +114,7 @@
           <template v-else>
             <button
               type="button"
-              class="primary-btn small-btn"
+              class="topbar-actions__auth small-btn"
               data-auth-open
               data-auth-view-target="login"
               @click="openAuthModal('login')"
@@ -126,7 +126,7 @@
           <button
             v-if="showPostButton"
             type="button"
-            class="white-btn small-btn topbar-actions__post"
+            class="topbar-actions__post small-btn"
             @click="handlePostJobFree"
           >
             Đăng tin miễn phí

@@ -12,6 +12,7 @@
       :job="job"
       show-similar-jobs
       :similar-jobs="similarJobs"
+      :company-other-jobs="companyOtherJobs"
       :has-applied="jobHasApplied"
       @apply="openApplyDrawer"
       @view-similar="viewSimilarJob"
@@ -48,6 +49,7 @@ const { ensureLoaded, hasAppliedToJob, canApplyToJobs } = useAppliedJobs()
 const loading = ref(false)
 const job = ref<JobModel | null>(null)
 const similarJobs = ref<JobModel[]>([])
+const companyOtherJobs = ref<any[]>([])
 const jobHasApplied = computed(() =>
   job.value ? hasAppliedToJob(job.value.id) : false,
 )
@@ -69,6 +71,26 @@ const openApplyDrawer = (j: JobModel) => {
 
   applyingJob.value = j
   applyDrawerOpen.value = true
+}
+
+const loadCompanyOtherJobs = async () => {
+  if (!job.value?.companyId) {
+    companyOtherJobs.value = []
+    return
+  }
+
+  try {
+    const comp = await $api.company.getCompanyDetail(Number(job.value.companyId))
+    if (comp?.jobs && Array.isArray(comp.jobs)) {
+      companyOtherJobs.value = comp.jobs
+        .filter((x: { id?: number }) => Number(x?.id) !== Number(job.value?.id))
+        .slice(0, 2)
+    } else {
+      companyOtherJobs.value = []
+    }
+  } catch {
+    companyOtherJobs.value = []
+  }
 }
 
 const loadSimilarJobs = async () => {
@@ -104,7 +126,7 @@ const loadJobDetail = async () => {
     const response = await $api.job.getJobDetail(parseInt(jobId, 10))
     if (response) {
       job.value = JobMapper.toModel(response)
-      await loadSimilarJobs()
+      await Promise.all([loadSimilarJobs(), loadCompanyOtherJobs()])
     }
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Không tải được tin tuyển dụng'

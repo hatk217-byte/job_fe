@@ -1,286 +1,220 @@
 <template>
-  <div class="contact-page">
-    <section class="contact-main contact-main-single">
-      <div class="container contact-page-shell">
-        <div class="contact-main-layout">
-          <div class="contact-form-card contact-card">
-            <div class="contact-card-head">
-              <h2 class="contact-simple-title">Gửi tin nhắn</h2>
+  <div class="contact-page min-h-screen">
+    <div class="contact-vldl-container">
+      <div class="contact-vldl-grid">
+        <!-- 1. Left Column: Form (Full width rows) -->
+        <div class="contact-vldl-form-col">
+          <h1 class="contact-vldl-title">Gửi tin nhắn</h1>
+
+          <form class="contact-vldl-form" @submit.prevent="submit">
+            <!-- Họ và tên của bạn -->
+            <div class="contact-vldl-field">
+              <label for="contact-fullname">
+                Họ và tên của bạn <span class="req">*</span>
+              </label>
+              <input
+                id="contact-fullname"
+                v-model="form.fullName"
+                type="text"
+                placeholder="Nhập họ và tên"
+                autocomplete="name"
+                :disabled="submitting"
+              />
             </div>
 
-            <form class="contact-form" @submit.prevent="submit">
-              <label class="contact-field">
-                <span>Họ và tên của bạn *</span>
-                <input
-                  v-model="form.fullName"
-                  type="text"
-                  placeholder="Nhập họ và tên"
-                  autocomplete="name"
-                  :disabled="submitting"
-                />
+            <!-- Email liên hệ -->
+            <div class="contact-vldl-field">
+              <label for="contact-email">
+                Email liên hệ <span class="req">*</span>
               </label>
+              <input
+                id="contact-email"
+                v-model="form.email"
+                type="email"
+                placeholder="email@example.com"
+                autocomplete="email"
+                :disabled="submitting"
+              />
+            </div>
 
-              <label class="contact-field">
-                <span>Email liên hệ *</span>
-                <input
-                  v-model="form.email"
-                  type="email"
-                  placeholder="email@example.com"
-                  autocomplete="email"
-                  :disabled="submitting"
-                />
+            <!-- Chủ đề -->
+            <div class="contact-vldl-field">
+              <label for="contact-subject">
+                Chủ đề <span class="req">*</span>
               </label>
-
-              <label class="contact-field">
-                <span>Chủ đề *</span>
-                <select v-model="form.subject" :disabled="submitting">
-                  <option value="" disabled>Chọn chủ đề</option>
-                  <option
-                    v-for="item in subjectItems"
-                    :key="item.value"
-                    :value="item.value"
-                  >
-                    {{ item.label }}
-                  </option>
-                </select>
-              </label>
-
-              <label class="contact-field contact-field-textarea">
-                <span>Lời nhắn của bạn *</span>
-                <textarea
-                  v-model="form.message"
-                  rows="7"
-                  maxlength="1000"
-                  placeholder="Nhập nội dung tin nhắn..."
-                  :disabled="submitting"
-                />
-              </label>
-
-              <div class="contact-message-count">{{ messageCount }} / 1000</div>
-
-              <div class="contact-form-actions">
-                <button
-                  type="submit"
-                  class="primary-btn contact-submit-btn"
-                  :disabled="submitting"
+              <select
+                id="contact-subject"
+                v-model="form.subject"
+                :disabled="submitting"
+              >
+                <option value="" disabled>Chọn chủ đề</option>
+                <option
+                  v-for="item in subjectItems"
+                  :key="item.value"
+                  :value="item.value"
                 >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path
-                      d="M22 2L11 13"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M22 2L15 22L11 13L2 9L22 2Z"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                  <span>{{ submitting ? 'Đang gửi...' : 'Gửi Tin Nhắn' }}</span>
-                </button>
-              </div>
-            </form>
+                  {{ item.label }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Lời nhắn của bạn -->
+            <div class="contact-vldl-field">
+              <label for="contact-message">
+                Lời nhắn của bạn <span class="req">*</span>
+              </label>
+              <textarea
+                id="contact-message"
+                v-model="form.message"
+                rows="6"
+                maxlength="1000"
+                placeholder="Nhập nội dung tin nhắn..."
+                :disabled="submitting"
+              />
+            </div>
+
+            <!-- Counter -->
+            <div class="contact-vldl-counter">
+              {{ messageCount }} / 1000
+            </div>
+
+            <!-- Full Width Submit Button -->
+            <button
+              type="submit"
+              class="contact-vldl-submit-btn"
+              :disabled="submitting"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="22" y1="2" x2="11" y2="13" />
+                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+              </svg>
+              <span>{{ submitting ? 'Đang gửi...' : 'Gửi Tin Nhắn' }}</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- 2. Right Column: Info & Socials -->
+        <div class="contact-vldl-info-col">
+          <h2 class="contact-vldl-title">Thông tin liên hệ</h2>
+
+          <div class="contact-vldl-channel-list">
+            <!-- Email -->
+            <a
+              v-if="email"
+              :href="mailtoHref"
+              class="contact-vldl-channel-item"
+            >
+              <span class="contact-vldl-icon-box" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect width="20" height="16" x="2" y="4" rx="2" />
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                </svg>
+              </span>
+              <span class="contact-vldl-channel-text">
+                <span class="label">Email</span>
+                <span class="value">{{ email }}</span>
+              </span>
+            </a>
+
+            <!-- Hotline -->
+            <a
+              v-if="phoneNumber"
+              :href="telHref"
+              class="contact-vldl-channel-item"
+            >
+              <span class="contact-vldl-icon-box" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+              </span>
+              <span class="contact-vldl-channel-text">
+                <span class="label">Hotline</span>
+                <span class="value">{{ phoneNumber }}</span>
+              </span>
+            </a>
+
+            <!-- Thời gian làm việc -->
+            <div class="contact-vldl-channel-item is-static">
+              <span class="contact-vldl-icon-box" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+              </span>
+              <span class="contact-vldl-channel-text">
+                <span class="label">Thời gian làm việc</span>
+                <span class="value">Thứ Hai - Thứ Sáu, 8:00 - 18:00</span>
+              </span>
+            </div>
           </div>
 
-          <aside class="contact-sidebar">
-            <div class="contact-sidebar-card contact-card contact-sidebar-card-plain">
-              <div class="contact-card-head contact-card-head-compact">
-                <h2 class="contact-simple-title">Thông tin liên hệ</h2>
-              </div>
+          <!-- Social Links -->
+          <div class="contact-vldl-social-wrap">
+            <h3>Theo dõi chúng tôi</h3>
+            <p>Theo dõi chúng tôi trên mạng xã hội để cập nhật tin tức và cơ hội mới nhất.</p>
 
-              <div class="contact-channel-list">
-                <a
-                  v-if="email"
-                  :href="mailtoHref"
-                  class="contact-channel-card"
-                >
-                  <span class="contact-channel-icon" aria-hidden="true">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M4 7L10.5886 11.6118C11.4277 12.1991 12.5723 12.1991 13.4114 11.6118L20 7"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <rect
-                        x="3"
-                        y="5"
-                        width="18"
-                        height="14"
-                        rx="3"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                      />
-                    </svg>
-                  </span>
-                  <span class="contact-channel-copy">
-                    <strong>Email</strong>
-                    <span>{{ email }}</span>
-                  </span>
-                </a>
+            <div class="contact-vldl-social-row">
+              <a
+                href="#"
+                class="contact-vldl-social-btn"
+                aria-label="Facebook"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                </svg>
+              </a>
 
-                <a
-                  v-if="phoneNumber"
-                  :href="telHref"
-                  class="contact-channel-card"
-                >
-                  <span class="contact-channel-icon" aria-hidden="true">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M6.8 4H9.4L10.7 7.8L8.9 9.1C9.9 11.2 11.8 13.1 13.9 14.1L15.2 12.3L19 13.6V16.2C19 17.2 18.2 18 17.2 18C10.5 18 5 12.5 5 5.8C5 4.8 5.8 4 6.8 4Z"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </span>
-                  <span class="contact-channel-copy">
-                    <strong>Hotline</strong>
-                    <span>{{ phoneNumber }}</span>
-                  </span>
-                </a>
+              <a
+                href="#"
+                class="contact-vldl-social-btn"
+                aria-label="Instagram"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                </svg>
+              </a>
 
-                <p v-if="!loading && !email && !phoneNumber" class="contact-channel-empty">
-                  Chưa có thông tin liên hệ admin.
-                </p>
+              <a
+                href="#"
+                class="contact-vldl-social-btn"
+                aria-label="Pinterest"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.2 4C7.9 4 5 6.9 5 10.8C5 13.3 6.4 15.3 8.7 15.3C9.2 15.3 9.4 13.9 9.4 13.6C9.4 13.2 8.4 12.4 8.4 10.7C8.4 8.1 10.4 6.2 12.9 6.2C15.1 6.2 16.8 7.4 16.8 9.8C16.8 12.1 15.8 16.5 12.8 16.5C11.8 16.5 11 15.6 11 14.6C11 13.1 12.1 11.7 12.1 10.1C12.1 7.4 8.3 7.9 8.3 12.7C8.3 13.7 8.4 14.7 8.9 15.5L7.6 20C7.1 21.6 7.5 22 9.1 21.3C11.4 20.2 11.7 18.8 12.2 16.4C12.8 17 13.6 17.4 14.7 17.4C18.6 17.4 20.7 13.6 20.7 10.1C20.7 6.3 17.5 4 12.2 4Z" />
+                </svg>
+              </a>
 
-                <div class="contact-channel-card is-static">
-                  <span class="contact-channel-icon" aria-hidden="true">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8" />
-                      <path
-                        d="M12 8V12L14.5 14.5"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </span>
-                  <span class="contact-channel-copy">
-                    <strong>Thời gian làm việc</strong>
-                    <span>Thứ Hai - Thứ Sáu, 8:00 - 18:00</span>
-                  </span>
-                </div>
-              </div>
+              <a
+                href="#"
+                class="contact-vldl-social-btn"
+                aria-label="LinkedIn"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                  <rect width="4" height="12" x="2" y="9" />
+                  <circle cx="4" cy="4" r="2" />
+                </svg>
+              </a>
             </div>
-
-            <div class="contact-sidebar-card contact-card contact-social-card">
-              <div class="contact-card-head contact-card-head-compact">
-                <h3>Theo dõi chúng tôi</h3>
-                <p>
-                  Theo dõi chúng tôi trên mạng xã hội để cập nhật tin tức và cơ hội mới nhất.
-                </p>
-              </div>
-
-              <div class="contact-social-links">
-                <a
-                  href="#"
-                  class="contact-social-link"
-                  aria-label="Facebook"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path
-                      d="M14 8H16V5H14C11.7909 5 10 6.79086 10 9V11H8V14H10V19H13V14H15.5L16 11H13V9C13 8.44772 13.4477 8 14 8Z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </a>
-                <a
-                  href="#"
-                  class="contact-social-link"
-                  aria-label="Instagram"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <rect
-                      x="4"
-                      y="4"
-                      width="16"
-                      height="16"
-                      rx="4"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                    />
-                    <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.8" />
-                    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
-                  </svg>
-                </a>
-                <a
-                  href="#"
-                  class="contact-social-link"
-                  aria-label="Pinterest"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path
-                      d="M12.2 4C7.9 4 5 6.9 5 10.8C5 13.3 6.4 15.3 8.7 15.3C9.2 15.3 9.4 13.9 9.4 13.6C9.4 13.2 8.4 12.4 8.4 10.7C8.4 8.1 10.4 6.2 12.9 6.2C15.1 6.2 16.8 7.4 16.8 9.8C16.8 12.1 15.8 16.5 12.8 16.5C11.8 16.5 11 15.6 11 14.6C11 13.1 12.1 11.7 12.1 10.1C12.1 7.4 8.3 7.9 8.3 12.7C8.3 13.7 8.4 14.7 8.9 15.5L7.6 20C7.1 21.6 7.5 22 9.1 21.3C11.4 20.2 11.7 18.8 12.2 16.4C12.8 17 13.6 17.4 14.7 17.4C18.6 17.4 20.7 13.6 20.7 10.1C20.7 6.3 17.5 4 12.2 4Z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </a>
-                <a
-                  href="#"
-                  class="contact-social-link"
-                  aria-label="LinkedIn"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <rect
-                      x="4"
-                      y="4"
-                      width="16"
-                      height="16"
-                      rx="2"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                    />
-                    <path
-                      d="M8 10V16"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                      stroke-linecap="round"
-                    />
-                    <path
-                      d="M8 8.2C8 8.08954 8.08954 8 8.2 8H8.8C8.91046 8 9 8.08954 9 8.2V8.8C9 8.91046 8.91046 9 8.8 9H8.2C8.08954 9 8 8.91046 8 8.8V8.2Z"
-                      fill="currentColor"
-                    />
-                    <path
-                      d="M12 16V12.8C12 11.8059 12.8059 11 13.8 11C14.7941 11 15.6 11.8059 15.6 12.8V16"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                      stroke-linecap="round"
-                    />
-                    <path
-                      d="M12 10.8V16"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                      stroke-linecap="round"
-                    />
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </aside>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-useHead({ title: 'Liên hệ' })
+useHead({ title: 'Liên hệ - TuyenGiaoVien.vn' })
 
 const { email, phoneNumber, mailtoHref, telHref, loading } = useAdminContactInfo()
 
@@ -320,7 +254,7 @@ const submit = async () => {
   const message = form.message.trim()
 
   if (!name || !email || !subject || !message) {
-    useNotify({ type: 'error', message: 'Vui lòng điền đầy đủ thông tin bắt buộc.' })
+    useNotify({ type: 'error', message: 'Vui lòng điền đầy đủ các thông tin bắt buộc (*).' })
     return
   }
 
@@ -354,3 +288,7 @@ const submit = async () => {
   }
 }
 </script>
+
+<style lang="scss">
+@import '~/assets/styles/components/contact-page.scss';
+</style>

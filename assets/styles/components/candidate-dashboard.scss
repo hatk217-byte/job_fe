@@ -25,6 +25,14 @@
   background: #ffffff;
   box-shadow: var(--shadow-sm);
   color: #202632;
+  font-family: var(--font-sans);
+
+  input,
+  button,
+  textarea,
+  select {
+    font-family: inherit;
+  }
 }
 
 .candidate-sidebar {
@@ -72,7 +80,7 @@
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0;
-  color: var(--blue);
+  color: #16a34a;
 }
 
 .candidate-sidebar-nav {
@@ -111,14 +119,14 @@
 .candidate-nav-link.is-active {
   color: #ffffff;
   border-color: transparent;
-  background: linear-gradient(135deg, #3563ff 0%, #2e57ef 100%);
-  box-shadow: 0 12px 24px rgba(53, 99, 255, 0.16);
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25);
 }
 
 .candidate-nav-link.is-active:hover {
   color: #ffffff;
   border-color: transparent;
-  background: linear-gradient(135deg, #3563ff 0%, #2e57ef 100%);
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
 }
 
 .candidate-nav-link.is-active .candidate-nav-icon {
@@ -208,7 +216,7 @@
   width: 32px;
   height: 32px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #3563ff 0%, #2e57ef 100%);
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   font-size: 12px;
   font-weight: bold;
   color: #fff;
@@ -259,7 +267,7 @@
 }
 
 .candidate-topbar-dropdown-item:hover {
-  background: rgba(53, 99, 255, 0.08);
+  background: rgba(234, 88, 12, 0.08);
 }
 
 .candidate-topbar-dropdown-item svg {
@@ -284,40 +292,50 @@
 }
 
 .candidate-overview-card {
-  border: 1px solid rgba(220, 227, 239, 0.96);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: none;
-  backdrop-filter: blur(12px);
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 }
 
 .candidate-overview-cv-card,
 .candidate-overview-total-card {
-  min-height: 156px;
-  padding: 28px;
+  min-height: auto;
+  padding: 20px 22px;
 }
 
 .candidate-overview-cv-card {
-  display: grid;
-  align-content: center;
-  gap: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
 }
 
 .candidate-overview-cv-card h1,
+.candidate-overview-cv-card h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
 .candidate-overview-card-head h2 {
   margin: 0;
   color: #0f172a;
-  font-size: 22px;
-  line-height: 1.2;
-  font-weight: bold;
-  letter-spacing: 0;
+  font-size: 16px;
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .candidate-overview-cv {
   display: grid;
-  grid-template-columns: 52px minmax(0, 1fr);
+  grid-template-columns: 44px minmax(0, 1fr);
   align-items: center;
-  gap: 16px;
+  gap: 14px;
+  min-width: 0;
 }
 
 .candidate-overview-file-icon,
@@ -326,48 +344,66 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border-radius: 12px;
+  border-radius: 10px;
 }
 
 .candidate-overview-file-icon {
-  width: 52px;
-  height: 52px;
+  width: 44px;
+  height: 44px;
 }
 
 .candidate-overview-file-icon.is-yellow {
-  color: #d69b00;
-  border: 1.5px solid rgba(214, 155, 0, 0.42);
-  background: rgba(255, 248, 224, 0.72);
+  color: #ea580c;
+  border: 1px solid #fed7aa;
+  background: #fff7ed;
 }
 
 .candidate-overview-file-icon.is-blue {
-  color: #3563ff;
-  border: 1.5px solid rgba(53, 99, 255, 0.32);
-  background: rgba(53, 99, 255, 0.07);
+  color: #ea580c;
+  border: 1px solid #fed7aa;
+  background: #fff7ed;
 }
 
 .candidate-overview-cv-copy {
   display: grid;
-  gap: 6px;
+  gap: 3px;
   min-width: 0;
+}
+
+.candidate-overview-cv-filename {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.4;
 }
 
 .candidate-overview-cv-copy strong,
 .candidate-overview-job-copy strong,
 .candidate-overview-job-type {
   color: #1e293b;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.35;
-  font-weight: bold;
+  font-weight: 600;
 }
 
-.candidate-overview-cv-copy span,
+.candidate-overview-cv-copy span {
+  color: #64748b;
+  font-size: 12.5px;
+  font-weight: 450;
+  line-height: 1.4;
+}
+
 .candidate-overview-job-copy span,
 .candidate-overview-job-location,
 .candidate-overview-job-date,
 .candidate-overview-total-copy span {
   color: #64748b;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 500;
 }
 
@@ -375,26 +411,28 @@
 .candidate-overview-card-head a,
 .candidate-overview-card-head-link {
   width: fit-content;
-  color: #3563ff;
-  font-size: 14px;
-  font-weight: bold;
+  color: #ea580c;
+  font-size: 13px;
+  font-weight: 550;
   text-decoration: none;
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
+  transition: color 0.15s ease;
 }
 
 .candidate-overview-cv-copy a:hover,
 .candidate-overview-card-head a:hover,
 .candidate-overview-card-head-link:hover {
-  color: #2550e8;
+  color: #c2410c;
+  text-decoration: underline;
 }
 
 .candidate-overview-total-card {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 16px;
 }
 
 .candidate-overview-total-copy {
@@ -404,13 +442,13 @@
 
 .candidate-overview-total-copy strong {
   color: #0f172a;
-  font-size: 34px;
-  line-height: 1;
-  font-weight: bold;
+  font-size: 26px;
+  line-height: 1.1;
+  font-weight: 700;
 }
 
 .candidate-overview-applications {
-  padding: 28px;
+  padding: 20px 22px;
 }
 
 .candidate-overview-card-head {
@@ -418,7 +456,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 .candidate-overview-table-shell {
@@ -562,7 +600,8 @@
   border: none;
   border-radius: 10px;
   background: transparent;
-  color: #3563ff;
+  color: #ea580c;
+  text-decoration: none;
   cursor: pointer;
   transition:
     background 0.18s ease,
@@ -570,7 +609,7 @@
 }
 
 .candidate-overview-view:hover {
-  background: rgba(53, 99, 255, 0.08);
+  background: rgba(234, 88, 12, 0.08);
 }
 
 .candidate-overview-state {
@@ -584,8 +623,8 @@
   width: 32px;
   height: 32px;
   margin: 0 auto 12px;
-  border: 2px solid rgba(53, 99, 255, 0.2);
-  border-top-color: #3563ff;
+  border: 2px solid rgba(234, 88, 12, 0.2);
+  border-top-color: #ea580c;
   border-radius: 50%;
   animation: candidate-overview-spin 0.8s linear infinite;
 }
