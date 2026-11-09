@@ -2737,9 +2737,9 @@ body:has(.employer-admin-applications-filters) .vs__no-options {
 .employer-row-position strong,
 .employer-row-title-btn {
   font-size: 14px;
-  font-weight: 700;
-  line-height: 1.35;
-  color: #111827;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #1e293b;
   overflow-wrap: anywhere;
 }
 
@@ -2751,12 +2751,13 @@ body:has(.employer-admin-applications-filters) .vs__no-options {
   font-family: inherit;
   text-align: left;
   cursor: pointer;
-  color: #111827;
+  color: #1e293b;
+  font-weight: 600;
   transition: color 0.18s ease;
 }
 
 .employer-row-title-btn:hover {
-  color: #15803d;
+  color: #16a34a;
   text-decoration: underline;
 }
 
