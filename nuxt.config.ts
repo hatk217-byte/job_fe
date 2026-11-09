@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: {
-        lang: 'ja',
+        lang: 'vi',
       },
 
       charset: 'utf-8',
@@ -22,6 +22,19 @@ export default defineNuxtConfig({
       viewport:
         'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0',
       link: [
+        {
+          rel: 'preconnect',
+          href: 'https://fonts.googleapis.com',
+        },
+        {
+          rel: 'preconnect',
+          href: 'https://fonts.gstatic.com',
+          crossorigin: '',
+        },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap',
+        },
         {
           rel: 'icon',
           type: 'image/x-icon',
@@ -50,7 +63,13 @@ export default defineNuxtConfig({
   },
 
   fonts: {
+    subsets: ['latin', 'vietnamese'],
     families: [
+      {
+        name: 'Be Vietnam Pro',
+        weights: [300, 400, 500, 600, 700, 800],
+        provider: 'google',
+      },
       {
         name: 'Plus Jakarta Sans',
         weights: [300, 400, 500, 600, 700, 800],
@@ -59,11 +78,6 @@ export default defineNuxtConfig({
       {
         name: 'Inter',
         weights: [400, 500, 600, 700, 800],
-        provider: 'google',
-      },
-      {
-        name: 'Manrope',
-        weights: [300, 400, 500, 600, 700],
         provider: 'google',
       },
     ],
