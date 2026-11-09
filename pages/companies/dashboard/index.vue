@@ -316,6 +316,7 @@
             :company-name="companyData?.name || 'CÔNG TY'"
             @create-new-job="handleCreateNewJob"
             @edit-job="handleEditJob"
+            @manage-candidates="setActiveView('candidates')"
           />
         </template>
 

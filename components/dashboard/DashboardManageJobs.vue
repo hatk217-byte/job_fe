@@ -124,17 +124,35 @@
                   <div class="employer-row-title-wrap">
                     <button
                       type="button"
-                      class="employer-row-title-btn"
+                      class="employer-row-title-btn group"
                       data-row-title=""
-                      :aria-label="`Xem ứng viên: ${job.title}`"
-                      @click="openJobApplicantsModal(job)"
+                      :aria-label="`Xem tin tuyển dụng: ${job.title}`"
+                      :title="`Xem tin tuyển dụng trong tab mới: ${job.title}`"
+                      @click="viewJob(job)"
                     >
-                      {{ job.title }}
+                      <span>{{ job.title }}</span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" class="employer-row-external-icon inline-block ml-1 opacity-40 group-hover:opacity-100 transition-opacity" aria-hidden="true">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline points="15 3 21 3 21 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
                     </button>
                   </div>
                 </td>
                 <td class="is-applications">
-                  <span class="employer-row-muted" data-row-applications="">
+                  <button
+                    v-if="jobApplicationsCount(job) > 0"
+                    type="button"
+                    class="employer-row-applicant-link inline-flex items-center gap-1 font-semibold text-emerald-600 hover:text-emerald-700 hover:underline cursor-pointer"
+                    :title="`Xem ${jobApplicationsCount(job)} ứng viên trong mục Quản lý ứng viên`"
+                    @click="navigateToCandidates(job)"
+                  >
+                    <span>{{ applicationsLabel(job) }}</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </button>
+                  <span v-else class="employer-row-muted" data-row-applications="">
                     {{ applicationsLabel(job) }}
                   </span>
                 </td>
@@ -514,6 +532,7 @@ const emit = defineEmits<{
   back: []
   createNewJob: []
   editJob: [job: JobModel]
+  manageCandidates: [job?: JobModel]
 }>()
 
 const { t } = useI18n()
@@ -815,11 +834,19 @@ const fetchJobs = async () => {
 }
 
 const viewJob = (job: JobModel) => {
-  if (!isJobVisible(job)) {
-    window.open(`/jobs/preview/${job.id}`, '_blank')
-  } else {
-    router.push(`/jobs/${job.id}`)
-  }
+  const url = isJobVisible(job) ? `/jobs/${job.id}` : `/jobs/preview/${job.id}`
+  window.open(url, '_blank')
+}
+
+const route = useRoute()
+const navigateToCandidates = (job: JobModel) => {
+  emit('manageCandidates', job)
+  router.replace({
+    query: {
+      ...route.query,
+      view: 'candidates',
+    },
+  })
 }
 
 const updateJob = (job: JobModel) => {
