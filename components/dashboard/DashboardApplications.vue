@@ -194,10 +194,15 @@ const formatDateTime = (date: Date | string | null | undefined): string => {
   return `${day}/${month}/${year}`
 }
 
-const getEmploymentTypeLabel = (type: number | null | undefined): string => {
+const getEmploymentTypeLabel = (type: number | string | null | undefined): string => {
   if (!type) return ''
-
-  return employmentTypesEnumLabel?.[type as keyof typeof employmentTypesEnumLabel] || ''
+  const raw = String(type)
+  const labels = raw
+    .split(',')
+    .map((k) => k.trim())
+    .filter(Boolean)
+    .map((k) => (employmentTypesEnumLabel as any)?.[k] ?? (employmentTypesEnumLabel as any)?.[Number(k)] ?? k)
+  return labels.length > 0 ? labels.join(' / ') : raw
 }
 
 const getCategoryLabel = (category: number | string | null | undefined): string => {

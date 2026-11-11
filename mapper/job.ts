@@ -59,10 +59,11 @@ export class JobMapper {
       location: value.location 
         ? value.location.split(',').map(l => l.trim()).filter(l => l)
         : undefined,
-      typeOfEmployment:
-        value.typeOfEmployment !== undefined
-          ? Number(value.typeOfEmployment)
-          : 0,
+      typeOfEmployment: value.typeOfEmployment
+        ? (typeof value.typeOfEmployment === 'string'
+            ? value.typeOfEmployment.split(',').map(t => t.trim()).filter(Boolean)
+            : [String(value.typeOfEmployment)])
+        : [],
       experienceLevel:
         value.experienceLevel !== undefined ? Number(value.experienceLevel) : 0,
       requiredQualification: value.requiredQualification

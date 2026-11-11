@@ -560,11 +560,19 @@ const getOtherJobLocation = (oj: any) => {
 
 const getOtherJobType = (oj: any) => {
   if (!oj.typeOfEmployment) return 'Toàn thời gian'
-  return (
-    (employmentTypesEnumLabel as Record<string, string>)?.[oj.typeOfEmployment] ??
-    (employmentTypesEnumLabel as Record<number, string>)?.[Number(oj.typeOfEmployment)] ??
-    oj.typeOfEmployment
-  )
+  const raw = String(oj.typeOfEmployment)
+  const labels = raw
+    .split(',')
+    .map((k) => k.trim())
+    .filter(Boolean)
+    .map((k) => {
+      return (
+        (employmentTypesEnumLabel as Record<string, string>)?.[k] ??
+        (employmentTypesEnumLabel as Record<number, string>)?.[Number(k)] ??
+        k
+      )
+    })
+  return labels.length > 0 ? labels.join(' / ') : raw
 }
 
 const getOtherJobSalary = (oj: any) => {

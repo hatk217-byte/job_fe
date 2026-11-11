@@ -569,22 +569,26 @@
                           {{ $t('job.uploadJob.typeJobLabel') }}
                           <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                         </label>
-                        <USelect
-                          :items="employmentTypeItems"
-                          :model-value="job.typeOfEmployment?.toString()"
-                          :placeholder="$t('job.uploadJob.chooseTypeOfEmployment')"
-                          :ui="{
-                            base: 'h-11 w-full rounded-xl' + fieldErrorRingClass(jobErrors.typeOfEmployment),
-                          }"
-                          class="w-full text-sm"
-                          :content="{ side: 'bottom' }"
-                          @update:model-value="
-                            (val) => {
-                              job.typeOfEmployment = Number(val ?? 0)
-                              jobErrors.typeOfEmployment = ''
-                            }
-                          "
-                        />
+                        <div
+                          class="job-vselect w-full min-w-0"
+                          :class="{ 'job-vselect--error': jobErrors.typeOfEmployment }"
+                        >
+                          <v-select
+                            id="job-type-employment"
+                            v-model="typeOfEmploymentForSelect"
+                            :options="employmentTypeSelectItems"
+                            :append-to-body="true"
+                            :calculate-position="vueSelectCalculatePosition"
+                            multiple
+                            class="w-full text-sm"
+                            :placeholder="$t('job.uploadJob.chooseTypeOfEmployment')"
+                            label="label"
+                            :clear-search-on-blur="() => true"
+                            @open="onMultiSelectOpen"
+                            @close="onMultiSelectClose"
+                            @update:model-value="jobErrors.typeOfEmployment = ''"
+                          />
+                        </div>
                         <p v-if="jobErrors.typeOfEmployment" class="mt-1 text-sm !text-red-500">{{ jobErrors.typeOfEmployment }}</p>
                       </div>
                     </div>
@@ -1240,6 +1244,13 @@ const requiredQualificationSelectItems = computed(() =>
   ),
 )
 
+const employmentTypeSelectItems = computed(() =>
+  employmentTypeItems.value.map((item) => ({
+    label: item.label,
+    value: String(item.value),
+  })),
+)
+
 const jobBenefitsSelectItems = computed(() =>
   [...jobBenefitsItems.value].sort((a, b) =>
     a.label.localeCompare(b.label, 'vi', { sensitivity: 'base' }),
@@ -1347,6 +1358,32 @@ const requiredQualificationForSelect = computed({
       ? val.map((v) =>
           typeof v === 'object' && v !== null && 'value' in v
             ? (v as { value: string }).value
+            : String(v),
+        )
+      : []
+  },
+})
+
+// Computed property for v-select typeOfEmployment (convert between string[] and object[])
+const typeOfEmploymentForSelect = computed({
+  get: () => {
+    if (!job.value.typeOfEmployment) return []
+    const raw = Array.isArray(job.value.typeOfEmployment)
+      ? job.value.typeOfEmployment
+      : String(job.value.typeOfEmployment).split(',').map((s) => s.trim()).filter(Boolean)
+
+    return raw.map((val) => {
+      const v = typeof val === 'object' && val !== null && 'value' in val
+        ? (val as { value: string }).value
+        : String(val)
+      return employmentTypeSelectItems.value.find((item) => item.value === v) || { label: v, value: v }
+    })
+  },
+  set: (val: any[]) => {
+    job.value.typeOfEmployment = val
+      ? val.map((v) =>
+          typeof v === 'object' && v !== null && 'value' in v
+            ? String((v as { value: string }).value)
             : String(v),
         )
       : []
@@ -2443,7 +2480,9 @@ const addJob = async () => {
           location: Array.isArray(job.value.location)
             ? job.value.location.filter(Boolean).map(String).join(',')
             : String(job.value.location ?? ''),
-          typeOfEmployment: Number(job.value.typeOfEmployment ?? 0),
+          typeOfEmployment: Array.isArray(job.value.typeOfEmployment)
+            ? job.value.typeOfEmployment.filter(Boolean).map(String).join(',')
+            : String(job.value.typeOfEmployment ?? ''),
           experienceLevel: job.value.experienceLevel ?? null,
           requiredQualification: Array.isArray(job.value.requiredQualification)
             ? job.value.requiredQualification.filter(Boolean).map(String).join(',')
@@ -2622,7 +2661,11 @@ function validateJobFields(): boolean {
     isValid = false
   }
 
-  if (!job.value.typeOfEmployment) {
+  if (
+    !job.value.typeOfEmployment ||
+    (Array.isArray(job.value.typeOfEmployment) && job.value.typeOfEmployment.length === 0) ||
+    (typeof job.value.typeOfEmployment === 'string' && job.value.typeOfEmployment.trim().length === 0)
+  ) {
     jobErrors.value.typeOfEmployment = 'Vui lòng chọn loại hình công việc.'
     isValid = false
   }

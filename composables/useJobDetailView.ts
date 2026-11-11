@@ -139,11 +139,19 @@ export function useJobDetailView(job: Ref<JobModel | null>) {
 
   const employmentTypeText = computed(() => {
     if (!job.value?.typeOfEmployment) return t('common.nanValue')
-    return (
-      (employmentTypesEnumLabel as Record<string, string>)?.[job.value.typeOfEmployment] ??
-      job.value.typeOfEmployment ??
-      t('common.nanValue')
-    )
+    const raw = String(job.value.typeOfEmployment)
+    const labels = raw
+      .split(',')
+      .map((k) => k.trim())
+      .filter(Boolean)
+      .map((k) => {
+        return (
+          (employmentTypesEnumLabel as Record<string, string>)?.[k] ??
+          (employmentTypesEnumLabel as Record<number, string>)?.[Number(k)] ??
+          k
+        )
+      })
+    return labels.length > 0 ? labels.join(' / ') : raw
   })
 
   const deadlineText = computed(() => {
@@ -187,10 +195,7 @@ export function useJobDetailView(job: Ref<JobModel | null>) {
       { label: 'Loại lương', value: salaryTypeText.value },
       {
         label: 'Hình thức',
-        value:
-          (employmentTypesEnumLabel as Record<string, string>)?.[job.value.typeOfEmployment] ??
-          job.value.typeOfEmployment ??
-          t('common.nanValue'),
+        value: employmentTypeText.value,
       },
       {
         label: 'Lĩnh vực',

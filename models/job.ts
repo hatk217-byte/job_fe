@@ -44,7 +44,7 @@ export interface JobModelAddUpdate {
   detailDescription: string
   category?: string[] // Array for UI binding, will be converted to string when sending
   location?: string[] // Array for UI binding, will be converted to string when sending
-  typeOfEmployment: number
+  typeOfEmployment: number | string | string[]
   experienceLevel: number
   requiredQualification?: string[] // Array for UI binding, will be converted to string when sending
   gender?: string[] // Array for UI binding, will be converted to string when sending

@@ -185,17 +185,16 @@
                 </label>
 
                 <!-- Input job type -->
-                <USelect
-                  :items="employmentTypeItems"
-                  :model-value="job.typeOfEmployment?.toString()"
-                  class="w-full"
+                <v-select
+                  id="job-type-employment"
+                  v-model="typeOfEmploymentForSelect"
+                  :options="employmentTypeSelectItems"
+                  multiple
+                  class="w-full text-sm"
                   :class="{ 'border-red-500': jobErrors.typeOfEmployment }"
-                  @update:model-value="
-                    (val) => {
-                      job.typeOfEmployment = Number(val ?? 0)
-                      jobErrors.typeOfEmployment = ''
-                    }
-                  "
+                  :placeholder="$t('job.uploadJob.chooseTypeOfEmployment')"
+                  label="label"
+                  @update:model-value="jobErrors.typeOfEmployment = ''"
                 />
                 <p v-if="jobErrors.typeOfEmployment" class="text-red-500 text-sm mt-1">
                   {{ jobErrors.typeOfEmployment }}
@@ -663,7 +662,38 @@ const {
   gradeItems,
 } = useJobFilters()
 
+const employmentTypeSelectItems = computed(() =>
+  employmentTypeItems.value.map((item) => ({
+    label: item.label,
+    value: String(item.value),
+  })),
+)
+
 // Computed properties for v-select (convert between string[] and object[])
+const typeOfEmploymentForSelect = computed({
+  get: () => {
+    if (!job.value.typeOfEmployment) return []
+    const raw = Array.isArray(job.value.typeOfEmployment)
+      ? job.value.typeOfEmployment
+      : String(job.value.typeOfEmployment).split(',').map((s) => s.trim()).filter(Boolean)
+
+    return raw.map((val) => {
+      const v = typeof val === 'object' && val !== null && 'value' in val
+        ? (val as { value: string }).value
+        : String(val)
+      return employmentTypeSelectItems.value.find((item) => item.value === v) || { label: v, value: v }
+    })
+  },
+  set: (val: any[]) => {
+    job.value.typeOfEmployment = val
+      ? val.map((v) =>
+          typeof v === 'object' && v !== null && 'value' in v
+            ? String((v as { value: string }).value)
+            : String(v),
+        )
+      : []
+  },
+})
 const categoryForSelect = computed({
   get: () => {
     // Handle case when category is string (comma-separated) or array
@@ -920,7 +950,11 @@ function validateJobFields(): boolean {
     isValid = false
   }
 
-  if (!job.value.typeOfEmployment) {
+  if (
+    !job.value.typeOfEmployment ||
+    (Array.isArray(job.value.typeOfEmployment) && job.value.typeOfEmployment.length === 0) ||
+    (typeof job.value.typeOfEmployment === 'string' && job.value.typeOfEmployment.trim().length === 0)
+  ) {
     jobErrors.value.typeOfEmployment = 'Vui lòng chọn loại hình công việc.'
     isValid = false
   }
@@ -1137,12 +1171,26 @@ const editJob = async () => {
       requiredQualificationString = job.value.requiredQualification
     }
 
+    // Convert typeOfEmployment array to comma-separated string before sending
+    let typeOfEmploymentString = ''
+
+    if (Array.isArray(job.value.typeOfEmployment)) {
+      typeOfEmploymentString = job.value.typeOfEmployment
+        .filter((t) => t != null && t !== '')
+        .map((t) => String(t).trim())
+        .filter(Boolean)
+        .join(',')
+    } else if (job.value.typeOfEmployment != null) {
+      typeOfEmploymentString = String(job.value.typeOfEmployment).trim()
+    }
+
     // Ensure salary values are unformatted (no commas) before sending
     const jobDataToSend: any = {
       ...job.value,
       detailDescription: job.value.detailDescription ?? '',
       benefits: benefitsString,
       category: categoryString,
+      typeOfEmployment: typeOfEmploymentString || undefined,
       gender: genderString || undefined,
       location: locationString || undefined,
       requiredQualification: requiredQualificationString || undefined,

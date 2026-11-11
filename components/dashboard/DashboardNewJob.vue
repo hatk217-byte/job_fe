@@ -115,24 +115,27 @@
                   {{ $t('job.uploadJob.typeJobLabel') }}
                   <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
-                <USelect
-                  :items="employmentTypeItems"
-                  :model-value="job.typeOfEmployment?.toString()"
-                  :placeholder="$t('job.uploadJob.chooseTypeOfEmployment')"
-                  :ui="{
-                    base: jobControlUiBase + fieldErrorRingClass(jobErrors.typeOfEmployment),
-                    content: 'z-[9999]',
-                  }"
-                  class="w-full text-sm"
-                  :content="{ side: 'bottom' }"
-                  :disabled="isFormDisabled"
-                  @update:model-value="
-                    (val) => {
-                      job.typeOfEmployment = Number(val ?? 0)
-                      jobErrors.typeOfEmployment = ''
-                    }
-                  "
-                />
+                <div
+                  class="job-vselect w-full min-w-0"
+                  :class="{ 'job-vselect--error': jobErrors.typeOfEmployment }"
+                >
+                  <v-select
+                    id="job-type-employment"
+                    v-model="typeOfEmploymentForSelect"
+                    :options="employmentTypeSelectItems"
+                    :append-to-body="true"
+                    :calculate-position="vueSelectCalculatePosition"
+                    multiple
+                    class="w-full text-sm"
+                    :placeholder="$t('job.uploadJob.chooseTypeOfEmployment')"
+                    label="label"
+                    :disabled="isFormDisabled"
+                    :clear-search-on-blur="() => true"
+                    @open="onMultiSelectOpen"
+                    @close="onMultiSelectClose"
+                    @update:model-value="jobErrors.typeOfEmployment = ''"
+                  />
+                </div>
                 <p v-if="jobErrors.typeOfEmployment" class="mt-1 text-sm !text-red-500">{{ jobErrors.typeOfEmployment }}</p>
               </div>
             </div>
@@ -841,6 +844,13 @@ const requiredQualificationSelectItems = computed(() =>
   ),
 )
 
+const employmentTypeSelectItems = computed(() =>
+  employmentTypeItems.value.map((item) => ({
+    label: item.label,
+    value: String(item.value),
+  })),
+)
+
 const jobBenefitsSelectItems = computed(() =>
   [...jobBenefitsItems.value].sort((a, b) =>
     a.label.localeCompare(b.label, 'vi', { sensitivity: 'base' }),
@@ -967,6 +977,32 @@ const genderForSelect = computed({
   }
 })
 
+// Computed property for v-select typeOfEmployment (convert between string[] and object[])
+const typeOfEmploymentForSelect = computed({
+  get: () => {
+    if (!job.value.typeOfEmployment) return []
+    const raw = Array.isArray(job.value.typeOfEmployment)
+      ? job.value.typeOfEmployment
+      : String(job.value.typeOfEmployment).split(',').map((s) => s.trim()).filter(Boolean)
+
+    return raw.map((val) => {
+      const v = typeof val === 'object' && val !== null && 'value' in val
+        ? (val as { value: string }).value
+        : String(val)
+      return employmentTypeSelectItems.value.find((item) => item.value === v) || { label: v, value: v }
+    })
+  },
+  set: (val: any[]) => {
+    job.value.typeOfEmployment = val
+      ? val.map((v) =>
+          typeof v === 'object' && v !== null && 'value' in v
+            ? String((v as { value: string }).value)
+            : String(v),
+        )
+      : []
+  },
+})
+
 // Convert JobModel to JobModelAddUpdate
 const convertJobModelToAddUpdate = (jobModel: import('~/models/job').JobModel): JobModelAddUpdate => {
   // Format deadline from Date to string (YYYY-MM-DD)
@@ -985,7 +1021,11 @@ const convertJobModelToAddUpdate = (jobModel: import('~/models/job').JobModel): 
     detailDescription: jobModel.detailDescription ?? '',
     category: jobModel.category ? jobModel.category.split(',').map(c => c.trim()).filter(c => c) : undefined,
     location: jobModel.location ? jobModel.location.split(',').map(l => l.trim()).filter(l => l) : undefined,
-    typeOfEmployment: Number(jobModel.typeOfEmployment),
+    typeOfEmployment: jobModel.typeOfEmployment
+      ? (Array.isArray(jobModel.typeOfEmployment)
+          ? jobModel.typeOfEmployment
+          : String(jobModel.typeOfEmployment).split(',').map(t => t.trim()).filter(Boolean))
+      : undefined,
     experienceLevel: Number(jobModel.experienceLevel),
     requiredQualification: jobModel.requiredQualification
       ? jobModel.requiredQualification.split(',').map((q) => q.trim()).filter(Boolean)
@@ -1268,11 +1308,25 @@ const addJob = async () => {
       requiredQualificationString = job.value.requiredQualification
     }
 
+    // Convert typeOfEmployment array to comma-separated string before sending
+    let typeOfEmploymentString = ''
+
+    if (Array.isArray(job.value.typeOfEmployment)) {
+      typeOfEmploymentString = job.value.typeOfEmployment
+        .filter((t) => t != null && t !== '')
+        .map((t) => String(t).trim())
+        .filter(Boolean)
+        .join(',')
+    } else if (job.value.typeOfEmployment != null) {
+      typeOfEmploymentString = String(job.value.typeOfEmployment).trim()
+    }
+
     const jobDataToSend: any = {
       ...job.value,
       detailDescription: job.value.detailDescription ?? '',
       benefits: benefitsString,
       category: categoryString,
+      typeOfEmployment: typeOfEmploymentString || undefined,
       gender: genderString || undefined,
       location: locationString || undefined,
       requiredQualification: requiredQualificationString || undefined,
@@ -1495,7 +1549,11 @@ function validateJobFields(): boolean {
     isValid = false
   }
 
-  if (!job.value.typeOfEmployment) {
+  if (
+    !job.value.typeOfEmployment ||
+    (Array.isArray(job.value.typeOfEmployment) && job.value.typeOfEmployment.length === 0) ||
+    (typeof job.value.typeOfEmployment === 'string' && job.value.typeOfEmployment.trim().length === 0)
+  ) {
     jobErrors.value.typeOfEmployment = 'Vui lòng chọn loại hình công việc.'
     isValid = false
   }
