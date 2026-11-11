@@ -28,7 +28,7 @@
         <div class="employer-company-section">
           <div class="employer-grid employer-grid-two">
           <label class="employer-field">
-            <span>{{ $t('company.name') }} {{ $t('common.requiredMark') }}</span>
+            <span>{{ $t('company.name') }} <span class="employer-required-star">{{ $t('common.requiredMark') }}</span></span>
             <UInput
               id="company-name"
               v-model.trim="companyForm.name"
@@ -81,7 +81,7 @@
           </label>
 
           <label class="employer-field employer-field-full employer-field-editor employer-field-editor--address">
-            <span>{{ $t('job.uploadJob.detailAddressLabel') }} {{ $t('common.requiredMark') }}</span>
+            <span>{{ $t('job.uploadJob.detailAddressLabel') }} <span class="employer-required-star">{{ $t('common.requiredMark') }}</span></span>
             <div class="employer-editor rich-text-output">
           <RichTextEditor
             id="company-address"
@@ -100,7 +100,7 @@
         <div class="employer-company-section">
           <div class="employer-grid employer-grid-two">
           <label class="employer-field">
-            <span>{{ $t('company.industry') }} {{ $t('common.requiredMark') }}</span>
+            <span>{{ $t('company.industry') }} <span class="employer-required-star">{{ $t('common.requiredMark') }}</span></span>
             <USelectMenu
               id="company-organization-type"
               :items="organizationTypeItemsSearchable"
@@ -286,7 +286,7 @@
           <div class="employer-company-media-stack">
           <div class="employer-company-media-field">
             <div class="employer-company-media-label">
-              <strong>{{ $t('company.form.logoTitle') }} {{ $t('common.requiredMark') }}</strong>
+              <strong>{{ $t('company.form.logoTitle') }} <span class="employer-required-star">{{ $t('common.requiredMark') }}</span></strong>
             </div>
 
           <div

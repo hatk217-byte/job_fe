@@ -1036,6 +1036,17 @@
   letter-spacing: -0.01em;
 }
 
+.employer-required-star,
+.employer-field > span .employer-required-star,
+.employer-field strong .employer-required-star,
+.employer-company-media-label .employer-required-star,
+.employer-input-label .employer-required-star,
+.employer-field-label .employer-required-star {
+  color: #f97316 !important;
+  font-weight: bold !important;
+  margin-left: 2px;
+}
+
 .employer-field-error {
   margin: 0;
   color: #ef4444;

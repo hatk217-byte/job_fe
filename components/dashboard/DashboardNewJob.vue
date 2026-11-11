@@ -40,7 +40,7 @@
             <div data-job-field="title" class="space-y-1.5">
               <label for="job-title" class="employer-input-label">
                 {{ $t('job.uploadJob.nameJobLabel') }}
-                <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                <span class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
               </label>
               <UInput
                 id="job-title"
@@ -60,7 +60,7 @@
             <div data-job-field="detailDescription" class="mt-4 space-y-1.5 rich-text-output">
               <label class="employer-input-label">
                 {{ $t('job.uploadJob.detailJobLabel') }}
-                <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                <span class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
               </label>
               <RichTextEditor
                 id="job-detail-description"
@@ -82,7 +82,7 @@
               <div data-job-field="category" class="space-y-1.5">
                 <label class="employer-input-label">
                   {{ $t('job.uploadJob.categoryLabel') }}
-                  <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                  <span class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <div
                   class="job-vselect w-full min-w-0"
@@ -113,7 +113,7 @@
               <div data-job-field="typeOfEmployment" class="space-y-1.5">
                 <label class="employer-input-label">
                   {{ $t('job.uploadJob.typeJobLabel') }}
-                  <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                  <span class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <div
                   class="job-vselect w-full min-w-0"
@@ -144,7 +144,7 @@
               <div data-job-field="grade" class="space-y-1.5">
                 <label class="employer-input-label">
                   {{ $t('job.uploadJob.gradeLabel') }}
-                  <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                  <span class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <div
                   class="job-vselect w-full min-w-0"
@@ -172,7 +172,7 @@
               <div id="job-deadline-field" data-job-field="deadline" class="space-y-1.5">
                 <label class="employer-input-label">
                   {{ $t('job.uploadJob.deadlineLabel') }}
-                  <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                  <span class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <UPopover
                   v-model:open="isDeadlinePopoverOpen"
@@ -238,7 +238,7 @@
               <div data-job-field="salaryType" class="space-y-1.5">
                 <label class="employer-input-label">
                   {{ $t('job.uploadJob.currentSalaryLabel') }}
-                  <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                  <span class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <USelect
                   id="job-salary-type"
@@ -264,7 +264,7 @@
               <div v-if="job.salaryType != 5" data-job-field="salaryMin" class="space-y-1.5">
                 <label class="employer-input-label">
                   {{ $t('job.uploadJob.minSalaryLabel') }}
-                  <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                  <span class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <UInput
                   id="job-salary-min"
@@ -287,7 +287,7 @@
               <div v-if="job.salaryType != 5" data-job-field="salaryMax" class="space-y-1.5">
                 <label class="employer-input-label">
                   {{ $t('job.uploadJob.maxSalaryLabel') }}
-                  <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                  <span class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <UInput
                   id="job-salary-max"
@@ -313,7 +313,7 @@
               <div data-job-field="address" class="space-y-1.5 rich-text-output">
                 <label class="employer-input-label">
                   {{ $t('job.uploadJob.addressJobLabel') }}
-                  <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                  <span class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <RichTextEditor
                   id="job-address"
@@ -330,7 +330,7 @@
               <div data-job-field="location" class="space-y-1.5">
                 <label class="employer-input-label">
                   {{ $t('job.uploadJob.locationJobLabel') }}
-                  <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                  <span class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <div
                   class="job-vselect w-full min-w-0"
@@ -386,7 +386,7 @@
               <div data-job-field="requiredQualification" class="space-y-1.5">
                 <label class="employer-input-label">
                   {{ $t('job.uploadJob.requiredQualificationLabel') }}
-                  <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                  <span class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <div
                   id="job-required-qualification"
@@ -415,7 +415,7 @@
               <div data-job-field="experienceLevel" class="space-y-1.5">
                 <label class="employer-input-label">
                   {{ $t('job.uploadJob.experienceLabel') }}
-                  <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                  <span class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <USelect
                   :items="experienceLevelItems"
@@ -440,7 +440,7 @@
               <div data-job-field="gender" class="space-y-1.5">
                 <label class="employer-input-label">
                   {{ $t('job.uploadJob.genderLabel') }}
-                  <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                  <span class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <div
                   class="job-vselect w-full min-w-0"
@@ -469,7 +469,7 @@
               <div data-job-field="benefits" class="space-y-1.5">
                 <label class="employer-input-label">
                   {{ $t('job.uploadJob.benefitLabel') }}
-                  <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                  <span class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <div
                   class="job-vselect w-full min-w-0"
@@ -525,7 +525,7 @@
               <div data-job-field="email" class="space-y-1.5">
                 <label for="job-email" class="employer-input-label">
                   {{ $t('job.uploadJob.emailJobLabel') }}
-                  <span v-if="!isAdminJobContext" class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                  <span v-if="!isAdminJobContext" class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <UInput
                   id="job-email"
@@ -545,7 +545,7 @@
               <div data-job-field="phoneNumber" class="space-y-1.5">
                 <label for="job-phone" class="employer-input-label">
                   {{ $t('job.uploadJob.phoneJobLabel') }}
-                  <span v-if="!isAdminJobContext" class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
+                  <span v-if="!isAdminJobContext" class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <UInput
                   id="job-phone"

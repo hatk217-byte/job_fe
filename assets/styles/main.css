@@ -427,3 +427,24 @@ div[aria-label*="Event Date"] [class*="justify-between"] button {
   box-shadow: none !important;
   border: none !important;
 }
+
+/* ==========================================================================
+   Mandatory Asterisk (*) in Employer Dashboard & Post Pages (Brand Orange)
+   ========================================================================== */
+.employer-required-star,
+.employer-field-required,
+.employer-field > span .employer-required-star,
+.employer-field strong .employer-required-star,
+.employer-company-media-label .employer-required-star,
+.employer-input-label .employer-required-star,
+.page-dashboard-newjob .employer-input-label .text-red-500,
+.page-dashboard-newjob .employer-input-label .text-orange-500,
+.page-dashboard-newjob label .text-red-500,
+.page-dashboard-newjob label .text-orange-500,
+.page-job-upload .employer-input-label .text-red-500,
+.page-job-upload .employer-input-label .text-orange-500,
+.page-job-upload label .text-red-500,
+.page-job-upload label .text-orange-500 {
+  color: #f97316 !important;
+  font-weight: 700 !important;
+}

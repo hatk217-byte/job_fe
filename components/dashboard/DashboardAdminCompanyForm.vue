@@ -3,7 +3,7 @@
     <label class="employer-field employer-field-full">
       <span>
         MST
-        {{ $t('common.requiredMark') }}
+        <span class="employer-required-star">{{ $t('common.requiredMark') }}</span>
       </span>
       <div class="employer-admin-company-mst-row">
         <UInput
@@ -34,7 +34,7 @@
     <label class="employer-field employer-field-full">
       <span>
         {{ $t('company.name') }}
-        {{ $t('common.requiredMark') }}
+        <span class="employer-required-star">{{ $t('common.requiredMark') }}</span>
       </span>
       <UInput
         v-model.trim="form.name"
@@ -87,7 +87,7 @@
     <label class="employer-field employer-field-full employer-field-editor">
       <span>
         {{ $t('job.uploadJob.detailAddressLabel') }}
-        {{ $t('common.requiredMark') }}
+        <span class="employer-required-star">{{ $t('common.requiredMark') }}</span>
       </span>
       <div class="employer-editor rich-text-output">
         <RichTextEditor
@@ -115,7 +115,7 @@
       <label class="employer-field">
         <span>
           {{ $t('company.industry') }}
-          {{ $t('common.requiredMark') }}
+          <span class="employer-required-star">{{ $t('common.requiredMark') }}</span>
         </span>
         <USelectMenu
           :items="organizationTypeItemsSearchable"
@@ -243,7 +243,7 @@
     <div class="employer-field employer-field-full">
       <span>
         {{ $t('company.form.logoTitle') }}
-        {{ $t('common.requiredMark') }}
+        <span class="employer-required-star">{{ $t('common.requiredMark') }}</span>
       </span>
       <div
         class="employer-admin-company-upload-zone"
@@ -356,7 +356,7 @@
         </span>
       </label>
       <label class="employer-field employer-field-full">
-        <span>Status {{ $t('common.requiredMark') }}</span>
+        <span>Status <span class="employer-required-star">{{ $t('common.requiredMark') }}</span></span>
         <div class="employer-admin-company-status-row">
           <button
             type="button"

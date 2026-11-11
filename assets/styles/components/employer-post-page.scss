@@ -239,8 +239,12 @@
 }
 
 .page-job-upload .employer-step-panel label .text-red-500,
-.page-job-upload .employer-step-panel .employer-field > span .text-red-500 {
-  color: #ef4444 !important;
+.page-job-upload .employer-step-panel .employer-field > span .text-red-500,
+.page-job-upload .employer-input-label .text-red-500,
+.page-job-upload .employer-input-label .text-orange-500,
+.page-job-upload .employer-required-star,
+.employer-required-star {
+  color: #f97316 !important;
   font-size: 13px !important;
   font-weight: 700 !important;
 }

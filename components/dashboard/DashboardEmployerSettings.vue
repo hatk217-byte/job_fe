@@ -58,7 +58,7 @@
 
               <div class="employer-grid employer-grid-two">
                 <label class="employer-field">
-                  <span>Họ và tên *</span>
+                  <span>Họ và tên <span class="employer-required-star">*</span></span>
                   <input
                     v-model="accountForm.fullName"
                     type="text"
@@ -69,7 +69,7 @@
                 </label>
 
                 <label class="employer-field">
-                  <span>Tên đăng nhập *</span>
+                  <span>Tên đăng nhập <span class="employer-required-star">*</span></span>
                   <input
                     v-model="accountForm.username"
                     type="text"
@@ -143,7 +143,7 @@
               >
               <div class="employer-grid employer-grid-two">
                 <label class="employer-field">
-                  <span>Mật khẩu cũ *</span>
+                  <span>Mật khẩu cũ <span class="employer-required-star">*</span></span>
                   <input
                     v-model="passwordForm.currentPassword"
                     type="password"
@@ -155,7 +155,7 @@
                 </label>
 
                 <label class="employer-field">
-                  <span>Mật khẩu mới *</span>
+                  <span>Mật khẩu mới <span class="employer-required-star">*</span></span>
                   <input
                     v-model="passwordForm.newPassword"
                     type="password"
@@ -168,7 +168,7 @@
               </div>
 
               <label class="employer-field employer-field-full">
-                <span>Xác nhận mật khẩu mới *</span>
+                <span>Xác nhận mật khẩu mới <span class="employer-required-star">*</span></span>
                 <input
                   v-model="passwordForm.confirmPassword"
                   type="password"
