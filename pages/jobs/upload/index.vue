@@ -982,9 +982,9 @@
                 <input v-model="agreeChecked" type="checkbox" :disabled="loading" />
                 <span>
                   {{ $t('job.uploadJob.agreeUploadJobLabel') }}
-                  <NuxtLink to="/policy#terms">{{ $t('job.uploadJob.agreePolicy') }}</NuxtLink>
+                  <NuxtLink to="/policy#terms" target="_blank" rel="noopener noreferrer">{{ $t('job.uploadJob.agreePolicy') }}</NuxtLink>
                   {{ $t('job.uploadJob.and') }}
-                  <NuxtLink to="/policy#privacy">{{ $t('job.uploadJob.agreePrivacy') }}</NuxtLink>
+                  <NuxtLink to="/policy#privacy" target="_blank" rel="noopener noreferrer">{{ $t('job.uploadJob.agreePrivacy') }}</NuxtLink>
                 </span>
               </label>
 
