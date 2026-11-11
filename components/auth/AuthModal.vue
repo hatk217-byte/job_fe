@@ -15,6 +15,7 @@
     <template #content>
       <div
         class="auth-modal-panel"
+        :class="{ 'is-loading': loading }"
         role="dialog"
         aria-modal="true"
         aria-label="Đăng ký và đăng nhập"
@@ -23,7 +24,8 @@
           type="button"
           class="auth-modal-close"
           aria-label="Đóng form đăng ký và đăng nhập"
-          @click.stop.prevent="deferClose()"
+          :disabled="loading"
+          @click.stop.prevent="!loading && deferClose()"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
@@ -174,9 +176,11 @@
             <button
               type="submit"
               class="primary-btn auth-submit-btn"
+              :class="{ 'is-loading': loading && view === 'login' }"
               :disabled="loading"
             >
-              {{ loading && view === 'login' ? 'Đang đăng nhập...' : 'Đăng nhập' }}
+              <span v-if="loading && view === 'login'" class="auth-spinner" aria-hidden="true" />
+              <span>{{ loading && view === 'login' ? 'Đang đăng nhập...' : 'Đăng nhập' }}</span>
             </button>
 
             <p class="auth-switch-copy">
@@ -184,7 +188,8 @@
               <button
                 type="button"
                 class="auth-switch-link"
-                @click="switchView('register', 'candidate')"
+                :disabled="loading"
+                @click="!loading && switchView('register', 'candidate')"
               >
                 Đăng ký ngay
               </button>
@@ -204,7 +209,8 @@
               :class="{ 'is-active': registerForm.activeTab === 'candidate' }"
               role="tab"
               :aria-selected="registerForm.activeTab === 'candidate'"
-              @click="registerForm.activeTab = 'candidate'"
+              :disabled="loading"
+              @click="!loading && (registerForm.activeTab = 'candidate')"
             >
               Ứng viên
             </button>
@@ -214,7 +220,8 @@
               :class="{ 'is-active': registerForm.activeTab === 'employer' }"
               role="tab"
               :aria-selected="registerForm.activeTab === 'employer'"
-              @click="registerForm.activeTab = 'employer'"
+              :disabled="loading"
+              @click="!loading && (registerForm.activeTab = 'employer')"
             >
               Nhà tuyển dụng
             </button>
@@ -438,15 +445,24 @@
             <button
               type="submit"
               class="primary-btn auth-submit-btn"
-              :class="{ 'auth-submit-btn-disabled': !agreeTerms }"
+              :class="{
+                'auth-submit-btn-disabled': !agreeTerms && !loading,
+                'is-loading': loading && view === 'register',
+              }"
               :disabled="!agreeTerms || loading"
             >
-              {{ loading && view === 'register' ? 'Đang đăng ký...' : 'Đăng ký' }}
+              <span v-if="loading && view === 'register'" class="auth-spinner" aria-hidden="true" />
+              <span>{{ loading && view === 'register' ? 'Đang đăng ký...' : 'Đăng ký' }}</span>
             </button>
 
             <p class="auth-switch-copy">
               <span>Bạn đã có tài khoản?</span>
-              <button type="button" class="auth-switch-link" @click="switchView('login')">
+              <button
+                type="button"
+                class="auth-switch-link"
+                :disabled="loading"
+                @click="!loading && switchView('login')"
+              >
                 Đăng nhập ngay
               </button>
             </p>
