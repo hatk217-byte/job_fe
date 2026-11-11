@@ -109,8 +109,13 @@ export function useJobDetailView(job: Ref<JobModel | null>) {
 
   const gradeText = computed(() => {
     if (!job.value?.grade) return t('common.nanValue')
-    const v = String(job.value.grade)
-    return gradeLabel[v] ?? v
+    const raw = String(job.value.grade)
+    const labels = raw
+      .split(',')
+      .map((k) => k.trim())
+      .filter(Boolean)
+      .map((k) => (gradeLabel as any)?.[k] ?? (gradeLabel as any)?.[Number(k)] ?? k)
+    return labels.length ? labels.join(', ') : t('common.nanValue')
   })
 
   const genderText = computed(() => {

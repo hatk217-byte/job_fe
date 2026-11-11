@@ -563,19 +563,16 @@
                       $t('job.uploadJob.mandatoryChar')
                     }}</span>
                   </label>
-                  <USelect
-                    :items="gradeItems"
-                    :model-value="job.grade?.toString() || ''"
+                  <v-select
+                    id="job-grade"
+                    v-model="gradeForSelect"
+                    :options="gradeSelectItems"
+                    multiple
                     class="w-full text-sm"
                     :class="{ 'border-red-500': jobErrors.grade }"
-                    :content="{ side: 'bottom' }"
                     :placeholder="$t('job.uploadJob.chooseGradeLevel')"
-                    @update:model-value="
-                      (val) => {
-                        job.grade = Number(val ?? 0)
-                        jobErrors.grade = ''
-                      }
-                    "
+                    label="label"
+                    @update:model-value="jobErrors.grade = ''"
                   />
                   <p v-if="jobErrors.grade" class="!text-red-500 text-sm mt-1">
                     {{ jobErrors.grade }}
@@ -668,6 +665,39 @@ const employmentTypeSelectItems = computed(() =>
     value: String(item.value),
   })),
 )
+
+const gradeSelectItems = computed(() =>
+  gradeItems.value.map((item) => ({
+    label: item.label,
+    value: String(item.value),
+  })),
+)
+
+// Computed properties for v-select (convert between string[] and object[])
+const gradeForSelect = computed({
+  get: () => {
+    if (!job.value.grade) return []
+    const raw = Array.isArray(job.value.grade)
+      ? job.value.grade
+      : String(job.value.grade).split(',').map((s) => s.trim()).filter(Boolean)
+
+    return raw.map((val) => {
+      const v = typeof val === 'object' && val !== null && 'value' in val
+        ? (val as { value: string }).value
+        : String(val)
+      return gradeSelectItems.value.find((item) => item.value === v) || { label: v, value: v }
+    })
+  },
+  set: (val: any[]) => {
+    job.value.grade = val
+      ? val.map((v) =>
+          typeof v === 'object' && v !== null && 'value' in v
+            ? String((v as { value: string }).value)
+            : String(v),
+        )
+      : []
+  },
+})
 
 // Computed properties for v-select (convert between string[] and object[])
 const typeOfEmploymentForSelect = computed({
@@ -1039,7 +1069,12 @@ function validateJobFields(): boolean {
   }
 
   // Grade validation - required
-  if (!job.value.grade || job.value.grade === 0) {
+  if (
+    !job.value.grade ||
+    job.value.grade === 0 ||
+    (Array.isArray(job.value.grade) && job.value.grade.length === 0) ||
+    (typeof job.value.grade === 'string' && job.value.grade.trim().length === 0)
+  ) {
     jobErrors.value.grade = 'Vui lòng chọn cấp bậc.'
     isValid = false
   }
@@ -1184,6 +1219,19 @@ const editJob = async () => {
       typeOfEmploymentString = String(job.value.typeOfEmployment).trim()
     }
 
+    // Convert grade array to comma-separated string before sending
+    let gradeString = ''
+
+    if (Array.isArray(job.value.grade)) {
+      gradeString = job.value.grade
+        .filter((g) => g != null && g !== '')
+        .map((g) => String(g).trim())
+        .filter(Boolean)
+        .join(',')
+    } else if (job.value.grade != null) {
+      gradeString = String(job.value.grade).trim()
+    }
+
     // Ensure salary values are unformatted (no commas) before sending
     const jobDataToSend: any = {
       ...job.value,
@@ -1191,6 +1239,7 @@ const editJob = async () => {
       benefits: benefitsString,
       category: categoryString,
       typeOfEmployment: typeOfEmploymentString || undefined,
+      grade: gradeString || undefined,
       gender: genderString || undefined,
       location: locationString || undefined,
       requiredQualification: requiredQualificationString || undefined,

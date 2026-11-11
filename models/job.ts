@@ -48,7 +48,7 @@ export interface JobModelAddUpdate {
   experienceLevel: number
   requiredQualification?: string[] // Array for UI binding, will be converted to string when sending
   gender?: string[] // Array for UI binding, will be converted to string when sending
-  grade?: number
+  grade?: number | string | string[]
   companyId?: number
   userId?: number
   imageLogo: string

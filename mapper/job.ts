@@ -72,7 +72,11 @@ export class JobMapper {
       gender: value.gender 
         ? value.gender.split(',').map(g => g.trim()).filter(g => g)
         : undefined,
-      grade: value.grade !== undefined ? Number(value.grade) : undefined,
+      grade: value.grade
+        ? (typeof value.grade === 'string'
+            ? value.grade.split(',').map(g => g.trim()).filter(Boolean)
+            : [String(value.grade)])
+        : [],
       salaryMin: value.salaryMin ?? undefined,
       salaryMax: value.salaryMax ?? undefined,
       salaryType: value.salaryType ?? undefined,

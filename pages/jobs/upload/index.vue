@@ -599,22 +599,26 @@
                           {{ $t('job.uploadJob.gradeLabel') }}
                           <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                         </label>
-                        <USelect
-                          :items="gradeItems"
-                          :model-value="job.grade?.toString() || ''"
-                          :content="{ side: 'bottom' }"
-                          :placeholder="$t('job.uploadJob.chooseGradeLevel')"
-                          :ui="{
-                            base: 'h-11 w-full rounded-xl' + fieldErrorRingClass(jobErrors.grade),
-                          }"
-                          class="w-full text-sm"
-                          @update:model-value="
-                            (val) => {
-                              job.grade = Number(val ?? 0)
-                              jobErrors.grade = ''
-                            }
-                          "
-                        />
+                        <div
+                          class="job-vselect w-full min-w-0"
+                          :class="{ 'job-vselect--error': jobErrors.grade }"
+                        >
+                          <v-select
+                            id="job-grade"
+                            v-model="gradeForSelect"
+                            :options="gradeSelectItems"
+                            :append-to-body="true"
+                            :calculate-position="vueSelectCalculatePosition"
+                            multiple
+                            class="w-full text-sm"
+                            :placeholder="$t('job.uploadJob.chooseGradeLevel')"
+                            label="label"
+                            :clear-search-on-blur="() => true"
+                            @open="onMultiSelectOpen"
+                            @close="onMultiSelectClose"
+                            @update:model-value="jobErrors.grade = ''"
+                          />
+                        </div>
                         <p v-if="jobErrors.grade" class="mt-1 text-sm !text-red-500">{{ jobErrors.grade }}</p>
                       </div>
                       <div id="job-deadline-field" class="employer-field-stack">
@@ -1251,6 +1255,13 @@ const employmentTypeSelectItems = computed(() =>
   })),
 )
 
+const gradeSelectItems = computed(() =>
+  gradeItems.value.map((item) => ({
+    label: item.label,
+    value: String(item.value),
+  })),
+)
+
 const jobBenefitsSelectItems = computed(() =>
   [...jobBenefitsItems.value].sort((a, b) =>
     a.label.localeCompare(b.label, 'vi', { sensitivity: 'base' }),
@@ -1381,6 +1392,32 @@ const typeOfEmploymentForSelect = computed({
   },
   set: (val: any[]) => {
     job.value.typeOfEmployment = val
+      ? val.map((v) =>
+          typeof v === 'object' && v !== null && 'value' in v
+            ? String((v as { value: string }).value)
+            : String(v),
+        )
+      : []
+  },
+})
+
+// Computed property for v-select grade (convert between string[] and object[])
+const gradeForSelect = computed({
+  get: () => {
+    if (!job.value.grade) return []
+    const raw = Array.isArray(job.value.grade)
+      ? job.value.grade
+      : String(job.value.grade).split(',').map((s) => s.trim()).filter(Boolean)
+
+    return raw.map((val) => {
+      const v = typeof val === 'object' && val !== null && 'value' in val
+        ? (val as { value: string }).value
+        : String(val)
+      return gradeSelectItems.value.find((item) => item.value === v) || { label: v, value: v }
+    })
+  },
+  set: (val: any[]) => {
+    job.value.grade = val
       ? val.map((v) =>
           typeof v === 'object' && v !== null && 'value' in v
             ? String((v as { value: string }).value)
@@ -2490,7 +2527,9 @@ const addJob = async () => {
           gender: Array.isArray(job.value.gender)
             ? job.value.gender.filter(Boolean).map(String).join(',')
             : (job.value.gender as any) ?? null,
-          grade: job.value.grade ?? null,
+          grade: Array.isArray(job.value.grade)
+            ? job.value.grade.filter(Boolean).map(String).join(',')
+            : (job.value.grade != null ? String(job.value.grade) : null),
           postedDate: job.value.postedDate
             ? new Date(job.value.postedDate).toISOString()
             : new Date().toISOString(),
@@ -2750,7 +2789,12 @@ function validateJobFields(): boolean {
   }
 
   // Grade validation - required
-  if (!job.value.grade || job.value.grade === 0) {
+  if (
+    !job.value.grade ||
+    job.value.grade === 0 ||
+    (Array.isArray(job.value.grade) && job.value.grade.length === 0) ||
+    (typeof job.value.grade === 'string' && job.value.grade.trim().length === 0)
+  ) {
     jobErrors.value.grade = 'Vui lòng chọn cấp bậc.'
     isValid = false
   }

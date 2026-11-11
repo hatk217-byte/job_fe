@@ -624,13 +624,10 @@ const filteredJobs = computed(() => {
   return jobs.value
     .filter((job) => {
       // Employment type filter
-      if (
-        selectedFilters.value.employmentType.length > 0 &&
-        !selectedFilters.value.employmentType.includes(
-          String(job.typeOfEmployment),
-        )
-      ) {
-        return false
+      if (selectedFilters.value.employmentType.length > 0) {
+        const jobTypes = String(job.typeOfEmployment || '').split(',').map((s) => s.trim()).filter(Boolean)
+        const hasMatch = jobTypes.some((t) => selectedFilters.value.employmentType.includes(t))
+        if (!hasMatch) return false
       }
 
       // Experience level filter
@@ -644,11 +641,10 @@ const filteredJobs = computed(() => {
       }
 
       // Grade filter
-      if (
-        selectedFilters.value.grade.length > 0 &&
-        !selectedFilters.value.grade.includes(String((job as any).grade ?? ''))
-      ) {
-        return false
+      if (selectedFilters.value.grade.length > 0) {
+        const jobGrades = String((job as any).grade || '').split(',').map((s) => s.trim()).filter(Boolean)
+        const hasMatch = jobGrades.some((g) => selectedFilters.value.grade.includes(g))
+        if (!hasMatch) return false
       }
 
       return true
