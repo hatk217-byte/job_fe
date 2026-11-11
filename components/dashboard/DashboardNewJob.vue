@@ -175,6 +175,7 @@
                   <span class="text-red-500">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <UPopover
+                  v-model:open="isDeadlinePopoverOpen"
                   :disabled="isFormDisabled"
                   :content="{
                     side: 'bottom',
@@ -218,7 +219,14 @@
                       :max-value="maxDeadlineDate"
                       :is-hidden="isDeadlineDateHidden"
                       :disabled="isFormDisabled"
-                      @update:model-value="jobErrors.deadline = ''"
+                      @update:model-value="
+                        (val) => {
+                          jobErrors.deadline = ''
+                          if (val) {
+                            isDeadlinePopoverOpen = false
+                          }
+                        }
+                      "
                     />
                   </template>
                 </UPopover>
@@ -1207,10 +1215,15 @@ const formatDateDeadline = (dateStr: string): string => {
 }
 
 // Calendar date binding
+const isDeadlinePopoverOpen = ref(false)
+
 const deadlineCalendarDate = computed({
   get: () => parseDateString(job.value.deadline || null),
   set: (val: DateValue | null) => {
     job.value.deadline = formatDateToString(val)
+    if (val) {
+      isDeadlinePopoverOpen.value = false
+    }
   },
 })
 

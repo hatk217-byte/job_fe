@@ -1,5 +1,5 @@
 <template>
-  <UPopover>
+  <UPopover v-model:open="isOpen">
     <UButton
       class="w-full justify-start bg-white"
       color="neutral"
@@ -17,6 +17,13 @@
         class="p-2"
         :number-of-months="1"
         v-bind="$attrs"
+        @update:model-value="
+          (val) => {
+            if (val) {
+              isOpen = false
+            }
+          }
+        "
       />
     </template>
   </UPopover>
@@ -25,6 +32,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { CalendarDate, type DateValue } from '@internationalized/date'
+
+const isOpen = ref(false)
 
 const parseDateString = (str: string | null): DateValue | null => {
   if (!str) return null
