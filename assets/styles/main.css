@@ -320,3 +320,110 @@ h3 {
 .employer-admin-drawer-panel .ui-drawer-body-vh {
   max-height: none;
 }
+
+/* ==========================================================================
+   UCalendar Navigation Arrows (Light, subtle modern design)
+   ========================================================================== */
+.u-calendar-header,
+.u-calendar [class*="justify-between"]:first-child,
+[data-reka-calendar-root] [class*="justify-between"]:first-child,
+[data-reka-calendar-header],
+[data-calendar-header] {
+  padding-bottom: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+/* Header heading */
+.u-calendar-header [class*="heading"],
+.u-calendar [class*="heading"],
+[data-reka-calendar-root] [class*="heading"],
+[data-reka-calendar-heading] {
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  color: #1e293b !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* All calendar navigation buttons */
+.u-calendar-header button,
+.u-calendar [class*="justify-between"]:first-child button,
+[data-reka-calendar-root] [class*="justify-between"]:first-child button,
+[data-reka-calendar-root] header button,
+[data-reka-calendar-header] button,
+[data-calendar-header] button,
+div[aria-label*="Event Date"] [class*="justify-between"] button {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  max-width: 28px !important;
+  max-height: 28px !important;
+  padding: 0 !important;
+  margin: 0 1px !important;
+  border-radius: 9999px !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #64748b !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.15s ease-in-out !important;
+  cursor: pointer !important;
+}
+
+/* Icon inside calendar navigation buttons */
+.u-calendar-header button span,
+.u-calendar-header button svg,
+.u-calendar-header button .icon,
+.u-calendar [class*="justify-between"]:first-child button span,
+.u-calendar [class*="justify-between"]:first-child button svg,
+.u-calendar [class*="justify-between"]:first-child button .icon,
+[data-reka-calendar-root] [class*="justify-between"]:first-child button span,
+[data-reka-calendar-root] [class*="justify-between"]:first-child button svg,
+[data-reka-calendar-root] [class*="justify-between"]:first-child button .icon {
+  width: 15px !important;
+  height: 15px !important;
+  font-size: 15px !important;
+  color: inherit !important;
+}
+
+/* Hover state for active buttons */
+.u-calendar-header button:hover:not(:disabled):not([aria-disabled="true"]):not([data-disabled]),
+.u-calendar [class*="justify-between"]:first-child button:hover:not(:disabled):not([aria-disabled="true"]):not([data-disabled]),
+[data-reka-calendar-root] [class*="justify-between"]:first-child button:hover:not(:disabled):not([aria-disabled="true"]):not([data-disabled]) {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* Active / press state */
+.u-calendar-header button:active:not(:disabled):not([aria-disabled="true"]):not([data-disabled]),
+.u-calendar [class*="justify-between"]:first-child button:active:not(:disabled):not([aria-disabled="true"]):not([data-disabled]),
+[data-reka-calendar-root] [class*="justify-between"]:first-child button:active:not(:disabled):not([aria-disabled="true"]):not([data-disabled]) {
+  background-color: #e2e8f0 !important;
+  transform: scale(0.94);
+}
+
+/* Disabled state: very light, NO solid gray background, subtle opacity */
+.u-calendar-header button:disabled,
+.u-calendar-header button[aria-disabled="true"],
+.u-calendar-header button[data-disabled],
+.u-calendar [class*="justify-between"]:first-child button:disabled,
+.u-calendar [class*="justify-between"]:first-child button[aria-disabled="true"],
+.u-calendar [class*="justify-between"]:first-child button[data-disabled],
+[data-reka-calendar-root] [class*="justify-between"]:first-child button:disabled,
+[data-reka-calendar-root] [class*="justify-between"]:first-child button[aria-disabled="true"],
+[data-reka-calendar-root] [class*="justify-between"]:first-child button[data-disabled] {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #cbd5e1 !important;
+  opacity: 0.3 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}

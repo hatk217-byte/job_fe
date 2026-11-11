@@ -10,9 +10,26 @@ export default defineAppConfig({
     },
     button: {
       slots: {
-        base: 'cursor-pointer inline-flex items-center justify-center font-semibold disabled:cursor-not-allowed aria-disabled:cursor-not-allowed disabled:!bg-gray disabled:!text-disabled',
+        base: 'cursor-pointer inline-flex items-center justify-center font-semibold disabled:cursor-not-allowed aria-disabled:cursor-not-allowed disabled:!text-disabled',
       },
       variants: {
+        variant: {
+          solid: {
+            base: 'disabled:!bg-gray',
+          },
+          ghost: {
+            base: 'disabled:!bg-transparent',
+          },
+          subtle: {
+            base: 'disabled:!bg-transparent',
+          },
+          outline: {
+            base: 'disabled:!bg-transparent',
+          },
+          link: {
+            base: 'disabled:!bg-transparent',
+          },
+        },
         size: {
           xs: {
             base: 'h-[22px] text-[10px] leading-0 font-normal',
@@ -35,6 +52,13 @@ export default defineAppConfig({
         color: 'primary',
         size: 'md',
         variant: 'solid',
+      },
+    },
+    calendar: {
+      slots: {
+        root: 'u-calendar',
+        header: 'u-calendar-header flex items-center justify-between gap-1 pb-2',
+        heading: 'text-sm font-semibold text-slate-800 text-center truncate mx-auto',
       },
     },
     input: {
