@@ -7,6 +7,11 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: false },
 
+  routeRules: {
+    '/terms': { redirect: '/policy#dieu-khoan-dieu-kien' },
+    '/privacy': { redirect: '/policy#chinh-sach-quyen-rieng-tu' },
+  },
+
   app: {
     head: {
       htmlAttrs: {

@@ -145,9 +145,9 @@
       <input v-model="termsAgreed" type="checkbox" class="apply-vldl-checkbox" />
       <span class="terms-text">
         Tôi đồng ý với
-        <NuxtLink to="/terms" target="_blank" class="terms-link">Điều khoản dịch vụ</NuxtLink>
+        <a href="/policy#dieu-khoan-dieu-kien" target="_blank" rel="noopener noreferrer" class="terms-link" @click.stop>Điều khoản dịch vụ</a>
         và
-        <NuxtLink to="/privacy" target="_blank" class="terms-link">Chính sách bảo mật</NuxtLink>
+        <a href="/policy#chinh-sach-quyen-rieng-tu" target="_blank" rel="noopener noreferrer" class="terms-link" @click.stop>Chính sách bảo mật</a>
         của TuyenGiaoVien khi nộp đơn ứng tuyển.
       </span>
     </label>

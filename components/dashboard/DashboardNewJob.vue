@@ -629,9 +629,9 @@
         <input v-model="agreeChecked" type="checkbox" :disabled="isFormDisabled" />
         <span>
           {{ $t('job.uploadJob.agreeUploadJobLabel') }}
-          <NuxtLink to="/policy#terms" target="_blank" rel="noopener noreferrer">{{ $t('job.uploadJob.agreePolicy') }}</NuxtLink>
+          <a href="/policy#dieu-khoan-dieu-kien" target="_blank" rel="noopener noreferrer" @click.stop>{{ $t('job.uploadJob.agreePolicy') }}</a>
           {{ $t('job.uploadJob.and') }}
-          <NuxtLink to="/policy#privacy" target="_blank" rel="noopener noreferrer">{{ $t('job.uploadJob.agreePrivacy') }}</NuxtLink>
+          <a href="/policy#chinh-sach-quyen-rieng-tu" target="_blank" rel="noopener noreferrer" @click.stop>{{ $t('job.uploadJob.agreePrivacy') }}</a>
         </span>
       </label>
 

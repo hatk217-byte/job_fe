@@ -462,13 +462,13 @@
         <UCheckbox v-model="agreeChecked" class="text-primary mr-3" />
         <span>
           {{ $t('job.uploadJob.agreeUploadJobLabel') }}
-          <NuxtLink to="/terms" style="color: #0284c7; text-decoration: none">
+          <a href="/policy#dieu-khoan-dieu-kien" target="_blank" rel="noopener noreferrer" style="color: #0284c7; text-decoration: none" @click.stop>
             {{ $t('job.uploadJob.agreePolicy') }}
-          </NuxtLink>
+          </a>
           {{ $t('job.uploadJob.and') }}
-          <NuxtLink to="/privacy" style="color: #0284c7; text-decoration: none">
+          <a href="/policy#chinh-sach-quyen-rieng-tu" target="_blank" rel="noopener noreferrer" style="color: #0284c7; text-decoration: none" @click.stop>
             {{ $t('job.uploadJob.agreePrivacy') }}
-          </NuxtLink>
+          </a>
         </span>
       </div>
       <UButton

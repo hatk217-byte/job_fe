@@ -436,9 +436,9 @@
               <input v-model="agreeTerms" type="checkbox" :disabled="loading" />
               <span>
                 Tôi đồng ý với
-                <NuxtLink to="/policy#terms" target="_blank" rel="noopener noreferrer">Điều khoản và Điều kiện</NuxtLink>
+                <a href="/policy#dieu-khoan-dieu-kien" target="_blank" rel="noopener noreferrer" @click.stop>Điều khoản và Điều kiện</a>
                 và
-                <NuxtLink to="/policy#privacy" target="_blank" rel="noopener noreferrer">Chính sách quyền riêng tư</NuxtLink>
+                <a href="/policy#chinh-sach-quyen-rieng-tu" target="_blank" rel="noopener noreferrer" @click.stop>Chính sách quyền riêng tư</a>
               </span>
             </label>
 

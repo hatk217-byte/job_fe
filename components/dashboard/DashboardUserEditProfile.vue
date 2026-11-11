@@ -199,7 +199,10 @@
           :disabled="updatingProfile"
         >
         <span>
-          Tôi đồng ý với Điều khoản và Điều kiện và Chính sách quyền riêng tư
+          Tôi đồng ý với
+          <a href="/policy#dieu-khoan-dieu-kien" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline" @click.stop>Điều khoản và Điều kiện</a>
+          và
+          <a href="/policy#chinh-sach-quyen-rieng-tu" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline" @click.stop>Chính sách quyền riêng tư</a>
         </span>
       </label>
 
