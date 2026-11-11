@@ -2774,12 +2774,34 @@ function validateJobFields(): boolean {
   max-height: 200px;
   overflow-y: auto;
   z-index: 9999;
-  border: 1px solid rgba(200, 214, 236, 0.9);
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
   background: #ffffff;
-  box-shadow: 0 8px 24px rgba(31, 49, 93, 0.1);
-  padding: 4px 0;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+  padding: 4px;
   margin-top: 6px;
+}
+
+:deep(.vs__no-options) {
+  padding: 8px 12px !important;
+  margin: 0 !important;
+  text-align: center !important;
+  font-size: 0 !important;
+  color: transparent !important;
+  line-height: 1.4 !important;
+  user-select: none;
+  background: transparent !important;
+  border: none !important;
+
+  &::after {
+    content: "Không tìm thấy kết quả";
+    display: block;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+    color: #94a3b8 !important;
+    letter-spacing: -0.01em;
+    line-height: 1.4 !important;
+  }
 }
 
 :deep(.vs__dropdown-option) {
