@@ -310,11 +310,13 @@
         @click.stop="openImagesPicker"
       >
         <input ref="imagesInput" type="file" :accept="IMAGE_UPLOAD_ACCEPT" multiple class="hidden" @change="onPickImages" />
-        <div v-if="imagePreviews.length" class="flex flex-wrap gap-2">
-          <div v-for="(src, i) in imagePreviews" :key="i" class="relative">
-            <img :src="src" class="h-20 w-auto object-contain rounded border" />
-            <UButton icon="i-lucide-x" size="xs" color="error" class="absolute -top-1 -right-1" @click.stop="removeImage(i)" />
-          </div>
+        <div v-if="imagePreviews.length" class="flex flex-wrap items-center gap-3">
+          <template v-for="(src, i) in imagePreviews" :key="i">
+            <div v-if="src && src.trim() !== ''" class="relative w-28 h-28 p-1.5 bg-white rounded-xl border border-gray-200 shadow-sm flex items-center justify-center overflow-hidden">
+              <img :src="src" class="w-full h-full object-contain rounded-lg" />
+              <UButton icon="i-lucide-trash-2" size="xs" color="error" variant="solid" class="absolute top-1.5 right-1.5 shadow-sm" @click.stop="removeImage(i)" />
+            </div>
+          </template>
           <UButton size="xs" variant="soft" @click.stop="imagesInput?.click()">{{ $t('company.form.addMore') }}</UButton>
         </div>
         <div v-else class="grid place-items-center">
@@ -715,7 +717,10 @@ function fillFormFromCompany(company: any) {
     videoUrl: company.videoUrl ?? null,
     isWaiting: !!company.isWaiting,
     isFeatured: !!company.isFeatured,
-    companyImages: Array.isArray(company.companyImages) ? company.companyImages.map((img: any) => ({ url: img?.url ?? '' })) : [],
+    companyImages: (Array.isArray(company.companyImages) ? company.companyImages : [])
+      .map((img: any) => (typeof img === 'string' ? img.trim() : (img?.url ? String(img.url).trim() : '')))
+      .filter((url: string) => Boolean(url && url.length > 0))
+      .map((url: string) => ({ url })),
     bannerImage: company.bannerImage ?? null,
   }
   companySizeFromDb.value = company.companySize ?? null
@@ -723,7 +728,7 @@ function fillFormFromCompany(company: any) {
   console.log('[AdminCompanyForm] form after fill:', form.value)
   logoPreview.value = normalizeCompanyLogo(company.logo)
   bannerPreview.value = company.bannerImage || null
-  imagePreviews.value = Array.isArray(company.companyImages) ? company.companyImages.map((img: any) => img?.url ?? '') : []
+  imagePreviews.value = form.value.companyImages.map((img: any) => img.url)
   imageFiles.value = []
   logoFile.value = null
   bannerFile.value = null
@@ -1189,13 +1194,18 @@ function onPickImages(e: Event) {
   if (!files?.length) return
 
   for (const f of Array.from(files)) {
+    if (!f || f.size === 0) continue
     const validationError = validateImageUploadFile(f)
     if (validationError) {
       useNotify({ type: 'error', message: validationError })
       continue
     }
-    imageFiles.value.push(f)
-    imagePreviews.value.push(URL.createObjectURL(f))
+    const blobUrl = URL.createObjectURL(f)
+    if (blobUrl) {
+      imageFiles.value.push(f)
+      imagePreviews.value.push(blobUrl)
+      form.value.companyImages.push({ url: blobUrl })
+    }
   }
   if (imagesInput.value) imagesInput.value.value = ''
 }

@@ -391,14 +391,14 @@
               @change="onPickBanner"
             />
 
-            <div v-if="bannerPreview" class="flex flex-col gap-4">
+            <div v-if="bannerPreview && bannerPreview.trim() !== ''" class="flex flex-col gap-4">
               <div class="flex justify-center">
                 <div
-                  class="relative p-2 bg-white rounded-lg border shadow-sm inline-flex items-center justify-center"
+                  class="relative p-2 bg-white rounded-xl border border-gray-200 shadow-sm flex items-center justify-center min-w-[240px] min-h-[120px] max-w-full h-44 overflow-hidden"
                 >
                   <img
                     :src="bannerPreview"
-                    class="max-h-60 max-w-full h-auto w-auto object-contain rounded-md"
+                    class="w-full h-full object-contain rounded-lg"
                     draggable="false"
                   />
                   <UButton
@@ -406,7 +406,7 @@
                     color="error"
                     size="xs"
                     variant="solid"
-                    class="absolute top-2 right-2"
+                    class="absolute top-2 right-2 shadow-sm"
                     :disabled="formDisabled"
                     :aria-label="$t('common.remove')"
                     @click.stop="removeBanner"
@@ -459,27 +459,29 @@
               class="flex flex-col gap-4"
             >
               <div class="flex flex-wrap gap-4">
-                <div
-                  v-for="(src, idx) in imagePreviews"
-                  :key="src + idx"
-                  class="relative p-2 bg-white rounded-lg border shadow-sm inline-flex items-center justify-center"
-                >
-                  <img
-                    :src="src"
-                    class="max-h-40 max-w-[260px] h-auto w-auto object-contain rounded-md"
-                    draggable="false"
-                  />
-                  <UButton
-                    icon="i-lucide-trash-2"
-                    color="error"
-                    size="xs"
-                    variant="solid"
-                    class="absolute top-2 right-2"
-                    :disabled="formDisabled"
-                    :aria-label="$t('common.remove')"
-                    @click.stop="removeImage(idx)"
-                  />
-                </div>
+                <template v-for="(src, idx) in imagePreviews" :key="src + idx">
+                  <div
+                    v-if="src && src.trim() !== ''"
+                    class="relative p-2 bg-white rounded-xl border border-gray-200 shadow-sm flex items-center justify-center min-w-[140px] min-h-[140px] w-40 h-40 overflow-hidden group"
+                  >
+                    <img
+                      :src="src"
+                      class="w-full h-full object-contain rounded-lg"
+                      draggable="false"
+                      @error="removeImage(idx)"
+                    />
+                    <UButton
+                      icon="i-lucide-trash-2"
+                      color="error"
+                      size="xs"
+                      variant="solid"
+                      class="absolute top-2 right-2 shadow-sm"
+                      :disabled="formDisabled"
+                      :aria-label="$t('common.remove')"
+                      @click.stop="removeImage(idx)"
+                    />
+                  </div>
+                </template>
               </div>
               <div class="flex justify-center">
                 <UButton
@@ -831,12 +833,17 @@ function populateFormFromCompanyData(res: CompanyEntity) {
     companyForm.value.bannerImage = res.bannerImage || null
     bannerPreview.value = res.bannerImage || null
 
-    // Load company images - set directly to form (excluding logo)
+    // Load company images - set directly to form (excluding logo and invalid/empty urls)
     const urls: string[] = []
 
-    if (res.companyImages?.length) {
+    if (Array.isArray(res.companyImages)) {
       for (const it of res.companyImages) {
-        if (!res.logo || it.url !== res.logo) urls.push(it.url)
+        const u = typeof it === 'string' ? it.trim() : (it?.url ? String(it.url).trim() : '')
+        if (u && u.length > 0) {
+          if (!res.logo || u !== res.logo) {
+            urls.push(u)
+          }
+        }
       }
     }
     companyForm.value.companyImages = urls.map((url) => ({ url }))
@@ -1254,15 +1261,17 @@ function onPickImages(e: Event) {
 
 function addImageFiles(files: File[]) {
   for (const f of files) {
+    if (!f || f.size === 0) continue
     const validationError = validateImageUploadFile(f)
     if (validationError) {
       useNotify({ type: 'error', message: validationError })
       continue
     }
     const blobUrl = URL.createObjectURL(f)
-
-    imagePreviews.value.push(blobUrl)
-    companyForm.value.companyImages.push({ url: blobUrl })
+    if (blobUrl) {
+      imagePreviews.value.push(blobUrl)
+      companyForm.value.companyImages.push({ url: blobUrl })
+    }
   }
 }
 
@@ -1518,7 +1527,9 @@ async function saveCompany() {
     }
 
     // Upload company images that are blob URLs (new files)
-    const currentUrls = companyForm.value.companyImages.map((img: any) => img.url).filter(Boolean)
+    const currentUrls = companyForm.value.companyImages
+      .map((img: any) => (typeof img === 'string' ? img.trim() : (img?.url ? String(img.url).trim() : '')))
+      .filter((u: string) => Boolean(u && u.length > 0))
 
     for (const url of currentUrls) {
       if (url.startsWith('blob:')) {

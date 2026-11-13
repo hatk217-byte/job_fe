@@ -249,32 +249,34 @@
 
             <div v-if="imagePreviews.length > 0" class="flex flex-col gap-4">
               <div class="flex flex-wrap gap-4">
-                <div
-                  v-for="(src, idx) in imagePreviews"
-                  :key="src + idx"
-                  class="relative p-2 bg-white rounded-lg border shadow-sm inline-flex items-center justify-center"
-                >
-                  <img
-                    :src="src"
-                    class="max-h-40 max-w-[260px] h-auto w-auto object-contain rounded-md"
-                    draggable="false"
-                  />
-                  <span
-                    v-if="idx === 0"
-                    class="absolute top-2 left-2 px-2 py-0.5 text-xs rounded bg-blue-600 text-white"
+                <template v-for="(src, idx) in imagePreviews" :key="src + idx">
+                  <div
+                    v-if="src && src.trim() !== ''"
+                    class="relative p-2 bg-white rounded-xl border border-gray-200 shadow-sm flex items-center justify-center min-w-[140px] min-h-[140px] w-40 h-40 overflow-hidden group"
                   >
-                    {{ $t('company.form.logoBadge') }}
-                  </span>
-                  <UButton
-                    icon="i-lucide-trash-2"
-                    color="error"
-                    size="xs"
-                    variant="solid"
-                    class="absolute top-2 right-2"
-                    :aria-label="$t('common.remove') as string"
-                    @click.stop="removeImage(idx)"
-                  />
-                </div>
+                    <img
+                      :src="src"
+                      class="w-full h-full object-contain rounded-lg"
+                      draggable="false"
+                      @error="removeImage(idx)"
+                    />
+                    <span
+                      v-if="idx === 0"
+                      class="absolute top-2 left-2 px-2 py-0.5 text-xs rounded bg-blue-600 text-white shadow-sm"
+                    >
+                      {{ $t('company.form.logoBadge') }}
+                    </span>
+                    <UButton
+                      icon="i-lucide-trash-2"
+                      color="error"
+                      size="xs"
+                      variant="solid"
+                      class="absolute top-2 right-2 shadow-sm"
+                      :aria-label="$t('common.remove') as string"
+                      @click.stop="removeImage(idx)"
+                    />
+                  </div>
+                </template>
               </div>
               <div class="flex justify-center">
                 <UButton
@@ -479,10 +481,13 @@ async function loadData() {
     // preview images theo thứ tự: logo trước, rồi ảnh khác
     const urls: string[] = []
 
-    if (res.logo) urls.push(res.logo)
-    if (res.companyImages?.length) {
+    if (res.logo && typeof res.logo === 'string' && res.logo.trim() !== '') urls.push(res.logo.trim())
+    if (Array.isArray(res.companyImages)) {
       for (const it of res.companyImages) {
-        if (!res.logo || it.url !== res.logo) urls.push(it.url)
+        const u = typeof it === 'string' ? it.trim() : (it?.url ? String(it.url).trim() : '')
+        if (u && (!res.logo || u !== res.logo)) {
+          urls.push(u)
+        }
       }
     }
     imagePreviews.value = urls
