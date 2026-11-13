@@ -1318,6 +1318,7 @@ function onDropBanner(e: DragEvent) {
   if (bannerPreview.value?.startsWith('blob:')) {
     URL.revokeObjectURL(bannerPreview.value)
   }
+  bannerFile.value = file
   companyForm.value.bannerImage = URL.createObjectURL(file)
   bannerPreview.value = companyForm.value.bannerImage
 }
@@ -1338,6 +1339,7 @@ function onPickBanner(e: Event) {
   if (bannerPreview.value?.startsWith('blob:')) {
     URL.revokeObjectURL(bannerPreview.value)
   }
+  bannerFile.value = file
   companyForm.value.bannerImage = URL.createObjectURL(file)
   bannerPreview.value = companyForm.value.bannerImage
   if (bannerFileEl.value) bannerFileEl.value.value = ''
@@ -1508,7 +1510,15 @@ async function saveCompany() {
     }
 
     // Upload banner if it's a blob URL (new file)
-    if (companyForm.value.bannerImage?.startsWith('blob:')) {
+    if (bannerFile.value) {
+      const uploadedUrl = await $api.upload.uploadImageR2(bannerFile.value, 'banner')
+      if (uploadedUrl) {
+        bannerUrl = uploadedUrl
+      } else {
+        useNotify({ message: 'Tải lên banner thất bại. Vui lòng thử lại.', type: 'error' })
+        return
+      }
+    } else if (companyForm.value.bannerImage?.startsWith('blob:')) {
       // Need to fetch the blob and create a File
       const blob = await fetch(companyForm.value.bannerImage).then((res) => res.blob())
       const file = new File([blob], 'banner.png', { type: 'image/png' })

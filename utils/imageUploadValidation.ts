@@ -1,31 +1,40 @@
-/** MIME được phép khi upload ảnh (không bao gồm AVIF/HEIC). */
-export const IMAGE_UPLOAD_ACCEPT =
-  'image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml'
+/** MIME được phép khi upload ảnh: JPEG, PNG, WebP */
+export const IMAGE_UPLOAD_ACCEPT = 'image/jpeg,image/png,image/webp'
 
-const BLOCKED_IMAGE_EXTENSIONS = ['.avif', '.heic', '.heif'] as const
+export const MAX_IMAGE_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
-const BLOCKED_IMAGE_MIME_TYPES = new Set([
-  'image/avif',
-  'image/heif',
-  'image/heic',
+export const ALLOWED_IMAGE_MIME_TYPES = new Set([
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
 ])
 
+export const ALLOWED_IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp'] as const
+
 export const IMAGE_UPLOAD_REJECTED_MESSAGE =
-  'Định dạng ảnh không được hỗ trợ. Vui lòng chọn JPG, PNG, GIF, WEBP hoặc SVG (không dùng .avif).'
+  'Định dạng tệp không hợp lệ. Chỉ cho phép JPEG, PNG và WebP.'
+
+export const IMAGE_SIZE_REJECTED_MESSAGE =
+  'Kích thước tệp không được vượt quá 5MB. Vui lòng chọn tệp nhỏ hơn.'
 
 export function validateImageUploadFile(file: File): string | null {
-  const fileName = file.name.toLowerCase()
+  if (!file) return 'Chưa chọn tệp.'
 
-  if (BLOCKED_IMAGE_EXTENSIONS.some((ext) => fileName.endsWith(ext))) {
-    return IMAGE_UPLOAD_REJECTED_MESSAGE
+  // Kiểm tra dung lượng (tối đa 5MB)
+  if (file.size > MAX_IMAGE_FILE_SIZE) {
+    return IMAGE_SIZE_REJECTED_MESSAGE
   }
 
-  if (BLOCKED_IMAGE_MIME_TYPES.has(file.type.toLowerCase())) {
-    return IMAGE_UPLOAD_REJECTED_MESSAGE
-  }
+  const fileName = (file.name || '').toLowerCase()
+  const fileType = (file.type || '').toLowerCase()
 
-  if (!file.type.startsWith('image/')) {
-    return 'Tệp phải là ảnh.'
+  const hasValidExt = ALLOWED_IMAGE_EXTENSIONS.some((ext) => fileName.endsWith(ext))
+  const hasValidMime = fileType ? ALLOWED_IMAGE_MIME_TYPES.has(fileType) : false
+
+  // Nếu cả extension và MIME type đều không khớp định dạng cho phép
+  if (!hasValidExt && !hasValidMime) {
+    return IMAGE_UPLOAD_REJECTED_MESSAGE
   }
 
   return null
