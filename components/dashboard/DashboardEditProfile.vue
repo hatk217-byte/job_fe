@@ -717,6 +717,7 @@ const isDraggingImages = ref(false)
 
 /** Banner image state */
 const bannerFileEl = ref<HTMLInputElement | null>(null)
+const bannerFile = ref<File | null>(null)
 const bannerPreview = ref<string | null>(null)
 const isDraggingBanner = ref(false)
 
@@ -830,6 +831,7 @@ function populateFormFromCompanyData(res: CompanyEntity) {
     logoPreview.value = normalizeCompanyLogo(res.logo)
 
     // Load banner image - set directly to form
+    bannerFile.value = null
     companyForm.value.bannerImage = res.bannerImage || null
     bannerPreview.value = res.bannerImage || null
 
@@ -837,7 +839,7 @@ function populateFormFromCompanyData(res: CompanyEntity) {
     const urls: string[] = []
 
     if (Array.isArray(res.companyImages)) {
-      for (const it of res.companyImages) {
+      for (const it of res.companyImages as any[]) {
         const u = typeof it === 'string' ? it.trim() : (it?.url ? String(it.url).trim() : '')
         if (u && u.length > 0) {
           if (!res.logo || u !== res.logo) {
@@ -1352,8 +1354,10 @@ function removeBanner() {
   if (bannerPreview.value?.startsWith('blob:')) {
     URL.revokeObjectURL(bannerPreview.value)
   }
+  bannerFile.value = null
   bannerPreview.value = null
   companyForm.value.bannerImage = null
+  if (bannerFileEl.value) bannerFileEl.value.value = ''
 }
 
 onBeforeUnmount(() => {
