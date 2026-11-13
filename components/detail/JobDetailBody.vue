@@ -139,7 +139,12 @@
                 class="job-vldl-table-row"
               >
                 <div class="job-vldl-table-label">{{ item.label }}</div>
-                <div class="job-vldl-table-value">{{ item.value }}</div>
+                <div
+                  v-if="item.isHtml"
+                  class="job-vldl-table-value rich-text-output"
+                  v-html="item.value"
+                />
+                <div v-else class="job-vldl-table-value">{{ item.value }}</div>
               </div>
             </div>
           </section>
@@ -526,21 +531,28 @@ const {
   timeAgoFor,
 } = useJobDetailView(jobRef)
 
-const overviewFields = computed(() => [
-  { label: 'Ngày đăng tin', value: postedText.value },
-  { label: 'Hạn nộp hồ sơ', value: deadlineText.value },
-  { label: 'Lĩnh vực / Bộ môn', value: categoryText.value },
-  { label: 'Hình thức làm việc', value: employmentTypeText.value },
-  { label: 'Cấp học / Khối', value: gradeText.value },
-  { label: 'Bằng cấp / Trình độ', value: qualificationText.value },
-  { label: 'Mức lương', value: salaryText.value },
-  { label: 'Loại lương', value: salaryTypeText.value },
-  { label: 'Yêu cầu kinh nghiệm', value: experienceText.value },
-  { label: 'Yêu cầu giới tính', value: genderText.value },
-  { label: 'Khu vực làm việc', value: fullLocationText.value || 'Toàn quốc' },
-  { label: 'Địa chỉ cụ thể', value: (props.job.jobAddress || props.job.address || '').trim() || 'Theo thỏa thuận khi trao đổi' },
-  { label: 'Phúc lợi', value: benefitsPreview.value },
-])
+const overviewFields = computed(() => {
+  const hasAddr = hasRichTextContent(props.job.jobAddress || props.job.address)
+  return [
+    { label: 'Ngày đăng tin', value: postedText.value },
+    { label: 'Hạn nộp hồ sơ', value: deadlineText.value },
+    { label: 'Lĩnh vực / Bộ môn', value: categoryText.value },
+    { label: 'Hình thức làm việc', value: employmentTypeText.value },
+    { label: 'Cấp học / Khối', value: gradeText.value },
+    { label: 'Bằng cấp / Trình độ', value: qualificationText.value },
+    { label: 'Mức lương', value: salaryText.value },
+    { label: 'Loại lương', value: salaryTypeText.value },
+    { label: 'Yêu cầu kinh nghiệm', value: experienceText.value },
+    { label: 'Yêu cầu giới tính', value: genderText.value },
+    { label: 'Khu vực làm việc', value: fullLocationText.value || 'Toàn quốc' },
+    {
+      label: 'Địa chỉ cụ thể',
+      value: hasAddr ? (props.job.jobAddress || props.job.address) : 'Theo thỏa thuận khi trao đổi',
+      isHtml: hasAddr,
+    },
+    { label: 'Phúc lợi', value: benefitsPreview.value },
+  ]
+})
 
 const companyIntroText = computed(() => {
   if (props.job.note?.trim()) return props.job.note.trim()
