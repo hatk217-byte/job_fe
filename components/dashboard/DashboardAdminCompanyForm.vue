@@ -265,26 +265,29 @@
           @change="onPickLogo"
         />
         <div v-if="logoPreview" class="flex justify-center">
-          <div class="relative inline-block p-2 bg-white rounded-lg border shadow-sm">
-            <img :src="logoPreview" class="max-h-32 object-contain rounded-md" draggable="false" />
-            <UButton
-              icon="i-lucide-crop"
-              color="primary"
-              size="xs"
-              variant="solid"
-              class="absolute top-2 left-2"
-              :aria-label="$t('common.cropImage')"
-              :disabled="formDisabled"
-              @click.stop="openCropModal"
-            />
-            <UButton
-              icon="i-lucide-trash-2"
-              color="error"
-              size="xs"
-              class="absolute top-2 right-2"
-              :disabled="formDisabled"
-              @click.stop="removeLogo"
-            />
+          <div class="relative p-3 bg-white rounded-xl border border-gray-200 shadow-sm inline-flex items-center justify-center min-w-[160px] min-h-[160px] w-44 h-44 overflow-hidden">
+            <img :src="logoPreview" class="w-full h-full object-contain rounded-lg" draggable="false" />
+            <div class="absolute bottom-2 right-2 flex items-center gap-1.5">
+              <UButton
+                icon="i-lucide-crop"
+                color="primary"
+                size="xs"
+                variant="solid"
+                class="shadow-sm"
+                :aria-label="$t('common.cropImage')"
+                :disabled="formDisabled"
+                @click.stop="openCropModal"
+              />
+              <UButton
+                icon="i-lucide-trash-2"
+                color="error"
+                size="xs"
+                variant="solid"
+                class="shadow-sm"
+                :disabled="formDisabled"
+                @click.stop="removeLogo"
+              />
+            </div>
           </div>
         </div>
         <div v-else class="grid place-items-center">
@@ -413,54 +416,65 @@
               @click.stop.prevent="closeCropModal"
             />
           </div>
-          <div class="p-4 overflow-auto flex-1">
+          <div class="p-4 overflow-auto flex-1 bg-gray-900/10">
             <div
               ref="cropContainer"
-              class="relative w-full bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center select-none"
-              style="min-height: 400px; max-height: 600px"
+              class="relative w-full bg-gray-900 rounded-lg overflow-hidden flex items-center justify-center select-none"
+              style="min-height: 420px; max-height: 560px"
             >
               <img
                 v-if="cropImageSrc"
                 ref="cropImage"
                 :src="cropImageSrc"
-                class="pointer-events-none"
-                style="display: block; max-width: 100%; max-height: 100%; width: auto; height: 379px; object-fit: contain"
+                class="pointer-events-none select-none"
+                style="display: block; max-width: 100%; max-height: 500px; width: auto; height: auto"
                 draggable="false"
                 @load="initCrop"
               />
               <div
                 v-if="showCropArea"
                 ref="cropArea"
-                class="absolute border-2 border-gray-700 cursor-move"
-                style="background-color: rgba(55, 65, 81, 0.4)"
+                class="absolute border-2 border-orange-500 cursor-move shadow-[0_0_0_9999px_rgba(0,0,0,0.55)] rounded-lg overflow-visible"
                 :style="cropAreaStyle"
                 @mousedown.prevent="startCropDrag"
                 @touchstart.prevent="startCropDrag"
               >
-                <div class="absolute inset-0 flex items-center justify-center text-white text-xs font-medium pointer-events-none">
-                  {{ $t('common.dragToMove') }}
+                <!-- Rule-of-thirds grid -->
+                <div class="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none opacity-40">
+                  <div class="border-r border-b border-white"></div>
+                  <div class="border-r border-b border-white"></div>
+                  <div class="border-b border-white"></div>
+                  <div class="border-r border-b border-white"></div>
+                  <div class="border-r border-b border-white"></div>
+                  <div class="border-b border-white"></div>
+                  <div class="border-r border-white"></div>
+                  <div class="border-r border-white"></div>
+                  <div></div>
                 </div>
+
+                <div class="absolute inset-0 flex items-center justify-center text-white text-xs font-semibold select-none pointer-events-none drop-shadow">
+                  <span class="bg-black/60 px-2 py-0.5 rounded text-[11px]">
+                    1 : 1
+                  </span>
+                </div>
+
                 <div
-                  class="absolute w-4 h-4 bg-gray-700 border-2 border-white rounded-full cursor-nwse-resize"
-                  style="top: -6px; left: -6px"
+                  class="absolute w-4 h-4 bg-orange-500 border-2 border-white rounded-full cursor-nwse-resize shadow-md -top-2 -left-2"
                   @mousedown.stop.prevent="(e) => startResize('nw', e)"
                   @touchstart.stop.prevent="(e) => startResize('nw', e)"
                 />
                 <div
-                  class="absolute w-4 h-4 bg-gray-700 border-2 border-white rounded-full cursor-nesw-resize"
-                  style="top: -6px; right: -6px"
+                  class="absolute w-4 h-4 bg-orange-500 border-2 border-white rounded-full cursor-nesw-resize shadow-md -top-2 -right-2"
                   @mousedown.stop.prevent="(e) => startResize('ne', e)"
                   @touchstart.stop.prevent="(e) => startResize('ne', e)"
                 />
                 <div
-                  class="absolute w-4 h-4 bg-gray-700 border-2 border-white rounded-full cursor-nwse-resize"
-                  style="bottom: -6px; right: -6px"
+                  class="absolute w-4 h-4 bg-orange-500 border-2 border-white rounded-full cursor-nwse-resize shadow-md -bottom-2 -right-2"
                   @mousedown.stop.prevent="(e) => startResize('se', e)"
                   @touchstart.stop.prevent="(e) => startResize('se', e)"
                 />
                 <div
-                  class="absolute w-4 h-4 bg-gray-700 border-2 border-white rounded-full cursor-nesw-resize"
-                  style="bottom: -6px; left: -6px"
+                  class="absolute w-4 h-4 bg-orange-500 border-2 border-white rounded-full cursor-nesw-resize shadow-md -bottom-2 -left-2"
                   @mousedown.stop.prevent="(e) => startResize('sw', e)"
                   @touchstart.stop.prevent="(e) => startResize('sw', e)"
                 />
@@ -533,6 +547,7 @@ const isMstVerified = ref(false)
 const isNameAutoFilled = ref(false)
 const mstChecking = ref(false)
 const mstError = ref('')
+const mstDebounceTimer = ref<any>(null)
 /** Handle MST Change (chỉ reset trạng thái, không tự động tra cứu khi gõ) */
 function onMstInput(event: Event) {
   handleMstInput(event, (value) => {
@@ -657,12 +672,13 @@ const cropContainer = ref<HTMLElement | null>(null)
 const cropImage = ref<HTMLImageElement | null>(null)
 const cropArea = ref<HTMLElement | null>(null)
 const showCropArea = ref(false)
-const cropAreaStyle = ref({ left: '10%', top: '10%', width: '80%', height: '80%' })
+const currentCrop = ref({ left: 0, top: 0, size: 150 })
+const cropAreaStart = ref({ left: 0, top: 0, size: 0 })
+const cropAreaStyle = ref<Record<string, string>>({})
 const isDraggingCrop = ref(false)
 const isResizingCrop = ref(false)
 const resizeDirection = ref('')
 const dragStart = ref({ x: 0, y: 0 })
-const cropAreaStart = ref({ left: 0, top: 0, width: 0, height: 0 })
 
 const imagesInput = ref<HTMLInputElement | null>(null)
 const imageFiles = ref<File[]>([])
@@ -755,6 +771,32 @@ watch(
   { immediate: true },
 )
 
+function handleLogoFilePicked(file: File) {
+  const validationError = validateImageUploadFile(file)
+  if (validationError) {
+    useNotify({ type: 'error', message: validationError })
+    if (logoInput.value) logoInput.value.value = ''
+    return
+  }
+
+  // Tự động mở modal crop ảnh khi chọn file
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    const dataUrl = e.target?.result as string
+    if (dataUrl) {
+      cropImageSrc.value = dataUrl
+      showCropArea.value = false
+      showCropModal.value = true
+      emit('cropOpen')
+    }
+  }
+  reader.onerror = () => {
+    useNotify({ message: 'Không thể đọc tệp ảnh', type: 'error' })
+  }
+  reader.readAsDataURL(file)
+  if (logoInput.value) logoInput.value.value = ''
+}
+
 function onPickLogo(e: Event) {
   const input = e.target as HTMLInputElement
   const file = input.files?.[0]
@@ -764,30 +806,16 @@ function onPickLogo(e: Event) {
     return
   }
 
-  const validationError = validateImageUploadFile(file)
-  if (validationError) {
-    useNotify({ type: 'error', message: validationError })
-    input.value = ''
-    return
-  }
-
-  setLogoFile(file)
+  handleLogoFilePicked(file)
 }
 
 function onDropLogo(e: DragEvent) {
   if (formDisabled.value) return
   isDragging.value = false
   const file = e.dataTransfer?.files?.[0]
-
   if (!file) return
 
-  const validationError = validateImageUploadFile(file)
-  if (validationError) {
-    useNotify({ type: 'error', message: validationError })
-    return
-  }
-
-  setLogoFile(file)
+  handleLogoFilePicked(file)
 }
 
 function openLogoPicker() {
@@ -871,7 +899,7 @@ function initCrop() {
   const placeCropArea = () => {
     const img = cropImage.value
     const container = cropContainer.value
-    if (!img || !container) return
+    if (!img || !container) return false
 
     const containerRect = container.getBoundingClientRect()
     const imgRect = img.getBoundingClientRect()
@@ -879,17 +907,28 @@ function initCrop() {
       return false
     }
 
-    const cropWidth = imgRect.width * 0.8
-    const cropHeight = imgRect.height * 0.8
-    const cropLeft = imgRect.left - containerRect.left + (imgRect.width - cropWidth) / 2
-    const cropTop = imgRect.top - containerRect.top + (imgRect.height - cropHeight) / 2
+    // Khóa tỉ lệ 1:1 cho logo: lấy 80% cạnh nhỏ nhất của ảnh
+    const size = Math.round(Math.min(imgRect.width, imgRect.height) * 0.8)
+    const cropLeft = Math.round(
+      imgRect.left - containerRect.left + (imgRect.width - size) / 2,
+    )
+    const cropTop = Math.round(
+      imgRect.top - containerRect.top + (imgRect.height - size) / 2,
+    )
+
+    currentCrop.value = {
+      left: cropLeft,
+      top: cropTop,
+      size,
+    }
 
     cropAreaStyle.value = {
-      left: `${(cropLeft / containerRect.width) * 100}%`,
-      top: `${(cropTop / containerRect.height) * 100}%`,
-      width: `${(cropWidth / containerRect.width) * 100}%`,
-      height: `${(cropHeight / containerRect.height) * 100}%`,
+      left: `${cropLeft}px`,
+      top: `${cropTop}px`,
+      width: `${size}px`,
+      height: `${size}px`,
     }
+
     showCropArea.value = true
     return true
   }
@@ -907,21 +946,19 @@ function startCropDrag(e: MouseEvent | TouchEvent) {
   e.preventDefault()
   e.stopPropagation()
 
-  if (!cropContainer.value || !cropArea.value) return
+  if (!cropContainer.value || !cropArea.value || !cropImage.value) return
 
   isDraggingCrop.value = true
   const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
   const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
-  const containerRect = cropContainer.value.getBoundingClientRect()
-  const areaRect = cropArea.value.getBoundingClientRect()
 
   dragStart.value = { x: clientX, y: clientY }
   cropAreaStart.value = {
-    left: areaRect.left - containerRect.left,
-    top: areaRect.top - containerRect.top,
-    width: areaRect.width,
-    height: areaRect.height,
+    left: currentCrop.value.left,
+    top: currentCrop.value.top,
+    size: currentCrop.value.size,
   }
+
   document.addEventListener('mousemove', handleCropDrag, { passive: false })
   document.addEventListener('mouseup', stopCropDrag)
   document.addEventListener('touchmove', handleCropDrag, { passive: false })
@@ -929,25 +966,40 @@ function startCropDrag(e: MouseEvent | TouchEvent) {
 }
 
 function handleCropDrag(e: MouseEvent | TouchEvent) {
-  if (!isDraggingCrop.value || !cropContainer.value) return
+  if (!isDraggingCrop.value || !cropContainer.value || !cropImage.value) return
+
   e.preventDefault()
   e.stopPropagation()
+
   const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
   const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
+
   const deltaX = clientX - dragStart.value.x
   const deltaY = clientY - dragStart.value.y
-  const containerRect = cropContainer.value.getBoundingClientRect()
-  let newLeft = cropAreaStart.value.left + deltaX
 
+  const containerRect = cropContainer.value.getBoundingClientRect()
+  const imgRect = cropImage.value.getBoundingClientRect()
+
+  // Giới hạn tuyệt đối trong phạm vi ảnh
+  const minLeft = imgRect.left - containerRect.left
+  const maxLeft = minLeft + imgRect.width - cropAreaStart.value.size
+  const minTop = imgRect.top - containerRect.top
+  const maxTop = minTop + imgRect.height - cropAreaStart.value.size
+
+  let newLeft = cropAreaStart.value.left + deltaX
   let newTop = cropAreaStart.value.top + deltaY
 
-  newLeft = Math.max(0, Math.min(containerRect.width - cropAreaStart.value.width, newLeft))
-  newTop = Math.max(0, Math.min(containerRect.height - cropAreaStart.value.height, newTop))
+  newLeft = Math.max(minLeft, Math.min(maxLeft, newLeft))
+  newTop = Math.max(minTop, Math.min(maxTop, newTop))
+
+  currentCrop.value.left = newLeft
+  currentCrop.value.top = newTop
 
   cropAreaStyle.value = {
-    ...cropAreaStyle.value,
-    left: `${(newLeft / containerRect.width) * 100}%`,
-    top: `${(newTop / containerRect.height) * 100}%`,
+    left: `${newLeft}px`,
+    top: `${newTop}px`,
+    width: `${cropAreaStart.value.size}px`,
+    height: `${cropAreaStart.value.size}px`,
   }
 }
 
@@ -967,21 +1019,18 @@ function startResize(direction: string, e: MouseEvent | TouchEvent) {
   e.preventDefault()
   e.stopPropagation()
 
-  if (!cropContainer.value || !cropArea.value) return
+  if (!cropContainer.value || !cropArea.value || !cropImage.value) return
 
   isResizingCrop.value = true
   resizeDirection.value = direction
   const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
   const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
-  const containerRect = cropContainer.value.getBoundingClientRect()
-  const areaRect = cropArea.value.getBoundingClientRect()
 
   dragStart.value = { x: clientX, y: clientY }
   cropAreaStart.value = {
-    left: areaRect.left - containerRect.left,
-    top: areaRect.top - containerRect.top,
-    width: areaRect.width,
-    height: areaRect.height,
+    left: currentCrop.value.left,
+    top: currentCrop.value.top,
+    size: currentCrop.value.size,
   }
   document.addEventListener('mousemove', handleResize, { passive: false })
   document.addEventListener('mouseup', stopResize)
@@ -990,74 +1039,76 @@ function startResize(direction: string, e: MouseEvent | TouchEvent) {
 }
 
 function handleResize(e: MouseEvent | TouchEvent) {
-  if (!isResizingCrop.value || !cropContainer.value) return
+  if (!isResizingCrop.value || !cropContainer.value || !cropImage.value) return
+
   e.preventDefault()
   e.stopPropagation()
+
   const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
   const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
+
   const deltaX = clientX - dragStart.value.x
   const deltaY = clientY - dragStart.value.y
+
   const containerRect = cropContainer.value.getBoundingClientRect()
+  const imgRect = cropImage.value.getBoundingClientRect()
+
+  const imgLeft = imgRect.left - containerRect.left
+  const imgTop = imgRect.top - containerRect.top
+  const imgRight = imgLeft + imgRect.width
+  const imgBottom = imgTop + imgRect.height
+
+  const minSize = 60
+  let newSize = cropAreaStart.value.size
   let newLeft = cropAreaStart.value.left
   let newTop = cropAreaStart.value.top
-  let newWidth = cropAreaStart.value.width
-  let newHeight = cropAreaStart.value.height
-  const minSize = 50
 
-  if (resizeDirection.value === 'nw') {
-    newWidth = Math.max(minSize, cropAreaStart.value.width - deltaX)
-    newHeight = Math.max(minSize, cropAreaStart.value.height - deltaY)
-    newLeft = cropAreaStart.value.left + (cropAreaStart.value.width - newWidth)
-    newTop = cropAreaStart.value.top + (cropAreaStart.value.height - newHeight)
+  // Khóa tỉ lệ vuông 1:1 và giới hạn không được vượt quá khung ảnh
+  if (resizeDirection.value === 'se') {
+    const anchorX = cropAreaStart.value.left
+    const anchorY = cropAreaStart.value.top
+    const maxAvailable = Math.min(imgRight - anchorX, imgBottom - anchorY)
+    const delta = (deltaX + deltaY) / 2
+    newSize = Math.max(minSize, Math.min(maxAvailable, cropAreaStart.value.size + delta))
+    newLeft = anchorX
+    newTop = anchorY
+  } else if (resizeDirection.value === 'nw') {
+    const anchorX = cropAreaStart.value.left + cropAreaStart.value.size
+    const anchorY = cropAreaStart.value.top + cropAreaStart.value.size
+    const maxAvailable = Math.min(anchorX - imgLeft, anchorY - imgTop)
+    const delta = (-deltaX - deltaY) / 2
+    newSize = Math.max(minSize, Math.min(maxAvailable, cropAreaStart.value.size + delta))
+    newLeft = anchorX - newSize
+    newTop = anchorY - newSize
   } else if (resizeDirection.value === 'ne') {
-    newWidth = Math.max(minSize, Math.min(containerRect.width - cropAreaStart.value.left, cropAreaStart.value.width + deltaX))
-    newHeight = Math.max(minSize, cropAreaStart.value.height - deltaY)
-    newTop = cropAreaStart.value.top + (cropAreaStart.value.height - newHeight)
-  } else if (resizeDirection.value === 'se') {
-    newWidth = Math.max(minSize, Math.min(containerRect.width - cropAreaStart.value.left, cropAreaStart.value.width + deltaX))
-    newHeight = Math.max(minSize, Math.min(containerRect.height - cropAreaStart.value.top, cropAreaStart.value.height + deltaY))
+    const anchorX = cropAreaStart.value.left
+    const anchorY = cropAreaStart.value.top + cropAreaStart.value.size
+    const maxAvailable = Math.min(imgRight - anchorX, anchorY - imgTop)
+    const delta = (deltaX - deltaY) / 2
+    newSize = Math.max(minSize, Math.min(maxAvailable, cropAreaStart.value.size + delta))
+    newLeft = anchorX
+    newTop = anchorY - newSize
   } else if (resizeDirection.value === 'sw') {
-    newWidth = Math.max(minSize, cropAreaStart.value.width - deltaX)
-    newHeight = Math.max(minSize, Math.min(containerRect.height - cropAreaStart.value.top, cropAreaStart.value.height + deltaY))
-    newLeft = cropAreaStart.value.left + (cropAreaStart.value.width - newWidth)
+    const anchorX = cropAreaStart.value.left + cropAreaStart.value.size
+    const anchorY = cropAreaStart.value.top
+    const maxAvailable = Math.min(anchorX - imgLeft, imgBottom - anchorY)
+    const delta = (-deltaX + deltaY) / 2
+    newSize = Math.max(minSize, Math.min(maxAvailable, cropAreaStart.value.size + delta))
+    newLeft = anchorX - newSize
+    newTop = anchorY
   }
 
-  if (newLeft < 0) {
-    newWidth += newLeft
-    newLeft = 0
-    if (newWidth < minSize) {
-      newWidth = minSize
-      newLeft = cropAreaStart.value.left + cropAreaStart.value.width - minSize
-    }
-  }
-  if (newTop < 0) {
-    newHeight += newTop
-    newTop = 0
-    if (newHeight < minSize) {
-      newHeight = minSize
-      newTop = cropAreaStart.value.top + cropAreaStart.value.height - minSize
-    }
-  }
-  if (newLeft + newWidth > containerRect.width) {
-    newWidth = containerRect.width - newLeft
-    if (newWidth < minSize) {
-      newWidth = minSize
-      newLeft = containerRect.width - minSize
-    }
-  }
-  if (newTop + newHeight > containerRect.height) {
-    newHeight = containerRect.height - newTop
-    if (newHeight < minSize) {
-      newHeight = minSize
-      newTop = containerRect.height - minSize
-    }
+  currentCrop.value = {
+    left: newLeft,
+    top: newTop,
+    size: newSize,
   }
 
   cropAreaStyle.value = {
-    left: `${(newLeft / containerRect.width) * 100}%`,
-    top: `${(newTop / containerRect.height) * 100}%`,
-    width: `${(newWidth / containerRect.width) * 100}%`,
-    height: `${(newHeight / containerRect.height) * 100}%`,
+    left: `${newLeft}px`,
+    top: `${newTop}px`,
+    width: `${newSize}px`,
+    height: `${newSize}px`,
   }
 }
 
@@ -1075,65 +1126,61 @@ function stopResize(e?: MouseEvent | TouchEvent) {
 }
 
 async function applyCrop() {
-  if (!cropImageSrc.value || !cropImage.value || !cropArea.value || !cropContainer.value) return
+  if (!cropImageSrc.value || !cropImage.value || !cropContainer.value) return
 
   try {
-    const img = new Image()
+    const img = cropImage.value
+    const containerRect = cropContainer.value.getBoundingClientRect()
+    const imgRect = img.getBoundingClientRect()
 
-    img.src = cropImageSrc.value
-    await new Promise<void>((resolve) => {
-      img.onload = () => resolve()
-    })
-
-    const areaRect = cropArea.value.getBoundingClientRect()
-    const imgRect = cropImage.value.getBoundingClientRect()
     const scaleX = img.naturalWidth / imgRect.width
     const scaleY = img.naturalHeight / imgRect.height
-    const cropX = (areaRect.left - imgRect.left) * scaleX
-    const cropY = (areaRect.top - imgRect.top) * scaleY
-    const cropWidth = areaRect.width * scaleX
-    const cropHeight = areaRect.height * scaleY
-    const croppedBlob = await cropImageUsingImageBitmap(cropImageSrc.value, cropX, cropY, cropWidth, cropHeight)
-    const croppedFile = new File([croppedBlob], logoFile.value?.name || 'logo.png', { type: logoFile.value?.type || 'image/png' })
 
-    if (logoPreview.value?.startsWith('blob:')) URL.revokeObjectURL(logoPreview.value)
+    // Tọa độ vùng cắt tương đối so với kích thước gốc của ảnh
+    const relLeft = currentCrop.value.left - (imgRect.left - containerRect.left)
+    const relTop = currentCrop.value.top - (imgRect.top - containerRect.top)
+
+    let cropX = Math.round(relLeft * scaleX)
+    let cropY = Math.round(relTop * scaleY)
+    let cropSize = Math.round(currentCrop.value.size * scaleX)
+
+    // Khóa chặt chẽ trong phạm vi ảnh gốc, không để số âm hoặc tràn
+    const maxNaturalSize = Math.min(img.naturalWidth, img.naturalHeight)
+    cropSize = Math.max(10, Math.min(cropSize, maxNaturalSize))
+    cropX = Math.max(0, Math.min(cropX, img.naturalWidth - cropSize))
+    cropY = Math.max(0, Math.min(cropY, img.naturalHeight - cropSize))
+
+    // Cắt ảnh bằng HTML Canvas chuẩn (hỗ trợ 100% trình duyệt, mượt và sắc nét)
+    const outputSize = Math.min(cropSize, 512)
+    const canvas = document.createElement('canvas')
+    canvas.width = outputSize
+    canvas.height = outputSize
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('Không thể khởi tạo canvas 2D')
+
+    ctx.imageSmoothingEnabled = true
+    ctx.imageSmoothingQuality = 'high'
+    ctx.drawImage(img, cropX, cropY, cropSize, cropSize, 0, 0, outputSize, outputSize)
+
+    const croppedBlob = await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), 'image/png')
+    })
+
+    const croppedFile = new File([croppedBlob], logoFile.value?.name || 'logo.png', { type: 'image/png' })
+
+    if (logoPreview.value?.startsWith('blob:')) {
+      URL.revokeObjectURL(logoPreview.value)
+    }
+
     logoFile.value = croppedFile
     logoPreview.value = URL.createObjectURL(croppedBlob)
+    errors.value.logo = ''
+
     closeCropModal()
   } catch (err) {
     console.error('Error cropping image:', err)
     useNotify({ message: 'Có lỗi xảy ra khi cắt ảnh. Vui lòng thử lại.' })
   }
-}
-
-async function cropImageUsingImageBitmap(
-  imageSrc: string,
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-): Promise<Blob> {
-  const img = new Image()
-
-  img.src = imageSrc
-  await new Promise<void>((resolve, reject) => {
-    img.onload = () => resolve()
-    img.onerror = reject
-  })
-
-  const bitmap = await createImageBitmap(img, x, y, width, height)
-  const offscreen = new OffscreenCanvas(width, height)
-  const ctx = offscreen.getContext('2d')
-
-  if (!ctx) throw new Error('Could not get 2d context')
-
-  ctx.drawImage(bitmap, 0, 0)
-
-  const blob = await offscreen.convertToBlob({ type: 'image/png' })
-
-  bitmap.close()
-
-  return blob
 }
 
 function onPickImages(e: Event) {
