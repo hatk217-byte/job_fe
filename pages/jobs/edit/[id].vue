@@ -532,9 +532,6 @@
                     class="font-medium text-sm text-gray-700"
                   >
                     {{ $t('job.uploadJob.genderLabel') }}
-                    <span class="text-black">{{
-                      $t('job.uploadJob.mandatoryChar')
-                    }}</span>
                   </label>
                   <v-select
                     v-model="genderForSelect"
@@ -1062,11 +1059,7 @@ function validateJobFields(): boolean {
     isValid = false
   }
 
-  // Gender validation - required
-  if (!job.value.gender || (Array.isArray(job.value.gender) && job.value.gender.length === 0)) {
-    jobErrors.value.gender = 'Vui lòng chọn giới tính yêu cầu.'
-    isValid = false
-  }
+  // Gender validation - optional (no error check)
 
   // Grade validation - required
   if (

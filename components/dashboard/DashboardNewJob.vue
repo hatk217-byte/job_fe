@@ -440,7 +440,6 @@
               <div data-job-field="gender" class="space-y-1.5">
                 <label class="employer-input-label">
                   {{ $t('job.uploadJob.genderLabel') }}
-                  <span class="text-orange-500 employer-required-star">{{ $t('job.uploadJob.mandatoryChar') }}</span>
                 </label>
                 <div
                   class="job-vselect w-full min-w-0"
@@ -1471,7 +1470,6 @@ const JOB_FIELD_ERROR_ORDER = [
   'requiredQualification',
   'experienceLevel',
   'benefits',
-  'gender',
   'email',
   'phoneNumber',
 ] as const
@@ -1700,11 +1698,7 @@ function validateJobFields(): boolean {
     isValid = false
   }
 
-  // Gender validation - required
-  if (!job.value.gender || (Array.isArray(job.value.gender) && job.value.gender.length === 0)) {
-    jobErrors.value.gender = 'Vui lòng chọn giới tính yêu cầu.'
-    isValid = false
-  }
+  // Gender validation - optional (no error check)
 
   // Grade validation - required
   if (
