@@ -154,10 +154,15 @@
 
     <!-- 7. ACTIONS (Orange Submit Button) -->
     <div class="apply-modal-actions">
+      <p v-if="errorMessage" class="apply-modal-field-error text-center mb-3" role="alert">
+        {{ errorMessage }}
+      </p>
+
       <button
         type="submit"
         class="apply-vldl-submit-btn"
         :disabled="!isValid || !termsAgreed || loading"
+        @click="submit"
       >
         <span v-if="!loading">Nộp đơn</span>
         <span v-else>Đang gửi hồ sơ...</span>
@@ -184,6 +189,7 @@ interface Props {
     coverLetterUrl?: string | null
   } | null
   loading?: boolean
+  errorMessage?: string | null
 }
 
 interface Emits {

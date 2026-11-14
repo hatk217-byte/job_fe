@@ -33,6 +33,7 @@
         <JobApplicationDrawerForm
           :user-info="userInfo"
           :loading="formSubmitting"
+          :error-message="submitError"
           @cancel="open = false"
           @submit="onSubmit"
         />
@@ -60,9 +61,11 @@ const authStore = useAuthStore()
 const { submitApplication } = useJobApplicationSubmit()
 const { markJobAsApplied } = useAppliedJobs()
 const formSubmitting = ref(false)
+const submitError = ref<string | null>(null)
 const drawerPanelRef = ref<HTMLElement | null>(null)
 
 watch(open, async (isOpen) => {
+  submitError.value = null
   if (!isOpen) {
     formSubmitting.value = false
     return
@@ -128,18 +131,17 @@ async function onSubmit(data: JobApplicationFormPayload) {
   if (!props.job || formSubmitting.value) return
 
   formSubmitting.value = true
+  submitError.value = null
   try {
     const result = await submitApplication(props.job, data)
-    if (!result.ok) return
-
-    if (result.isNewUser) {
-      open.value = false
+    if (!result.ok) {
+      submitError.value = result.error || 'Có lỗi xảy ra khi nộp hồ sơ'
       return
     }
 
+    open.value = false
     markJobAsApplied(props.job.id)
     emit('success', props.job.id)
-    open.value = false
   } finally {
     formSubmitting.value = false
   }

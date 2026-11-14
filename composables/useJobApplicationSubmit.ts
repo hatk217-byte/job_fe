@@ -112,20 +112,29 @@ export function useJobApplicationSubmit() {
 
       const response = await $api.job.submitApplication(applicationData)
 
-      if (response.data?.isNewUser) {
-        await authStore.autoLogin(data.email)
+      if (response?.data?.isNewUser) {
+        try {
+          await authStore.autoLogin(data.email)
+        } catch (loginErr) {
+          console.warn('[submitApplication] Auto-login failed:', loginErr)
+        }
         useNotify({
           message: 'Đơn ứng tuyển đã được gửi thành công! Đang chuyển hướng...',
           type: 'success',
         })
-        await new Promise((resolve) => setTimeout(resolve, 500))
-        await navigateTo('/users/dashboard')
+        setTimeout(() => {
+          if (import.meta.client) {
+            window.location.href = '/users/dashboard'
+          } else {
+            navigateTo('/users/dashboard')
+          }
+        }, 600)
         return { ok: true, isNewUser: true }
       }
 
       if (!authStore.isLoggedIn) {
         useNotify({
-          message: 'Ứng tuyển thành công. Vui lòng đăng nhập để xem chi tiết.',
+          message: 'Ứng tuyển thành công! Vui lòng đăng nhập để theo dõi hồ sơ.',
           type: 'success',
         })
         return { ok: true, isNewUser: false, needsLogin: true }

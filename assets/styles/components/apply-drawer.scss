@@ -2,6 +2,16 @@
    Job Application Slide-over Drawer (VLDL Style — Scrollable Underlying JD)
    ========================================================================== */
 
+/* Ensure toast notifications always render on top of the drawer */
+[data-radix-portal],
+[data-nuxt-ui-toaster],
+[role="region"][aria-label*="Notification" i],
+ol[data-sonner-toaster],
+.u-toaster,
+div[role="status"] {
+  z-index: 100000 !important;
+}
+
 /* 1. Main Drawer Aside (Fixed to right, independent scroll, NO body scroll lock) */
 .job-apply-drawer-aside {
   position: fixed !important;
